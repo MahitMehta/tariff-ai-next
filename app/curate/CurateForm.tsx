@@ -1,17 +1,24 @@
 "use client";
 
-import { accountsCollection } from "@/lib/firebase.client";
-import { getDocs } from "firebase/firestore";
+import { accountsCollection, auth, usersCollection } from "@/lib/firebase.client";
+import { doc, getDocs, setDoc } from "firebase/firestore";
 import { useCallback, useEffect, useState } from "react";
 
-import { db } from "@/lib/firebase.server";
 import AutocompleteDropdownMulti from "../../components/AutocompleteDropdown";
 import { UserIcon } from "@heroicons/react/24/outline";
 import BrandButton from "../../components/BrandButton";
 import InputField from "../../components/InputField";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import Checkbox from "../../components/Checkbox";
 import DropdownSelect from "../../components/Dropdown";
+
+// stocks
+import stocks from "../../data/sp500.json";
+
+const mappedStocks = stocks.map((stock) => ({
+    id: stock.ticker,
+    value: `${stock.ticker} - ${stock.name}`,
+}));
 
 interface IAccount {
     id: string;
@@ -55,15 +62,33 @@ const CurateForm = () => {
 
     const [ loading, setLoading ] = useState(false);
 
-    const handleContinue = useCallback(() => {
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-            // Redirect to the portal page
-            redirect("/dashboard");
+    const [ selectedAccounts, setSelectedAccounts ] = useState<string[]>([]);
+    const [ selectedEvents, setSelectedEvents ] = useState<string[]>([]);
+    const [ selectedTickers, setSelectedTickers ] = useState<string[]>([]);
+
+    const router = useRouter();
+
+    const handleContinue = useCallback(async () => {
+        const user = auth.currentUser;
+
+        if (!user) {
+            console.error("User not logged in");
+            router.replace("/login");
         }
-        , 2000);
-    }, []);
+
+        setLoading(true);
+        
+        await setDoc(doc(usersCollection, user?.uid), {
+            accounts: selectedAccounts,
+            events: selectedEvents,
+            tickers: selectedTickers,
+        } as IUserModel).then(() => {
+            router.replace("/dashboard");
+        }).catch((error) => {
+            console.error("Error updating user document: ", error);
+        });  
+
+    }, [ router, selectedAccounts, selectedEvents, selectedTickers ]);
 
     useEffect(() => {
         getAccounts().then((data) => {
@@ -110,7 +135,10 @@ const CurateForm = () => {
             id="events"
             options={eventCategories}
             className="mt-3"
-            onSelect={(value) => console.log(value)}
+            onSelect={(events) => {
+                setSelectedEvents(events.map((event) => event.id));
+                console.log("Selected events: ", events);
+            }}
             title="Event Categories"
             icon={<></>}
             placeholder="e.g. tariffs, interest rates..."
@@ -118,7 +146,10 @@ const CurateForm = () => {
         <AutocompleteDropdownMulti 
             id="search-reliable-accounts"
             options={accounts.map((account) => ({ id: account.id, value: account.name }))}
-            onSelect={(value) => console.log(value)}
+            onSelect={(accounts) => {
+                setSelectedAccounts(accounts.map((account) => account.id));
+                console.log("Selected accounts: ", accounts);
+            }}
             title="Search Reliable Accounts"
             className="mt-3"
             icon={<UserIcon className="w-5 h-5 inline-block mr-2" />}
@@ -126,8 +157,11 @@ const CurateForm = () => {
         />
         <AutocompleteDropdownMulti 
             id="search-stock-portfolio"
-            options={accounts.map((account) => ({ id: account.id, value: account.name }))}
-            onSelect={(value) => console.log(value)}
+            options={mappedStocks}
+            onSelect={(tickers) => {
+                setSelectedTickers(tickers.map((ticker) => ticker.id));
+                console.log("Selected tickers: ", tickers);
+            }}
             title="Stock Portfolio"
             className="mt-3"
             icon={<></>}

@@ -32,7 +32,7 @@ const SignUpForm = () => {
         
         if (userDoc.exists()) {
             const docData = userDoc.data() as IUserModel;
-            if (docData?.accounts?.length === 0) {
+            if (!docData?.accounts || docData.accounts.length === 0) {
                 console.log("User exists but has no accounts");
                 router.push("/curate");
                 return;

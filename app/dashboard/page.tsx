@@ -1,26 +1,29 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { initializeApp } from 'firebase/app';
 import { 
-  getFirestore, 
   collection, 
   getDocs, 
   query, 
   orderBy, 
-  limit,
   where,
   doc,
-  getDoc
+  getDoc,
+  documentId
 } from 'firebase/firestore';
 import { 
-  getAuth, 
   onAuthStateChanged, 
   User as FirebaseUser 
 } from 'firebase/auth';
 import Chatbot from './components/chatbot';
 import Post from './components/post';
 import PostModal from './components/postModal';
+import { app, auth, db } from '@/lib/firebase.client';
+import Link from 'next/link';
+import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid';
+import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/navigation';
+import { getMessaging, onMessage } from 'firebase/messaging';
 
 // Define proper types for your data structures
 interface StockData {
@@ -47,19 +50,6 @@ interface PostData {
   stocks: StockData[];
 }
 
-const firebaseConfig = {
-    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
-  };
-  
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);  
-
 export default function DashboardPage() {
   const [posts, setPosts] = useState<PostData[]>([]);
   const [selectedPost, setSelectedPost] = useState<PostData | null>(null);
@@ -69,6 +59,38 @@ export default function DashboardPage() {
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const messaging = getMessaging(app);
+
+    onMessage(messaging, (payload) => {
+      console.log('Message received in foreground:', payload);
+      
+      // Create and display a custom notification for foreground messages
+      const notificationTitle = payload.notification?.title || 'Financial Alert';
+      const notificationOptions = {
+        body: payload.notification?.body || '',
+        icon: '/vercel.svg', // Add your icon path
+        data: payload.data || {}
+      };
+      
+      // Display notification manually since onMessage only works in foreground
+      // and doesn't display notifications automatically
+      if (!("Notification" in window)) {
+        console.log("This browser does not support notifications");
+      } else if (Notification.permission === "granted") {
+        const notification = new Notification(notificationTitle, notificationOptions);
+        
+        // Add click handler to notification
+        notification.onclick = () => {
+          notification.close();
+          window.focus();
+          // Handle any additional click actions here
+          console.log('Notification clicked:', payload);
+        };
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -98,16 +120,32 @@ export default function DashboardPage() {
         return;
       }
 
-      const postsRef = collection(db, 'events');
+      const postsRef = collection(db, "users", currentUser.uid, "events");
+     
       const q = query(
-        postsRef, 
-        where('stock_tickers', 'array-contains-any', userTickers),
-        orderBy('timestamp', 'desc'),
-      );
-      
+        postsRef,
+        orderBy("timestamp", 'desc')
+      ); 
       const querySnapshot = await getDocs(q);
-      const fetchedEvents = querySnapshot.docs.map(doc => doc.data());
+      const fetchedEventIds = querySnapshot.docs.map(doc => doc.id);
 
+      if (fetchedEventIds.length === 0) {
+        console.log('No events found for user');
+        setPosts([]);
+        return;
+      }
+
+      const eventRef = collection(db, "events");
+      const eventQ = query(
+        eventRef,
+        where(documentId(), "in", fetchedEventIds)
+      );
+
+      const eventSnapshot = await getDocs(eventQ);
+      const fetchedEvents = eventSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as any[];
       const accountIds = [...new Set(fetchedEvents.map(event => event.trigger_account_id))];
       const accountsRef = collection(db, 'accounts');
       
@@ -151,7 +189,7 @@ export default function DashboardPage() {
           username: account.username,
           handle: account.handle,
           verified: true,
-          content: 'placeholder.',
+          content: event.summary || '',
           timestamp: event.timestamp,
           positiveTickers: event.stock_tickers || [],
           negativeTickers: [],
@@ -247,6 +285,17 @@ export default function DashboardPage() {
     return () => clearTimeout(timer);
   }, []);
 
+  const router = useRouter();
+
+  const handleLogOut = useCallback(() => {
+    auth.signOut().then(() => {
+      console.log('User signed out');
+      router.push("/");
+    }).catch((error) => {
+      console.error('Error signing out: ', error);
+    }); 
+  }, [router]);
+
   return (
     <div 
       ref={containerRef}
@@ -257,8 +306,11 @@ export default function DashboardPage() {
         style={{ width: `${leftPanelWidth}%` }}
       >
         <div className="max-w-4xl mx-auto">
-          <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4 ml-4">
+          <div className="sticky flex justify-between top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4 ml-4">
             <h1 className="text-xl font-bold text-white">Activity</h1>
+            <ArrowLeftEndOnRectangleIcon className="cursor-pointer" width={24} height={24}
+              onClick={handleLogOut} 
+            />
           </div>
 
         <div className="divide-y divide-neutral-800">

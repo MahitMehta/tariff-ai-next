@@ -13,7 +13,12 @@ type Message = {
   isAnimating?: boolean;
 };
 
-const sendChatMessage = async (question: string, context: string): Promise<{ answer: string }> => {
+const sendChatMessage = async (
+  question: string, 
+  context: string, 
+  previousMessages: { role: 'user' | 'ai'; message: string }[]
+): Promise<{ answer: string }> => {
+  // Validate input
   if (!question.trim()) {
     throw new Error('Question cannot be empty');
   }
@@ -26,7 +31,8 @@ const sendChatMessage = async (question: string, context: string): Promise<{ ans
       },
       body: JSON.stringify({
         question: question.trim(),
-        context: context.trim() || ''
+        context: context.trim() || '',
+        previousMessages
       }),
       signal: AbortSignal.timeout(30000)
     });
@@ -153,11 +159,18 @@ export default function Chatbot() {
     const currentInput = inputMessage;
     setInputMessage('');
     setIsLoading(true);
-
+    const recentHistory = messages
+    .filter(msg => msg.sender === 'user' || msg.sender === 'ai')
+    .slice(-4) 
+    .map(msg => ({
+      role: msg.sender,
+      message: msg.content
+    }));
     try {
       const response = await sendChatMessage(
         currentInput, 
-        chatContext || ''
+        chatContext || '',
+        recentHistory
       );
 
       const aiMessage: Message = {

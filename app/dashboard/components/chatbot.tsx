@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { m, motion } from 'framer-motion';
+import { useAtom } from 'jotai';
+import { chatContextAtom } from '@/lib/atom';
 
 type Message = {
   id: number;
@@ -105,11 +107,23 @@ export default function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [chatContext, setChatContext] = useState(
-    "You are Chaewon, a financial analyst AI assistant. Provide professional, accurate responses about stocks, investments, and market trends. Keep answers concise but informative."
-  );
+  const [chatContext, setChatContext] = useAtom(chatContextAtom);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (chatContext) {
+      const contextMessage: Message = {
+        id: Date.now(),
+        content: "Report Imported!",
+        sender: 'user',
+        timestamp: new Date().toISOString(),
+        isAnimating: false
+      };
+
+      setMessages(prevMessages => [...prevMessages, contextMessage]);
+    }
+  }, [chatContext, setChatContext]);
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -125,53 +139,59 @@ export default function Chatbot() {
   };
 
   const handleSendMessage = async () => {
-    if (inputMessage.trim() === '' || isLoading) return;
-  
+    if (!inputMessage.trim()) return;
+
     const userMessage: Message = {
       id: Date.now(),
       content: inputMessage,
       sender: 'user',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      isAnimating: false
     };
-    setMessages(prev => [...prev, userMessage]);
+
+    setMessages(prevMessages => [...prevMessages, userMessage]);
+    
+    const currentInput = inputMessage;
     setInputMessage('');
     setIsLoading(true);
-  
-    const loadingMessage: Message = {
-      id: Date.now() + 1,
-      content: '...',
-      sender: 'ai',
-      timestamp: new Date().toISOString()
-    };
-    setMessages(prev => [...prev, loadingMessage]);
-  
+
     try {
-      const response = await sendChatMessage(inputMessage, chatContext);
-  
-      setMessages(prev => {
-        const newMessages = [...prev];
-        newMessages[newMessages.length - 1] = {
-          ...loadingMessage,
-          content: response.answer,
-          timestamp: new Date().toISOString(),
-          isAnimating: true
-        };
-        return newMessages;
-      });
+      const response = await sendChatMessage(
+        currentInput, 
+        chatContext || ''
+      );
+
+      const aiMessage: Message = {
+        id: Date.now(),
+        content: response.answer,
+        sender: 'ai',
+        timestamp: new Date().toISOString(),
+        isAnimating: true
+      };
+
+      setMessages(prevMessages => [...prevMessages, aiMessage]);
+      
+      if (chatContext) {
+        setChatContext(null);
+      }
     } catch (error) {
-      setMessages(prev => {
-        const newMessages = [...prev];
-        newMessages[newMessages.length - 1] = {
-          ...loadingMessage,
-          content: "Sorry, I couldn't process your request. Please try again.",
-          timestamp: new Date().toISOString()
-        };
-        return newMessages;
-      });
+      console.error('Message send error:', error);
+      
+      setInputMessage(currentInput);
+      
+      const errorMessage: Message = {
+        id: Date.now(),
+        content: "Sorry, I couldn't process your request. Please try again.",
+        sender: 'ai',
+        timestamp: new Date().toISOString(),
+        isAnimating: false
+      };
+
+      setMessages(prevMessages => [...prevMessages, errorMessage]);
     } finally {
       setIsLoading(false);
     }
-  };  
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {

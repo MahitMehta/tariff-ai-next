@@ -16,7 +16,7 @@ export async function POST(req) {
     const model = genAI.getGenerativeModel({ 
       model: 'gemini-2.0-flash-001',
       generationConfig: {
-        maxOutputTokens: 2000,
+        maxOutputTokens: 300,
         temperature: 0.2,
       }
     });
@@ -28,7 +28,7 @@ ${context || ''}
 User Question:
 ${question}
 
-You are a financial analyst AI, you have to realise the international scene and understand politics and things said in politics and other factors. Do not use formating or markdown.
+You are a financial analyst AI, you have to realise the international scene and understand politics and things said in politics and other factors. If you are provided a context, based your reasoning on the context. Do not use formating or markdown. Provide 3-6 sentences max.
 `;
 
     const result = await model.generateContent(userMessage);

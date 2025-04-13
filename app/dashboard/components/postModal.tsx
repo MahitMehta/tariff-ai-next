@@ -1,5 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useAtom } from "jotai";
+import { chatContextAtom } from "@/lib/atom";
 
 interface PostModalProps {
   isOpen: boolean;
@@ -30,16 +32,15 @@ interface PostModalProps {
 export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
   const [animate, setAnimate] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [, setChatContext] = useAtom(chatContextAtom);
   const router = useRouter();
 
   useEffect(() => {
     if (isOpen && post) {
       setVisible(true);
-      // Slight delay to trigger animations after component is rendered
       setTimeout(() => setAnimate(true), 50);
     } else {
       setAnimate(false);
-      // Delay hiding the component until animation completes
       setTimeout(() => setVisible(false), 300);
     }
   }, [isOpen, post]);
@@ -48,6 +49,22 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
 
   const handleTickerClick = (ticker: string) => {
     router.push(`/dashboard/stocks?ticker=${ticker}`);
+  };
+
+  const sendReportToChatbot = () => {
+    const stockDetails = post.stocks.map(stock => 
+      `Ticker: ${stock.ticker}, Primary Rating: ${stock.primaryRating || 'N/A'}`
+    ).join('; ');
+
+    const combinedContext = `
+Report: ${post.report || post.content}
+
+Stocks Analysis:
+${stockDetails}
+    `.trim();
+
+    setChatContext(combinedContext);
+    onClose();
   };
 
   return (
@@ -65,25 +82,33 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-neutral-400 hover:text-white z-60 transition-colors duration-200"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+        <div className="flex justify-between items-center p-4">
+          <button
+            onClick={sendReportToChatbot}
+            className="bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 rounded-lg px-4 py-2 transition-colors duration-200"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
+            Ask AI Assistant
+          </button>
+          <button
+            onClick={onClose}
+            className="text-neutral-400 hover:text-white z-60 transition-colors duration-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
 
         {post && (
           <div className="p-6">

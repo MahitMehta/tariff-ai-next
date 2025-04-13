@@ -66,6 +66,10 @@ export default function DashboardPage() {
     onMessage(messaging, (payload) => {
       console.log('Message received in foreground:', payload);
       
+      fetchPosts().then(() => {
+        console.log('Posts refetched after receiving message:', payload);
+      });
+
       // Create and display a custom notification for foreground messages
       const notificationTitle = payload.notification?.title || 'Financial Alert';
       const notificationOptions = {
@@ -80,7 +84,7 @@ export default function DashboardPage() {
         console.log("This browser does not support notifications");
       } else if (Notification.permission === "granted") {
         const notification = new Notification(notificationTitle, notificationOptions);
-        
+        console.log("Attempting to show notification:", notification);
         // Add click handler to notification
         notification.onclick = () => {
           notification.close();

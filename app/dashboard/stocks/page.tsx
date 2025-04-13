@@ -222,7 +222,7 @@ export default function StocksPage() {
   useEffect(() => {
     const loadStockPosts = async () => {
       const posts = await fetchStockPosts();
-      setStockPosts(posts);
+      setStockPosts(posts || []);
     };
 
     if (ticker) {

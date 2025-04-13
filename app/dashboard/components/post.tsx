@@ -60,8 +60,8 @@ export default function Post({
 
   return (
     <div
-      className={`p-4 ${mounted ? "opacity-100" : "opacity-0"} transition-colors duration-500 transition-opacity duration-200 cursor-pointer 
-                ${isClicked ? "bg-neutral-700" : "hover:bg-neutral-800"}`}
+      className={`p-4 ${mounted ? "opacity-100" : "opacity-0"} transition-all duration-500 duration-200 cursor-pointer 
+                ${isClicked ? "bg-neutral-700" : "hover:bg-[#111111]"}`}
       onClick={() => setIsClicked(true)}
     >
       <div className="flex-1">

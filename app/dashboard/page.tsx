@@ -5,6 +5,7 @@ import Chatbot from './components/chatbot';
 import Post from './components/post';
 import PostModal from './components/postModal';
 
+
 const postsData = [
     {
       id: 1,
@@ -93,8 +94,8 @@ export default function DashboardPage() {
   
   // Use refs for performance-critical state
   const isDraggingRef = useRef(false);
-  const containerRef = useRef(null);
-  const rafRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
 
   // @ts-ignore
   const handlePostClick = (post) => {
@@ -178,10 +179,10 @@ export default function DashboardPage() {
             ))}
           </div>
 
-          <PostModal 
-            isOpen={!!selectedPost} 
-            onClose={handleCloseModal} 
-            post={selectedPost} 
+          <PostModal
+            isOpen={!!selectedPost}
+            onClose={handleCloseModal}
+            post={selectedPost || undefined}
           />
         </div>
       </div>

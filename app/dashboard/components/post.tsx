@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface PostProps {
   username: string;
@@ -25,6 +25,16 @@ export default function Post({
 }: PostProps) {
   const [isClicked, setIsClicked] = useState(false);
 
+  // Reset isClicked state after a short delay
+  useEffect(() => {
+    if (isClicked) {
+      const timer = setTimeout(() => {
+        setIsClicked(false);
+      }, 1); // 200ms delay matches the transition duration
+      return () => clearTimeout(timer);
+    }
+  }, [isClicked]);
+
   const formatTimestamp = (isoString: string) => {
     const now = new Date("2025-04-12T19:40:18-04:00");
     const postDate = new Date(isoString);
@@ -44,7 +54,7 @@ export default function Post({
     <div
       className={`p-4 transition-colors duration-200 cursor-pointer 
                 ${isClicked ? "bg-neutral-700" : "hover:bg-neutral-800"}`}
-      onClick={() => setIsClicked(!isClicked)}
+      onClick={() => setIsClicked(true)}
     >
       <div className="flex-1">
         <div className="flex items-center space-x-1 mb-1">

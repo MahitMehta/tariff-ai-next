@@ -305,31 +305,47 @@ export default function StocksPage() {
     const stockData = stockInfo.find(stock => stock.ticker === ticker);
     const latestPost = stockData?.posts?.[0];
     
-    return latestPost?.stocks?.[0] ? (
+    // Default empty recommendation data
+    const emptyRecommendation = {
+      primaryRating: 'No Data',
+      strongBuyPercent: 0,
+      buyPercent: 0,
+      holdPercent: 0,
+      sellPercent: 0,
+      strongSellPercent: 0,
+      rationale: 'No AI insights available for this stock.'
+    };
+
+    const stockRecommendation = latestPost?.stocks?.[0] || emptyRecommendation;
+    
+    return (
       <div className="space-y-4">
         <div className="flex justify-between items-center mb-6">
           <span className="text-neutral-300 text-sm font-bold">
-            Primary Rating: {latestPost.stocks[0].primaryRating}
+            Primary Rating: {stockRecommendation.primaryRating}
           </span>
         </div>
 
         <div className="space-y-2">
           {[
-            { label: 'Strong Buy', value: latestPost.stocks[0].strongBuyPercent || 0 },
-            { label: 'Buy', value: latestPost.stocks[0].buyPercent || 0 },
-            { label: 'Hold', value: latestPost.stocks[0].holdPercent || 0 },
-            { label: 'Sell', value: latestPost.stocks[0].sellPercent || 0 },
-            { label: 'Strong Sell', value: latestPost.stocks[0].strongSellPercent || 0 }
+            { label: 'Strong Buy', value: stockRecommendation.strongBuyPercent },
+            { label: 'Buy', value: stockRecommendation.buyPercent },
+            { label: 'Hold', value: stockRecommendation.holdPercent },
+            { label: 'Sell', value: stockRecommendation.sellPercent },
+            { label: 'Strong Sell', value: stockRecommendation.strongSellPercent }
           ].map((item, idx) => {
             const maxValue = Math.max(
-              latestPost.stocks[0].strongBuyPercent || 0,
-              latestPost.stocks[0].buyPercent || 0,
-              latestPost.stocks[0].holdPercent || 0,
-              latestPost.stocks[0].sellPercent || 0,
-              latestPost.stocks[0].strongSellPercent || 0
+              stockRecommendation.strongBuyPercent,
+              stockRecommendation.buyPercent,
+              stockRecommendation.holdPercent,
+              stockRecommendation.sellPercent,
+              stockRecommendation.strongSellPercent
             );
             
             const getColorClass = () => {
+              if (item.value === 0) 
+                return 'bg-neutral-900/30 text-neutral-300 border border-neutral-800 hover:bg-neutral-800/40';
+              
               if (item.label.includes('Buy') && item.value === maxValue) 
                 return 'bg-emerald-900/40 text-emerald-100 ring-2 ring-emerald-800 scale-105';
               if (item.label.includes('Sell') && item.value === maxValue) 
@@ -357,11 +373,11 @@ export default function StocksPage() {
         <div className="p-2">
           <h3 className="text-md font-semibold text-neutral-300 mb-1">AI Insight</h3>
           <p className="text-neutral-300 text-sm mt-4">
-            {latestPost.stocks[0].rationale}
+            {stockRecommendation.rationale}
           </p>
         </div>
       </div>
-    ) : null;
+    );
   };
 
   const handleGoBack = () => {
@@ -489,12 +505,15 @@ export default function StocksPage() {
 
         <div className="bg-black text-gray-300 w-full">
             <div className="max-w-4xl mx-auto">
-                <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4">
+                <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4 mt-8">
                 <h1 className="text-xl font-bold text-white">Activity</h1>
                 </div>
 
                 <div className="divide-y divide-neutral-800">
                 {stockInfo
+                    .find(stock => stock.ticker === ticker)
+                    ?.posts.length > 0 ? (
+                    stockInfo
                     .find(stock => stock.ticker === ticker)
                     ?.posts.map((post) => (
                     <div 
@@ -504,7 +523,11 @@ export default function StocksPage() {
                     >    
                         <Post {...post} />
                     </div>
-                ))}
+                ))) : (
+                    <div className="text-center text-neutral-500 p-8">
+                        No posts available for this stock
+                    </div>
+                )}
                 </div>
 
                 <PostModal 

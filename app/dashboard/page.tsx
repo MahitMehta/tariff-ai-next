@@ -1,102 +1,189 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { initializeApp } from 'firebase/app';
+import { 
+  getFirestore, 
+  collection, 
+  getDocs, 
+  query, 
+  orderBy, 
+  limit,
+  where,
+  doc,
+  getDoc
+} from 'firebase/firestore';
+import { 
+  getAuth, 
+  onAuthStateChanged, 
+  User as FirebaseUser 
+} from 'firebase/auth';
 import Chatbot from './components/chatbot';
 import Post from './components/post';
 import PostModal from './components/postModal';
 
+// Define proper types for your data structures
+interface StockData {
+  ticker: string;
+  primaryRating: string;
+  strongBuyPercent: number;
+  buyPercent: number;
+  holdPercent: number;
+  sellPercent: number;
+  strongSellPercent: number;
+  rationale: string;
+}
 
-const postsData = [
-    {
-      id: 1,
-      username: 'Elon Musk',
-      handle: '@elonmusk',
-      verified: true,
-      content: 'Congrats to the Giga Texas team on producing their 400,000th vehicle!',
-      timestamp: '2025-04-12T14:00:00Z',
-      positiveTickers: ['TSLA'],
-      negativeTickers: [],
-      report: "Tesla's Giga Texas milestone represents a significant production ramp-up, indicating strong manufacturing capabilities and potential for increased market share. The 400,000th vehicle production suggests improved operational efficiency and growing demand for electric vehicles.",
-      stocks: [
-        {
-          ticker: 'TSLA',
-          primaryRating: 'Buy',
-          strongBuyPercent: 45,
-          buyPercent: 25,
-          holdPercent: 20,
-          sellPercent: 7,
-          strongSellPercent: 3,
-          rationale: "Tesla's production milestone at Giga Texas demonstrates strong manufacturing capabilities, operational efficiency, and growing demand for electric vehicles. The company continues to lead in EV innovation and market expansion."
-        }
-      ]
-    },
-    {
-      id: 2,
-      username: 'CryptoAnalyst',
-      handle: '@bitcoininsights',
-      verified: true,
-      content: 'Bitcoin approaching key resistance level. Analysts predict potential breakout in the next 48 hours. Stay tuned!',
-      timestamp: '2025-04-12T14:00:00Z',
-      positiveTickers: ['BTC'],
-      negativeTickers: ['COIN'],
-      report: "Bitcoin is nearing a critical resistance level, and analysts predict a potential breakout within the next 48 hours. If the cryptocurrency successfully breaches this level, it could spark increased trading activity, boost investor confidence, and potentially trigger an altcoin rally. However, failure to break through may lead to short-term bearish sentiment.",
-      stocks: [
-        {
-          ticker: 'BTC',
-          primaryRating: 'Neutral',
-          strongBuyPercent: 50,
-          buyPercent: 10,
-          holdPercent: 35,
-          sellPercent: 10,
-          strongSellPercent: 5,
-          rationale: "Bitcoin is at a critical juncture, approaching a key resistance level. A successful breakout could trigger increased trading activity and investor confidence, while failure may lead to short-term bearish sentiment."
-        },
-        {
-          ticker: 'COIN',
-          primaryRating: 'Hold',
-          strongBuyPercent: 15,
-          buyPercent: 25,
-          holdPercent: 40,
-          sellPercent: 15,
-          strongSellPercent: 5,
-          rationale: "Coinbase faces market volatility and regulatory challenges. The stock's performance is closely tied to cryptocurrency market dynamics and overall digital asset adoption."
-        }
-      ]
-    },
-    {
-      id: 3,
-      username: 'MarketWatch',
-      handle: '@marketwatch',
-      verified: true,
-      content: 'Apple’s latest product launch focuses on AI-driven personal assistants, signaling a deeper push into AI and smart home technology.',
-      timestamp: '2025-04-12T14:00:00Z',
-      positiveTickers: ['AAPL'],
-      negativeTickers: [],
-      report: "Apple's new product launch highlights its focus on AI and smart home technology, a move that aligns with current market trends. The integration of AI-driven personal assistants could strengthen Apple's ecosystem, attracting more customers and enhancing user experience.",
-      stocks: [
-        {
-          ticker: 'AAPL',
-          primaryRating: 'Strong Buy',
-          strongBuyPercent: 50,
-          buyPercent: 30,
-          holdPercent: 15,
-          sellPercent: 3,
-          strongSellPercent: 2,
-          rationale: "Apple's continued innovation in AI and smart home technology positions the company for growth, leveraging its strong brand and ecosystem to capture market share in emerging tech industries."
-        }
-      ]
-    }
-];  
+interface PostData {
+  id: number;
+  username: string;
+  handle: string;
+  verified: boolean;
+  content: string;
+  timestamp: string;
+  positiveTickers: string[];
+  negativeTickers: string[];
+  report: string;
+  stocks: StockData[];
+}
+
+const firebaseConfig = {
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+  };
+  
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);  
 
 export default function DashboardPage() {
-  const [selectedPost, setSelectedPost] = useState(null);
+  const [posts, setPosts] = useState<PostData[]>([]);
+  const [selectedPost, setSelectedPost] = useState<PostData | null>(null);
+  const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
   const [leftPanelWidth, setLeftPanelWidth] = useState(50);
   
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
 
-  const handlePostClick = (post) => {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const fetchPosts = useCallback(async () => {
+    if (!currentUser) return;
+
+    try {
+      const userDocRef = doc(db, 'users', currentUser.uid);
+      const userDocSnap = await getDoc(userDocRef);
+
+      if (!userDocSnap.exists()) {
+        console.error('No user document found');
+        return;
+      }
+
+      const userTickers = userDocSnap.data().tickers || [];
+
+      if (userTickers.length === 0) {
+        console.log('No tickers found for user');
+        setPosts([]);
+        return;
+      }
+
+      const postsRef = collection(db, 'events');
+      const q = query(
+        postsRef, 
+        where('stock_tickers', 'array-contains-any', userTickers),
+        orderBy('timestamp', 'desc'),
+      );
+      
+      const querySnapshot = await getDocs(q);
+      const fetchedEvents = querySnapshot.docs.map(doc => doc.data());
+
+      const accountIds = [...new Set(fetchedEvents.map(event => event.trigger_account_id))];
+      const accountsRef = collection(db, 'accounts');
+      
+      const accountPromises = accountIds.map(async (accountId) => {
+        try {
+          const docRef = doc(db, 'accounts', accountId);
+          const docSnap = await getDoc(docRef);
+          
+          if (docSnap.exists()) {
+            const accountData = docSnap.data();
+            return {
+              id: docSnap.id,
+              username: accountData.username,
+              handle: accountData.name
+            };
+          }
+          return null;
+        } catch (error) {
+          console.error(`Error fetching account ${accountId}:`, error);
+          return null;
+        }
+      });
+
+      const accountResults = await Promise.all(accountPromises);
+      
+      const accountsMap: Record<string, any> = accountResults.reduce((acc, account) => {
+        if (account) {
+          acc[account.id] = {
+            username: account.username,
+            handle: account.handle
+          };
+        }
+        return acc;
+      }, {});
+
+      const reformattedPosts: PostData[] = fetchedEvents.map((event, index) => {
+        const account = accountsMap[event.trigger_account_id];
+
+        return {
+          id: index,
+          username: account.username,
+          handle: account.handle,
+          verified: true,
+          content: 'placeholder.',
+          timestamp: event.timestamp,
+          positiveTickers: event.stock_tickers || [],
+          negativeTickers: [],
+          report: event.detailed_report || '',
+          stocks: (event.stock_tickers || []).map(ticker => {
+            const tickerData = event.recommendation?.[ticker] || {};
+            return {
+              ticker: ticker,
+              primaryRating: tickerData?.sentiment || 'Neutral',
+              strongBuyPercent: tickerData?.rec?.strongBuy || 0,
+              buyPercent: tickerData?.rec?.buy || 0,
+              holdPercent: tickerData?.rec?.hold || 0,
+              sellPercent: tickerData?.rec?.sell || 0,
+              strongSellPercent: tickerData?.rec?.strongSell || 0,
+              rationale: tickerData?.reasoning || 'No specific rationale available'
+            };
+          })
+        };
+      });
+
+      setPosts(reformattedPosts);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      setPosts([]);
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
+
+  const handlePostClick = (post: PostData) => {
     setSelectedPost(post);
   };
 
@@ -104,7 +191,7 @@ export default function DashboardPage() {
     setSelectedPost(null);
   };
 
-  const handleMouseDown = (e) => {
+  const handleMouseDown = (e: React.MouseEvent) => {
     isDraggingRef.current = true;
     e.preventDefault();
     
@@ -151,7 +238,7 @@ export default function DashboardPage() {
     };
   }, []);
 
-  const [ mounted, setMounted ] = useState(false);
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => {
       setMounted(true);
@@ -175,7 +262,7 @@ export default function DashboardPage() {
           </div>
 
         <div className="divide-y divide-neutral-800">
-          {postsData.map((post) => (
+          {posts.map((post) => (
             <div 
               key={post.id}  
               className="p-4 hover:bg-neutral-900/50 transition-colors duration-200 cursor-pointer"

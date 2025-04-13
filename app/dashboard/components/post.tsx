@@ -25,29 +25,28 @@ export default function Post({
 }: PostProps) {
   const [isClicked, setIsClicked] = useState(false);
 
-  // Reset isClicked state after a short delay
   useEffect(() => {
     if (isClicked) {
       const timer = setTimeout(() => {
         setIsClicked(false);
-      }, 1); // 200ms delay matches the transition duration
+      }, 1);
       return () => clearTimeout(timer);
     }
   }, [isClicked]);
 
   const formatTimestamp = (isoString: string) => {
-    const now = new Date("2025-04-12T19:40:18-04:00");
+    const now = new Date();
     const postDate = new Date(isoString);
-    const diffMs = now.getTime() - postDate.getTime();
+    const diffMs = postDate.getTime() - now.getTime();
     const diffSeconds = Math.floor(diffMs / 1000);
     const diffMinutes = Math.floor(diffSeconds / 60);
     const diffHours = Math.floor(diffMinutes / 60);
     const diffDays = Math.floor(diffHours / 24);
 
-    if (diffSeconds < 60) return `${diffSeconds}s`;
-    if (diffMinutes < 60) return `${diffMinutes}m`;
-    if (diffHours < 24) return `${diffHours}h`;
-    return `${diffDays}d`;
+    if (diffDays > 0) return `${diffDays}d`;
+    if (diffHours > 0) return `${diffHours}h`;
+    if (diffMinutes > 0) return `${diffMinutes}m`;
+    return `${diffSeconds}s`;
   };
 
   return (

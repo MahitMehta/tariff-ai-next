@@ -340,7 +340,6 @@ export default function StocksPage() {
     const stockData = stockInfo.find(stock => stock.ticker === ticker);
     const latestPost = stockData?.posts?.[0];
     
-    // Default empty recommendation data
     const emptyRecommendation = {
       primaryRating: 'No Data',
       strongBuyPercent: 0,

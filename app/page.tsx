@@ -39,10 +39,10 @@ export default function Home() {
         }}
       />
 
-      {/* Header with PolyStocks and account buttons */}
+      {/* Header with PoliStocks and account buttons */}
       <header className="absolute top-0 left-0 w-full flex justify-between items-center p-4 z-10">
         <div className="text-2xl font-bold text-white flex items-center">
-          <span className="text-green-400">Poly</span>
+          <span className="text-green-400">Poli</span>
           <span>Stocks</span>
         </div>
         <div className="flex space-x-4">
@@ -144,7 +144,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="absolute bottom-0 w-full p-4 text-center text-gray-400 text-sm">
-        <p>© 2025 PolyStocks. All rights reserved.</p>
+        <p>© 2025 PoliStocks. All rights reserved.</p>
       </footer>
 
       {/* Simplified CSS animations */}

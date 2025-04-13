@@ -188,7 +188,7 @@ export default function DashboardPage() {
 
       <div 
         className="bg-neutral-900/50 cursor-col-resize hover:bg-emerald-900/50 transition-colors"
-        style={{ width: '10px' }}
+        style={{ width: '5px' }}
         onMouseDown={handleMouseDown}
       />
 

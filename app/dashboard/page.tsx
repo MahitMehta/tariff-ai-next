@@ -151,10 +151,19 @@ export default function DashboardPage() {
     };
   }, []);
 
+  const [ mounted, setMounted ] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div 
       ref={containerRef}
-      className="bg-black text-gray-300 w-full h-screen flex relative"
+      className={`bg-black ${mounted ? "opacity-100" : "opacity-0" } duration-1000 text-gray-300 transition-all w-full h-screen flex relative`}
     >
       <div 
         className="bg-black transition-none duration-0 overflow-auto" 

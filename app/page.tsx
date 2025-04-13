@@ -46,30 +46,32 @@ export default function Home() {
           <span>Stocks</span>
         </div>
         <div className="flex space-x-4">
-          <button
-            type="button"
-            className="px-4 py-2 font-semibold text-white bg-transparent border border-gray-500 rounded-md hover:bg-grey-900 hover:border-green-400 hover:scale-105 transition-all duration-200"
-            onClick={() => (location.href = "/signup")}
-          >
-            Create Account
-          </button>
-          <button
-            type="button"
-            className="px-4 py-2 font-semibold text-black bg-green-400 rounded-md hover:bg-green-350 hover:scale-105 transition-all duration-200"
-            onClick={() => (location.href = "/login")}
-          >
-            Sign In
-          </button>
+          <Link href="/signup">
+            <button
+              type="button"
+              className="px-4 py-2 font-semibold text-white bg-transparent border border-gray-500 rounded-md hover:bg-grey-900 hover:border-green-400 hover:scale-105 transition-all duration-200"
+            >
+              Create Account
+            </button>
+          </Link>
+          <Link href="/login">
+            <button
+              type="button"
+              className="px-4 py-2 font-semibold text-white cursor-pointer bg-green-500 rounded-md hover:bg-green-350 hover:scale-105 transition-all duration-200"
+            >
+              Sign In
+            </button>
+          </Link>
         </div>
       </header>
 
       {/* Content container with animations */}
       <div className="w-full max-w-3xl text-center z-10">
         {/* Headline with simple fade-in animation */}
-        <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl mb-6 animate-fadeIn">
-          <span className="block">Helping retail investors</span>
-          <span className="block">stay on top of</span>
-          <span className="block text-green-400">financial news</span>
+        <h1 style={{ lineHeight: 1.1 }} className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl mb-6 animate-fadeIn">
+          <span className="block">Helping Retail Investors</span>
+          <span className="block">Stay on Top of </span>
+          <span className="block text-green-400">Critical Financial News</span>
         </h1>
 
         {/* Subheading */}
@@ -80,28 +82,30 @@ export default function Home() {
 
         {/* Button group with hover effects */}
         <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4 animate-fadeIn">
-          <button
-            type="button"
-            className="rounded-md bg-green-500 px-6 py-3 text-base font-semibold text-white shadow-lg hover:bg-green-400 hover:scale-105 transition-all duration-200 group"
-          >
-            <span className="flex items-center justify-center">
-              Get Started
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M14 5l7 7m0 0l-7 7m7-7H3"
-                />
-              </svg>
-            </span>
-          </button>
+          <Link href="/signup">
+            <button
+              type="button"
+              className="rounded-md bg-green-500 px-6 py-3 text-base font-semibold text-white shadow-lg hover:bg-green-400 hover:scale-105 transition-all duration-200 group"
+            >
+              <span className="flex items-center justify-center">
+                Get Started
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  />
+                </svg>
+              </span>
+            </button>
+          </Link>
           <Link target="_blank" href="https://devpost.com/software/902063">
             <button
               type="button"

@@ -87,73 +87,85 @@ const StockBottomBar: React.FC = () => {
     }
   }, [isHoveringBar]);
 
-  return (
-    <div
-      className={`w-full ${
-        isHoveringBar ? "bg-black bg-opacity-25" : "bg-black bg-opacity-15"
-      } h-8 overflow-hidden fixed bottom-0 left-0 transition-colors duration-300`}
-      onMouseEnter={() => setIsHoveringBar(true)}
-      onMouseLeave={() => {
-        setIsHoveringBar(false);
-        setHoveredIndex(null);
-      }}
-    >
-      <div
-        ref={containerRef}
-        className="flex items-center h-full whitespace-nowrap px-2"
-      >
-        {stockData.length > 0 ? (
-          allStocks.map((stock, index) => {
-            const data = stockData[index % stockData.length];
-            const isHovered = hoveredIndex === index;
-            const shouldFade = hoveredIndex !== null && !isHovered;
+  const [ mounted, setMounted ] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 100);
 
-            return (
-              <div
-                key={`${stock.ticker}-${index}`}
-                className={`inline-flex items-center px-3 mx-1 h-8 transition-opacity duration-300 ${
-                  shouldFade ? "opacity-50" : "opacity-100"
-                } cursor-pointer`}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  try {
-                    console.log(`Attempting to navigate to stock: ${stock.ticker}`);
-                    
-                    // Alternative navigation method
-                    window.location.href = `/dashboard/stocks?ticker=${stock.ticker}`;
-                    
-                    // Fallback router push
-                    router.push(`/dashboard/stocks?ticker=${stock.ticker}`);
-                  } catch (error) {
-                    console.error('Navigation failed:', error);
-                  }
-                }}
-              >
-                <span className="font-medium text-xs text-gray-200 mr-2">
-                  {stock.ticker}
-                </span>
-                <span className="text-xs text-gray-400 mr-2">
-                  ${data?.price || "N/A"}
-                </span>
-                <span
-                  className={`text-xs ${
-                    data?.isUp ? "text-green-400" : "text-orange-400"
-                  }`}
+    return () => clearTimeout(timer);
+  }
+  , []);
+
+  return (
+    <div className={`${ mounted ? "opacity-100" : "opacity-0" } duration-1000 transition-all`}>
+      <div
+        className={`w-full ${
+          isHoveringBar ? "bg-black bg-opacity-25" : "bg-black bg-opacity-15"
+        } h-8 overflow-hidden fixed bottom-0 left-0 transition-colors duration-300`}
+        onMouseEnter={() => setIsHoveringBar(true)}
+        onMouseLeave={() => {
+          setIsHoveringBar(false);
+          setHoveredIndex(null);
+        }}
+      >
+        <div
+          ref={containerRef}
+          className="flex items-center h-full whitespace-nowrap px-2"
+        >
+          {stockData.length > 0 ? (
+            allStocks.map((stock, index) => {
+              const data = stockData[index % stockData.length];
+              const isHovered = hoveredIndex === index;
+              const shouldFade = hoveredIndex !== null && !isHovered;
+
+              return (
+                <div
+                  key={`${stock.ticker}-${index}`}
+                  className={`inline-flex items-center px-3 mx-1 h-8 transition-opacity duration-300 ${
+                    shouldFade ? "opacity-50" : "opacity-100"
+                  } cursor-pointer`}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    try {
+                      console.log(`Attempting to navigate to stock: ${stock.ticker}`);
+                      
+                      // Alternative navigation method
+                      window.location.href = `/dashboard/stocks?ticker=${stock.ticker}`;
+                      
+                      // Fallback router push
+                      router.push(`/dashboard/stocks?ticker=${stock.ticker}`);
+                    } catch (error) {
+                      console.error('Navigation failed:', error);
+                    }
+                  }}
                 >
-                  {data?.isUp ? "+" : ""}
-                  {data?.change.toFixed(2)}%
-                </span>
-              </div>
-            );
-          })
-        ) : (
-          <div className="text-center w-full text-gray-300 text-xs">
-            Loading stock data...
-          </div>
-        )}
+                  <span className="font-medium text-xs text-gray-200 mr-2">
+                    {stock.ticker}
+                  </span>
+                  <span className="text-xs text-gray-400 mr-2">
+                    ${data?.price || "N/A"}
+                  </span>
+                  <span
+                    className={`text-xs ${
+                      data?.isUp ? "text-green-400" : "text-orange-400"
+                    }`}
+                  >
+                    {data?.isUp ? "+" : ""}
+                    {data?.change.toFixed(2)}%
+                  </span>
+                </div>
+              );
+            })
+          ) : (
+            <div className="text-center w-full text-gray-300 text-xs">
+              Loading stock data...
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

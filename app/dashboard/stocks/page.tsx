@@ -10,149 +10,184 @@ import { useRouter } from 'next/navigation';
 
 type TimeRange = 'week' | 'month' | 'year' | 'all';
 
-const stockInfo = [
-    {
-        ticker: 'TSLA',
-        posts: [
-            {
-                id: 1,
-                username: 'Elon Musk',
-                handle: '@elonmusk',
-                verified: true,
-                content: 'Congrats to the Giga Texas team on producing their 400,000th vehicle!',
-                timestamp: '2025-04-12T14:00:00Z',
-                positiveTickers: ['TSLA'],
-                negativeTickers: [],
-                report: "Tesla's achievement is impressive, demonstrating operational efficiency and increasing EV demand. Investors remain optimistic about Tesla's future growth.",
-                stocks: [
-                    {
-                        primaryRating: 'Buy',
-                        strongBuyPercent: 45,
-                        buyPercent: 25,
-                        holdPercent: 20,
-                        sellPercent: 7,
-                        strongSellPercent: 3,
-                        rationale: "Tesla's production milestone at Giga Texas demonstrates strong manufacturing capabilities, operational efficiency, and growing demand for electric vehicles."
-                    }
-                ]
-            },
-            {
-                id: 2,
-                username: 'Investing Daily',
-                handle: '@investingdaily',
-                verified: true,
-                content: 'Tesla announces plans for a new Gigafactory in India, aiming to tap into the growing EV market in Asia.',
-                timestamp: '2025-04-11T16:30:00Z',
-                positiveTickers: ['TSLA'],
-                negativeTickers: [],
-                report: "Tesla's expansion into India highlights its strategic focus on emerging markets. This move could drive long-term growth by capturing a significant share of the developing EV market.",
-                stocks: [
-                    {
-                        primaryRating: 'Strong Buy',
-                        strongBuyPercent: 50,
-                        buyPercent: 30,
-                        holdPercent: 15,
-                        sellPercent: 3,
-                        strongSellPercent: 2,
-                        rationale: "The new Gigafactory in India positions Tesla to leverage the rapidly growing EV market in Asia, ensuring sustained growth and competitive advantages in the region."
-                    }
-                ]
-            },
-            {
-                id: 3,
-                username: 'EV Enthusiast',
-                handle: '@evnews',
-                verified: true,
-                content: 'Tesla’s Cybertruck deliveries are set to begin next quarter. The futuristic vehicle has already garnered over a million pre-orders!',
-                timestamp: '2025-04-10T09:15:00Z',
-                positiveTickers: ['TSLA'],
-                negativeTickers: [],
-                report: "The Cybertruck’s high demand underscores Tesla’s innovation appeal. Successful delivery could further solidify Tesla's market dominance in EVs.",
-                stocks: [
-                    {
-                        primaryRating: 'Buy',
-                        strongBuyPercent: 40,
-                        buyPercent: 35,
-                        holdPercent: 15,
-                        sellPercent: 7,
-                        strongSellPercent: 3,
-                        rationale: "The Cybertruck rollout could boost Tesla’s revenue and brand prestige, though execution risks remain critical to monitor."
-                    }
-                ]
-            }
+type StockDataPoint = {
+  date: string;
+  close: number;
+  open: number;
+  high: number;
+  low: number;
+  volume: number;
+};
+
+type Post = {
+  id: number;
+  username: string;
+  handle: string;
+  verified: boolean;
+  content: string;
+  timestamp: string;
+  positiveTickers: string[];
+  negativeTickers: string[];
+  report: string;
+  stocks: {
+    primaryRating: string;
+    strongBuyPercent: number;
+    buyPercent: number;
+    holdPercent: number;
+    sellPercent: number;
+    strongSellPercent: number;
+    rationale: string;
+  }[];
+};
+
+type StockInfo = {
+  ticker: string;
+  posts: Post[];
+};
+
+const stockInfo: StockInfo[] = [
+  {
+    ticker: 'TSLA',
+    posts: [
+      {
+        id: 1,
+        username: 'Elon Musk',
+        handle: '@elonmusk',
+        verified: true,
+        content: 'Congrats to the Giga Texas team on producing their 400,000th vehicle!',
+        timestamp: '2025-04-12T14:00:00Z',
+        positiveTickers: ['TSLA'],
+        negativeTickers: [],
+        report: "Tesla's achievement is impressive, demonstrating operational efficiency and increasing EV demand. Investors remain optimistic about Tesla's future growth.",
+        stocks: [
+          {
+            primaryRating: 'Buy',
+            strongBuyPercent: 45,
+            buyPercent: 25,
+            holdPercent: 20,
+            sellPercent: 7,
+            strongSellPercent: 3,
+            rationale: "Tesla's production milestone at Giga Texas demonstrates strong manufacturing capabilities, operational efficiency, and growing demand for electric vehicles."
+          }
         ]
-    },
-    {
-        ticker: 'NVDA',
-        posts: [
-            {
-                id: 4,
-                username: 'TechRadar',
-                handle: '@techradar',
-                verified: true,
-                content: 'NVIDIA unveils its latest AI-focused GPU, promising a 20% performance boost over its predecessor.',
-                timestamp: '2025-04-12T13:45:00Z',
-                positiveTickers: ['NVDA'],
-                negativeTickers: [],
-                report: "NVIDIA's advancements in AI hardware continue to solidify its market leadership. The new GPU is expected to drive adoption in AI-driven industries.",
-                stocks: [
-                    {
-                        primaryRating: 'Strong Buy',
-                        strongBuyPercent: 55,
-                        buyPercent: 30,
-                        holdPercent: 10,
-                        sellPercent: 3,
-                        strongSellPercent: 2,
-                        rationale: "NVIDIA's cutting-edge GPU technology positions the company as a leader in AI and gaming markets. Its innovations are expected to drive revenue growth and maintain dominance in a competitive field."
-                    }
-                ]
-            },
-            {
-                id: 5,
-                username: 'AI Insider',
-                handle: '@aiinsights',
-                verified: true,
-                content: 'NVIDIA secures a major partnership with OpenAI to power next-gen AI applications, leveraging their advanced GPUs.',
-                timestamp: '2025-04-11T18:00:00Z',
-                positiveTickers: ['NVDA'],
-                negativeTickers: [],
-                report: "NVIDIA's partnership with OpenAI reinforces its position as a key player in AI infrastructure. This collaboration is likely to accelerate growth in AI adoption across industries.",
-                stocks: [
-                    {
-                        primaryRating: 'Strong Buy',
-                        strongBuyPercent: 60,
-                        buyPercent: 25,
-                        holdPercent: 10,
-                        sellPercent: 3,
-                        strongSellPercent: 2,
-                        rationale: "This partnership strengthens NVIDIA’s foothold in the AI ecosystem, ensuring sustained demand for its cutting-edge hardware solutions."
-                    }
-                ]
-            },
-            {
-                id: 6,
-                username: 'MarketWatch',
-                handle: '@marketwatch',
-                verified: true,
-                content: 'NVIDIA’s data center revenue hits a record high, fueled by increasing demand for AI and machine learning solutions.',
-                timestamp: '2025-04-10T12:30:00Z',
-                positiveTickers: ['NVDA'],
-                negativeTickers: [],
-                report: "NVIDIA’s strong performance in the data center segment highlights its pivotal role in the AI revolution. This growth trend is expected to continue.",
-                stocks: [
-                    {
-                        primaryRating: 'Strong Buy',
-                        strongBuyPercent: 58,
-                        buyPercent: 28,
-                        holdPercent: 10,
-                        sellPercent: 3,
-                        strongSellPercent: 1,
-                        rationale: "The growth in data center revenue reflects NVIDIA’s successful alignment with AI and cloud computing trends, ensuring sustained profitability."
-                    }
-                ]
-            }
+      },
+      {
+        id: 2,
+        username: 'Investing Daily',
+        handle: '@investingdaily',
+        verified: true,
+        content: 'Tesla announces plans for a new Gigafactory in India, aiming to tap into the growing EV market in Asia.',
+        timestamp: '2025-04-11T16:30:00Z',
+        positiveTickers: ['TSLA'],
+        negativeTickers: [],
+        report: "Tesla's expansion into India highlights its strategic focus on emerging markets. This move could drive long-term growth by capturing a significant share of the developing EV market.",
+        stocks: [
+          {
+            primaryRating: 'Strong Buy',
+            strongBuyPercent: 50,
+            buyPercent: 30,
+            holdPercent: 15,
+            sellPercent: 3,
+            strongSellPercent: 2,
+            rationale: "The new Gigafactory in India positions Tesla to leverage the rapidly growing EV market in Asia, ensuring sustained growth and competitive advantages in the region."
+          }
         ]
-    }
+      },
+      {
+        id: 3,
+        username: 'EV Enthusiast',
+        handle: '@evnews',
+        verified: true,
+        content: 'Tesla’s Cybertruck deliveries are set to begin next quarter. The futuristic vehicle has already garnered over a million pre-orders!',
+        timestamp: '2025-04-10T09:15:00Z',
+        positiveTickers: ['TSLA'],
+        negativeTickers: [],
+        report: "The Cybertruck’s high demand underscores Tesla’s innovation appeal. Successful delivery could further solidify Tesla's market dominance in EVs.",
+        stocks: [
+          {
+            primaryRating: 'Buy',
+            strongBuyPercent: 40,
+            buyPercent: 35,
+            holdPercent: 15,
+            sellPercent: 7,
+            strongSellPercent: 3,
+            rationale: "The Cybertruck rollout could boost Tesla’s revenue and brand prestige, though execution risks remain critical to monitor."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    ticker: 'NVDA',
+    posts: [
+      {
+        id: 4,
+        username: 'TechRadar',
+        handle: '@techradar',
+        verified: true,
+        content: 'NVIDIA unveils its latest AI-focused GPU, promising a 20% performance boost over its predecessor.',
+        timestamp: '2025-04-12T13:45:00Z',
+        positiveTickers: ['NVDA'],
+        negativeTickers: [],
+        report: "NVIDIA's advancements in AI hardware continue to solidify its market leadership. The new GPU is expected to drive adoption in AI-driven industries.",
+        stocks: [
+          {
+            primaryRating: 'Strong Buy',
+            strongBuyPercent: 55,
+            buyPercent: 30,
+            holdPercent: 10,
+            sellPercent: 3,
+            strongSellPercent: 2,
+            rationale: "NVIDIA's cutting-edge GPU technology positions the company as a leader in AI and gaming markets. Its innovations are expected to drive revenue growth and maintain dominance in a competitive field."
+          }
+        ]
+      },
+      {
+        id: 5,
+        username: 'AI Insider',
+        handle: '@aiinsights',
+        verified: true,
+        content: 'NVIDIA secures a major partnership with OpenAI to power next-gen AI applications, leveraging their advanced GPUs.',
+        timestamp: '2025-04-11T18:00:00Z',
+        positiveTickers: ['NVDA'],
+        negativeTickers: [],
+        report: "NVIDIA's partnership with OpenAI reinforces its position as a key player in AI infrastructure. This collaboration is likely to accelerate growth in AI adoption across industries.",
+        stocks: [
+          {
+            primaryRating: 'Strong Buy',
+            strongBuyPercent: 60,
+            buyPercent: 25,
+            holdPercent: 10,
+            sellPercent: 3,
+            strongSellPercent: 2,
+            rationale: "This partnership strengthens NVIDIA’s foothold in the AI ecosystem, ensuring sustained demand for its cutting-edge hardware solutions."
+          }
+        ]
+      },
+      {
+        id: 6,
+        username: 'MarketWatch',
+        handle: '@marketwatch',
+        verified: true,
+        content: 'NVIDIA’s data center revenue hits a record high, fueled by increasing demand for AI and machine learning solutions.',
+        timestamp: '2025-04-10T12:30:00Z',
+        positiveTickers: ['NVDA'],
+        negativeTickers: [],
+        report: "NVIDIA’s strong performance in the data center segment highlights its pivotal role in the AI revolution. This growth trend is expected to continue.",
+        stocks: [
+          {
+            primaryRating: 'Strong Buy',
+            strongBuyPercent: 58,
+            buyPercent: 28,
+            holdPercent: 10,
+            sellPercent: 3,
+            strongSellPercent: 1,
+            rationale: "The growth in data center revenue reflects NVIDIA’s successful alignment with AI and cloud computing trends, ensuring sustained profitability."
+          }
+        ]
+      }
+    ]
+  }
 ];
 
 const DayStockInfo = ({ active, payload, label }: any) => {
@@ -178,19 +213,19 @@ export default function StocksPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [ticker, setTicker] = useState(searchParams.get('ticker') || 'TSLA');
-  const [stockData, setStockData] = useState([]);
+  const [stockData, setStockData] = useState<StockDataPoint[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [timeRange, setTimeRange] = useState<TimeRange>('month');
   const [companyName, setCompanyName] = useState('');
   
-  const completeStockDataRef = useRef<any[]>([]);
+  const completeStockDataRef = useRef<StockDataPoint[]>([]);
 
   const [initialDataFetched, setInitialDataFetched] = useState(false);
 
-  const [selectedPost, setSelectedPost] = useState(null);
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
-  const handlePostClick = (post) => {
+  const handlePostClick = (post: Post) => {
     setSelectedPost(post);
   };
 
@@ -201,7 +236,7 @@ export default function StocksPage() {
   const selectTimeRangeData = useCallback((range: TimeRange) => {
     if (!completeStockDataRef.current.length) return;
 
-    let selectedData: any[] = [];
+    let selectedData: StockDataPoint[] = [];
     switch (range) {
       case 'week':
         selectedData = completeStockDataRef.current.slice(-7);
@@ -286,8 +321,8 @@ export default function StocksPage() {
     }
   };
 
-  const calculatePercentChange = () => {
-    if (stockData.length < 2) return null;
+  const calculatePercentChange = (stockData: StockDataPoint[]): string => {
+    if (stockData.length < 2) return '0.00';
     const latestData = stockData[stockData.length - 1];
     const previousData = stockData[stockData.length - 2];
     const percentChange = ((latestData.close - previousData.close) / previousData.close) * 100;
@@ -431,13 +466,13 @@ export default function StocksPage() {
                     </p>
                     <p className={`
                       font-medium text-lg
-                      ${parseFloat(calculatePercentChange()) >= 0 
+                      ${parseFloat(calculatePercentChange(stockData)) >= 0 
                         ? 'text-green-500' 
                         : 'text-red-500'
                       }
                     `}>
-                      {calculatePercentChange()}% 
-                      {parseFloat(calculatePercentChange()) >= 0 ? '▲' : '▼'}
+                      {parseFloat(calculatePercentChange(stockData))}% 
+                      {parseFloat(calculatePercentChange(stockData)) >= 0 ? '▲' : '▼'}
                     </p>
                   </div>
                 </div>
@@ -510,12 +545,9 @@ export default function StocksPage() {
                 </div>
 
                 <div className="divide-y divide-neutral-800">
-                {stockInfo
-                    .find(stock => stock.ticker === ticker)
-                    ?.posts.length > 0 ? (
+                {stockInfo && stockInfo.find(stock => stock.ticker === ticker)?.posts.length ? (
                     stockInfo
-                    .find(stock => stock.ticker === ticker)
-                    ?.posts.map((post) => (
+                      .find(stock => stock.ticker === ticker)?.posts.map((post) => (
                     <div 
                     key={post.id} 
                     className="p-4 hover:bg-neutral-900/50 transition-colors duration-200 cursor-pointer"
@@ -533,7 +565,7 @@ export default function StocksPage() {
                 <PostModal 
                     isOpen={!!selectedPost} 
                     onClose={handleCloseModal} 
-                    post={selectedPost} 
+                    post={selectedPost!} 
                 />
             </div>
         </div>

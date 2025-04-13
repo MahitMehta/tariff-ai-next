@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 interface PostModalProps {
   isOpen: boolean;
   onClose: () => void;
-  post?: {
+  post: {
     id: number;
     username: string;
     handle: string;
@@ -33,7 +33,7 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
   const router = useRouter();
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && post) {
       setVisible(true);
       // Slight delay to trigger animations after component is rendered
       setTimeout(() => setAnimate(true), 50);
@@ -42,9 +42,9 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
       // Delay hiding the component until animation completes
       setTimeout(() => setVisible(false), 300);
     }
-  }, [isOpen]);
+  }, [isOpen, post]);
 
-  if (!visible) return null;
+  if (!visible || !post) return null;
 
   const handleTickerClick = (ticker: string) => {
     router.push(`/dashboard/stocks?ticker=${ticker}`);

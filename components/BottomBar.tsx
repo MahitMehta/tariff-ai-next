@@ -126,9 +126,7 @@ const StockBottomBar: React.FC = () => {
                     window.location.href = `/dashboard/stocks?ticker=${stock.ticker}`;
                     
                     // Fallback router push
-                    router.push(`/dashboard/stocks?ticker=${stock.ticker}`).catch((err) => {
-                      console.error('Navigation error:', err);
-                    });
+                    router.push(`/dashboard/stocks?ticker=${stock.ticker}`);
                   } catch (error) {
                     console.error('Navigation failed:', error);
                   }

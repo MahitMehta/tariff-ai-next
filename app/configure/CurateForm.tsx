@@ -7,8 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import AutocompleteDropdownMulti from "../../components/AutocompleteDropdown";
 import { UserIcon } from "@heroicons/react/24/outline";
 import BrandButton from "../../components/BrandButton";
-import InputField from "../../components/InputField";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Checkbox from "../../components/Checkbox";
 import DropdownSelect from "../../components/Dropdown";
 

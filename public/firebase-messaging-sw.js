@@ -18,6 +18,20 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
+    title: payload.notification.title,
+    // icon: '/firebase-logo.png', // optional icon
+  };
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+messaging.onMessage((payload) => {
+  console.log('[firebase-messaging-sw.js] Received foreground message ', payload);
+
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    title: payload.notification.title,
     // icon: '/firebase-logo.png', // optional icon
   };
 

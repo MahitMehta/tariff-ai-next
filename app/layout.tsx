@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import PageTransition from "../components/PageTransition";
 import { Suspense } from "react";
+import BottomBar from "../components/BottomBar";
+import "./globals.css";
 
 const inter = Inter(
   {
@@ -27,6 +27,7 @@ export default function RootLayout({
        
         <Suspense fallback={<></>}>
           {children}
+          <BottomBar />
         </Suspense>
 
       </body>

@@ -145,7 +145,7 @@ export default function DashboardPage() {
       const fetchedEvents = eventSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
-      }));
+      })) as any[];
       const accountIds = [...new Set(fetchedEvents.map(event => event.trigger_account_id))];
       const accountsRef = collection(db, 'accounts');
       

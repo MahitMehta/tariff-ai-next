@@ -14,7 +14,6 @@ type Message = {
 };
 
 const sendChatMessage = async (question: string, context: string): Promise<{ answer: string }> => {
-  // Validate input
   if (!question.trim()) {
     throw new Error('Question cannot be empty');
   }
@@ -210,7 +209,7 @@ export default function Chatbot() {
 
       <div 
         ref={chatContainerRef}
-        className="flex-grow overflow-y-auto p-4 space-y-4 no-scrollbar pt-16 pb-16"
+        className="flex-grow overflow-y-auto p-4 space-y-4 no-scrollbar pt-16 pb-16 max-h-[90vh]"
       >
         {messages.length === 0 && (
           <div className="text-center text-neutral-500 mt-10">

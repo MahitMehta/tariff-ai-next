@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
-import Image from 'next/image';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import Post from './components/post';
 import PostModal from './components/postModal';
+import Chatbot from './components/chatbot';
 
 const postsData = [
     {
@@ -89,6 +89,12 @@ const postsData = [
 
 export default function DashboardPage() {
   const [selectedPost, setSelectedPost] = useState(null);
+  const [leftPanelWidth, setLeftPanelWidth] = useState(50);
+  
+  // Use refs for performance-critical state
+  const isDraggingRef = useRef(false);
+  const containerRef = useRef(null);
+  const rafRef = useRef(null);
 
   const handlePostClick = (post) => {
     setSelectedPost(post);
@@ -98,30 +104,100 @@ export default function DashboardPage() {
     setSelectedPost(null);
   };
 
+  const handleMouseDown = (e) => {
+    isDraggingRef.current = true;
+    e.preventDefault();
+    
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
+
+    rafRef.current = requestAnimationFrame(() => {
+      if (!isDraggingRef.current) return;
+      
+      const container = containerRef.current;
+      if (!container) return;
+
+      const containerWidth = container.offsetWidth;
+      const mouseX = e.clientX - container.getBoundingClientRect().left;
+      const newWidth = (mouseX / containerWidth) * 100;
+      
+      const constrainedWidth = Math.max(10, Math.min(90, newWidth));
+      setLeftPanelWidth(constrainedWidth);
+    });
+  }, []);
+
+  const handleMouseUp = useCallback(() => {
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
+
+    isDraggingRef.current = false;
+    
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+  }, [handleMouseMove]);
+
+  useEffect(() => {
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <div className="bg-black text-gray-300 w-full">
-      <div className="max-w-4xl mx-auto">
-        <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4">
-          <h1 className="text-xl font-bold text-white">Activity</h1>
-        </div>
+    <div 
+      ref={containerRef}
+      className="bg-black text-gray-300 w-full h-screen flex relative"
+    >
+      <div 
+        className="bg-black transition-none duration-0 overflow-auto" 
+        style={{ width: `${leftPanelWidth}%` }}
+      >
+        <div className="max-w-4xl mx-auto">
+          <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4">
+            <h1 className="text-xl font-bold text-white">Activity</h1>
+          </div>
 
-        <div className="divide-y divide-neutral-800">
-          {postsData.map((post) => (
-            <div 
-              key={post.id} 
-              className="p-4 hover:bg-neutral-900/50 transition-colors duration-200 cursor-pointer"
-              onClick={() => handlePostClick(post)}
-            >    
+          <div className="divide-y divide-neutral-800">
+            {postsData.map((post) => (
+              <div 
+                key={post.id} 
+                className="p-4 hover:bg-neutral-900/50 transition-colors duration-200 cursor-pointer"
+                onClick={() => handlePostClick(post)}
+              >    
                 <Post {...post} />
-            </div>
-          ))}
-        </div>
+              </div>
+            ))}
+          </div>
 
-        <PostModal 
-          isOpen={!!selectedPost} 
-          onClose={handleCloseModal} 
-          post={selectedPost} 
-        />
+          <PostModal 
+            isOpen={!!selectedPost} 
+            onClose={handleCloseModal} 
+            post={selectedPost} 
+          />
+        </div>
+      </div>
+
+      <div 
+        className="bg-neutral-900/50 cursor-col-resize hover:bg-emerald-900/50 transition-colors"
+        style={{ width: '10px' }}
+        onMouseDown={handleMouseDown}
+      />
+
+      <div 
+        className="bg-neutral-950 transition-none duration-0 overflow-hidden" 
+        style={{ width: `${100 - leftPanelWidth}%` }}
+      >
+        <div className="text-neutral-400 text-center h-fit">
+          <Chatbot />
+        </div>
       </div>
     </div>
   );

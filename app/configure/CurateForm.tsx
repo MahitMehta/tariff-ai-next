@@ -176,7 +176,7 @@ const CurateForm = () => {
             options={eventCategories}
             className="mt-3"
             onSelect={(events) => {
-                setSelectedEvents(events.map((event) => event.id));
+                setSelectedEvents(events.map((event) => event.value));
                 console.log("Selected events: ", events);
             }}
             title="Event Categories"

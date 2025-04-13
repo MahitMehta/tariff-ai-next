@@ -1,12 +1,27 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { 
+    collection, 
+    getDocs, 
+    query, 
+    orderBy, 
+    where,
+    doc,
+    getDoc,
+    documentId
+  } from 'firebase/firestore';
+  import { 
+    onAuthStateChanged, 
+    User as FirebaseUser 
+  } from 'firebase/auth';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import Post from '../components/post';
 import PostModal from '../components/postModal';
 import { useRouter } from 'next/navigation';
+import { app, auth, db } from '@/lib/firebase.client';
 
 type TimeRange = 'week' | 'month' | 'year' | 'all';
 
@@ -45,151 +60,6 @@ type StockInfo = {
   posts: Post[];
 };
 
-const stockInfo: StockInfo[] = [
-  {
-    ticker: 'TSLA',
-    posts: [
-      {
-        id: 1,
-        username: 'Elon Musk',
-        handle: '@elonmusk',
-        verified: true,
-        content: 'Congrats to the Giga Texas team on producing their 400,000th vehicle!',
-        timestamp: '2025-04-12T14:00:00Z',
-        positiveTickers: ['TSLA'],
-        negativeTickers: [],
-        report: "Tesla's achievement is impressive, demonstrating operational efficiency and increasing EV demand. Investors remain optimistic about Tesla's future growth.",
-        stocks: [
-          {
-            primaryRating: 'Buy',
-            strongBuyPercent: 45,
-            buyPercent: 25,
-            holdPercent: 20,
-            sellPercent: 7,
-            strongSellPercent: 3,
-            rationale: "Tesla's production milestone at Giga Texas demonstrates strong manufacturing capabilities, operational efficiency, and growing demand for electric vehicles."
-          }
-        ]
-      },
-      {
-        id: 2,
-        username: 'Investing Daily',
-        handle: '@investingdaily',
-        verified: true,
-        content: 'Tesla announces plans for a new Gigafactory in India, aiming to tap into the growing EV market in Asia.',
-        timestamp: '2025-04-11T16:30:00Z',
-        positiveTickers: ['TSLA'],
-        negativeTickers: [],
-        report: "Tesla's expansion into India highlights its strategic focus on emerging markets. This move could drive long-term growth by capturing a significant share of the developing EV market.",
-        stocks: [
-          {
-            primaryRating: 'Strong Buy',
-            strongBuyPercent: 50,
-            buyPercent: 30,
-            holdPercent: 15,
-            sellPercent: 3,
-            strongSellPercent: 2,
-            rationale: "The new Gigafactory in India positions Tesla to leverage the rapidly growing EV market in Asia, ensuring sustained growth and competitive advantages in the region."
-          }
-        ]
-      },
-      {
-        id: 3,
-        username: 'EV Enthusiast',
-        handle: '@evnews',
-        verified: true,
-        content: 'Tesla’s Cybertruck deliveries are set to begin next quarter. The futuristic vehicle has already garnered over a million pre-orders!',
-        timestamp: '2025-04-10T09:15:00Z',
-        positiveTickers: ['TSLA'],
-        negativeTickers: [],
-        report: "The Cybertruck’s high demand underscores Tesla’s innovation appeal. Successful delivery could further solidify Tesla's market dominance in EVs.",
-        stocks: [
-          {
-            primaryRating: 'Buy',
-            strongBuyPercent: 40,
-            buyPercent: 35,
-            holdPercent: 15,
-            sellPercent: 7,
-            strongSellPercent: 3,
-            rationale: "The Cybertruck rollout could boost Tesla’s revenue and brand prestige, though execution risks remain critical to monitor."
-          }
-        ]
-      }
-    ]
-  },
-  {
-    ticker: 'NVDA',
-    posts: [
-      {
-        id: 4,
-        username: 'TechRadar',
-        handle: '@techradar',
-        verified: true,
-        content: 'NVIDIA unveils its latest AI-focused GPU, promising a 20% performance boost over its predecessor.',
-        timestamp: '2025-04-12T13:45:00Z',
-        positiveTickers: ['NVDA'],
-        negativeTickers: [],
-        report: "NVIDIA's advancements in AI hardware continue to solidify its market leadership. The new GPU is expected to drive adoption in AI-driven industries.",
-        stocks: [
-          {
-            primaryRating: 'Strong Buy',
-            strongBuyPercent: 55,
-            buyPercent: 30,
-            holdPercent: 10,
-            sellPercent: 3,
-            strongSellPercent: 2,
-            rationale: "NVIDIA's cutting-edge GPU technology positions the company as a leader in AI and gaming markets. Its innovations are expected to drive revenue growth and maintain dominance in a competitive field."
-          }
-        ]
-      },
-      {
-        id: 5,
-        username: 'AI Insider',
-        handle: '@aiinsights',
-        verified: true,
-        content: 'NVIDIA secures a major partnership with OpenAI to power next-gen AI applications, leveraging their advanced GPUs.',
-        timestamp: '2025-04-11T18:00:00Z',
-        positiveTickers: ['NVDA'],
-        negativeTickers: [],
-        report: "NVIDIA's partnership with OpenAI reinforces its position as a key player in AI infrastructure. This collaboration is likely to accelerate growth in AI adoption across industries.",
-        stocks: [
-          {
-            primaryRating: 'Strong Buy',
-            strongBuyPercent: 60,
-            buyPercent: 25,
-            holdPercent: 10,
-            sellPercent: 3,
-            strongSellPercent: 2,
-            rationale: "This partnership strengthens NVIDIA’s foothold in the AI ecosystem, ensuring sustained demand for its cutting-edge hardware solutions."
-          }
-        ]
-      },
-      {
-        id: 6,
-        username: 'MarketWatch',
-        handle: '@marketwatch',
-        verified: true,
-        content: 'NVIDIA’s data center revenue hits a record high, fueled by increasing demand for AI and machine learning solutions.',
-        timestamp: '2025-04-10T12:30:00Z',
-        positiveTickers: ['NVDA'],
-        negativeTickers: [],
-        report: "NVIDIA’s strong performance in the data center segment highlights its pivotal role in the AI revolution. This growth trend is expected to continue.",
-        stocks: [
-          {
-            primaryRating: 'Strong Buy',
-            strongBuyPercent: 58,
-            buyPercent: 28,
-            holdPercent: 10,
-            sellPercent: 3,
-            strongSellPercent: 1,
-            rationale: "The growth in data center revenue reflects NVIDIA’s successful alignment with AI and cloud computing trends, ensuring sustained profitability."
-          }
-        ]
-      }
-    ]
-  }
-];
-
 const DayStockInfo = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
@@ -224,6 +94,8 @@ export default function StocksPage() {
   const [initialDataFetched, setInitialDataFetched] = useState(false);
 
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+
+  const [stockPosts, setStockPosts] = useState<Post[]>([]);
 
   const handlePostClick = (post: Post) => {
     setSelectedPost(post);
@@ -263,6 +135,100 @@ export default function StocksPage() {
       fetchStockData(tickerParam);
     }
   }, [searchParams, initialDataFetched]);
+
+  const fetchStockPosts = useCallback(async () => {
+    if (!ticker) return;
+
+    try {
+      const eventsRef = collection(db, 'events');
+      const q = query(
+        eventsRef, 
+        where('stock_tickers', 'array-contains', ticker),
+        orderBy('timestamp', 'desc')
+      );
+      
+      const eventSnapshot = await getDocs(q);
+      const fetchedEvents = eventSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as any[];
+      const accountIds = [...new Set(fetchedEvents.map(event => event.trigger_account_id))];
+      
+      const accountPromises = accountIds.map(async (accountId) => {
+        try {
+          const docRef = doc(db, 'accounts', accountId);
+          const docSnap = await getDoc(docRef);
+          
+          if (docSnap.exists()) {
+            const accountData = docSnap.data();
+            return {
+              id: docSnap.id,
+              username: accountData.username,
+              handle: accountData.name
+            };
+          }
+          return null;
+        } catch (error) {
+          console.error(`Error fetching account ${accountId}:`, error);
+          return null;
+        }
+      });
+
+      const accountResults = await Promise.all(accountPromises);
+      
+      const accountsMap: Record<string, any> = accountResults.reduce((acc, account) => {
+        if (account) {
+          acc[account.id] = {
+            username: account.username,
+            handle: account.handle
+          };
+        }
+        return acc;
+      }, {});
+
+      const reformattedPosts: Post[] = fetchedEvents.map((event, index) => {
+        const account = accountsMap[event.trigger_account_id];
+
+        return {
+          id: index,
+          username: account.username,
+          handle: account.handle,
+          verified: true,
+          content: event.summary || '',
+          timestamp: event.timestamp,
+          positiveTickers: event.stock_tickers || [],
+          negativeTickers: [],
+          report: event.detailed_report || '',
+          stocks: (event.stock_tickers || []).map(tickerItem => ({
+            ticker: tickerItem,
+            primaryRating: event.recommendation?.[tickerItem]?.sentiment || 'Neutral',
+            strongBuyPercent: event.recommendation?.[tickerItem]?.rec?.strongBuy || 0,
+            buyPercent: event.recommendation?.[tickerItem]?.rec?.buy || 0,
+            holdPercent: event.recommendation?.[tickerItem]?.rec?.hold || 0,
+            sellPercent: event.recommendation?.[tickerItem]?.rec?.sell || 0,
+            strongSellPercent: event.recommendation?.[tickerItem]?.rec?.strongSell || 0,
+            rationale: event.recommendation?.[tickerItem]?.reasoning || 'No specific rationale available'
+          }))
+        };
+      });
+
+      return reformattedPosts;
+    } catch (error) {
+      console.error('Error fetching stock-specific posts:', error);
+      return [];
+    }
+  }, [ticker]);
+
+  useEffect(() => {
+    const loadStockPosts = async () => {
+      const posts = await fetchStockPosts();
+      setStockPosts(posts);
+    };
+
+    if (ticker) {
+      loadStockPosts();
+    }
+  }, [ticker, fetchStockPosts]);
 
   const fetchStockData = async (symbol: string) => {
     if (initialDataFetched) return;
@@ -337,9 +303,6 @@ export default function StocksPage() {
   ];
 
   const getRecommendationContent = () => {
-    const stockData = stockInfo.find(stock => stock.ticker === ticker);
-    const latestPost = stockData?.posts?.[0];
-    
     const emptyRecommendation = {
       primaryRating: 'No Data',
       strongBuyPercent: 0,
@@ -350,7 +313,21 @@ export default function StocksPage() {
       rationale: 'No AI insights available for this stock.'
     };
 
-    const stockRecommendation = latestPost?.stocks?.[0] || emptyRecommendation;
+    // Find the most recent post for the current ticker
+    const relevantPosts = stockPosts.filter(post => 
+      post.positiveTickers.includes(ticker) || 
+      post.stocks.some(stock => stock.ticker === ticker)
+    );
+
+    // Sort posts by timestamp in descending order and get the most recent
+    const latestPost = relevantPosts.length > 0 
+      ? relevantPosts.sort((a, b) => 
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        )[0]
+      : null;
+
+    // Get the stock recommendation from the latest post
+    const stockRecommendation = latestPost?.stocks?.find(stock => stock.ticker === ticker) || emptyRecommendation;
     
     return (
       <div className="space-y-4">
@@ -388,7 +365,7 @@ export default function StocksPage() {
                 return 'bg-yellow-900/40 text-yellow-100 ring-2 ring-yellow-800 scale-105';
               return 'bg-neutral-900/30 text-neutral-300 border border-neutral-800 hover:bg-neutral-800/40';
             };
-            
+
             return (
               <div 
                 key={item.label} 
@@ -544,9 +521,8 @@ export default function StocksPage() {
                 </div>
 
                 <div className="divide-y divide-neutral-800">
-                {stockInfo && stockInfo.find(stock => stock.ticker === ticker)?.posts.length ? (
-                    stockInfo
-                      .find(stock => stock.ticker === ticker)?.posts.map((post) => (
+                {stockPosts && stockPosts.length ? (
+                    stockPosts.map((post) => (
                     <div 
                     key={post.id} 
                     className="p-4 hover:bg-neutral-900/50 transition-colors duration-200 cursor-pointer"

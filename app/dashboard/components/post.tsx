@@ -34,24 +34,33 @@ export default function Post({
     }
   }, [isClicked]);
 
-  const formatTimestamp = (isoString: string) => {
+  const formatTimestamp = (rawString: string) => {
+    const isoString = `${rawString.replace(" ", "T")}:00Z`;
+
     const now = new Date();
     const postDate = new Date(isoString);
-    const diffMs = postDate.getTime() - now.getTime();
+    const diffMs = now.getTime() - postDate.getTime(); // fixed: now - postDate
     const diffSeconds = Math.floor(diffMs / 1000);
     const diffMinutes = Math.floor(diffSeconds / 60);
     const diffHours = Math.floor(diffMinutes / 60);
     const diffDays = Math.floor(diffHours / 24);
-
+  
     if (diffDays > 0) return `${diffDays}d`;
     if (diffHours > 0) return `${diffHours}h`;
     if (diffMinutes > 0) return `${diffMinutes}m`;
     return `${diffSeconds}s`;
   };
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div
-      className={`p-4 transition-colors duration-200 cursor-pointer 
+      className={`p-4 ${mounted ? "opacity-100" : "opacity-0"} transition-colors duration-500 transition-opacity duration-200 cursor-pointer 
                 ${isClicked ? "bg-neutral-700" : "hover:bg-neutral-800"}`}
       onClick={() => setIsClicked(true)}
     >

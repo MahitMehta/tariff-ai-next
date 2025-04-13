@@ -182,7 +182,7 @@ export default function DashboardPage() {
           <PostModal
             isOpen={!!selectedPost}
             onClose={handleCloseModal}
-            post={selectedPost || undefined}
+            post={selectedPost}
           />
         </div>
       </div>

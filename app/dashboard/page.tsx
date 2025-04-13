@@ -177,10 +177,21 @@ export default function DashboardPage() {
             ))}
           </div>
 
-          <PostModal
+          <PostModal 
             isOpen={!!selectedPost}
             onClose={handleCloseModal}
-            post={selectedPost}
+            post={selectedPost || {
+              id: 0,
+              username: '',
+              handle: '',
+              verified: false,
+              content: '',
+              timestamp: '',
+              positiveTickers: [],
+              negativeTickers: [],
+              report: '',
+              stocks: []
+            }}
           />
         </div>
       </div>

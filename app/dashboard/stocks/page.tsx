@@ -562,9 +562,32 @@ export default function StocksPage() {
                 </div>
 
                 <PostModal 
-                    isOpen={!!selectedPost} 
-                    onClose={handleCloseModal} 
-                    post={selectedPost!} 
+                    isOpen={!!selectedPost}
+                    onClose={handleCloseModal}
+                    post={selectedPost ? {
+                        ...selectedPost,
+                        stocks: selectedPost.stocks.map(stock => ({
+                            ticker: 'N/A',
+                            primaryRating: stock.primaryRating || '',
+                            strongBuyPercent: stock.strongBuyPercent || 0,
+                            buyPercent: stock.buyPercent || 0,
+                            holdPercent: stock.holdPercent || 0,
+                            sellPercent: stock.sellPercent || 0,
+                            strongSellPercent: stock.strongSellPercent || 0,
+                            rationale: stock.rationale || ''
+                        }))
+                    } : {
+                        id: 0,
+                        username: '',
+                        handle: '',
+                        verified: false,
+                        content: '',
+                        timestamp: '',
+                        positiveTickers: [],
+                        negativeTickers: [],
+                        report: '',
+                        stocks: []
+                    }}
                 />
             </div>
         </div>

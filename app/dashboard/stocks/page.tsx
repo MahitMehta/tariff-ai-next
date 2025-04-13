@@ -316,7 +316,7 @@ export default function StocksPage() {
     // Find the most recent post for the current ticker
     const relevantPosts = stockPosts.filter(post => 
       post.positiveTickers.includes(ticker) || 
-      post.stocks.some(stock => stock.ticker === ticker)
+      post.stocks.some(stock => ((stock as any).ticker) === ticker)
     );
 
     // Sort posts by timestamp in descending order and get the most recent
@@ -327,7 +327,7 @@ export default function StocksPage() {
       : null;
 
     // Get the stock recommendation from the latest post
-    const stockRecommendation = latestPost?.stocks?.find(stock => stock.ticker === ticker) || emptyRecommendation;
+    const stockRecommendation = latestPost?.stocks?.find(stock => ((stock as any).ticker) === ticker) || emptyRecommendation;
     
     return (
       <div className="space-y-4">

@@ -1,36 +1,104 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { m, motion } from 'framer-motion';
 
 type Message = {
   id: number;
   content: string;
   sender: 'user' | 'ai';
   timestamp: string;
+  isAnimating?: boolean;
 };
 
-const sendChatMessage = async (question: string, context: string) => {
+const sendChatMessage = async (question: string, context: string): Promise<{ answer: string }> => {
+  // Validate input
+  if (!question.trim()) {
+    throw new Error('Question cannot be empty');
+  }
+
   try {
-    const response = await fetch('http://localhost:8000/chat/', {
+    const response = await fetch('/api/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        question,
-        context
+        question: question.trim(),
+        context: context.trim() || ''
       }),
+      signal: AbortSignal.timeout(30000)
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorBody = await response.text();
+      throw new Error(`HTTP error! status: ${response.status}, message: ${errorBody}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+    
+    if (!data || !data.answer) {
+      throw new Error('Invalid response from server');
+    }
+
+    let answer = (data.answer ?? '').toString().trim();
+    answer = answer.replace(/\s*undefined\s*$/im, '').trim();
+
+    return {
+      answer: answer || 'I apologize, but I could not generate a response.'
+    };
   } catch (error) {
-    console.error('Error sending chat message:', error);
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      console.error('Request timed out');
+      throw new Error('The request took too long. Please try again.');
+    }
+
+    if (error instanceof TypeError) {
+      console.error('Network error:', error);
+      throw new Error('Network error. Please check your connection.');
+    }
+
+    console.error('Chat message error:', error);
     throw error;
   }
+};
+
+const AnimatedText = ({ text }: { text: string }) => {
+  const [displayText, setDisplayText] = useState('');
+
+  useEffect(() => {
+    const cleanText = (text || '')
+      .toString()
+      .replace(/\s*undefined\s*$/i, '')
+      .trim();
+
+    if (!cleanText) {
+      setDisplayText('');
+      return;
+    }
+
+    let isMounted = true;
+    let currentIndex = 0;
+
+    const animateText = () => {
+      if (currentIndex < cleanText.length && isMounted) {
+        setDisplayText(prev => {
+          const nextChar = cleanText[currentIndex];
+          return prev + (nextChar || '');
+        });
+        currentIndex++;
+        setTimeout(animateText, 5);
+      }
+    };
+
+    animateText();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [text]);
+
+  return <>{displayText}</>;
 };
 
 export default function Chatbot() {
@@ -43,14 +111,12 @@ export default function Chatbot() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Auto-scroll to bottom
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
-  // Adjust textarea height
   const adjustTextareaHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
@@ -71,7 +137,6 @@ export default function Chatbot() {
     setInputMessage('');
     setIsLoading(true);
   
-    // Add loading placeholder message
     const loadingMessage: Message = {
       id: Date.now() + 1,
       content: '...',
@@ -84,12 +149,12 @@ export default function Chatbot() {
       const response = await sendChatMessage(inputMessage, chatContext);
   
       setMessages(prev => {
-        // Replace the last message (loading) with real response
         const newMessages = [...prev];
         newMessages[newMessages.length - 1] = {
           ...loadingMessage,
           content: response.answer,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          isAnimating: true
         };
         return newMessages;
       });
@@ -134,38 +199,42 @@ export default function Chatbot() {
           </div>
         )}
         
-        {messages.map((message) => (
-          <div 
-            key={message.id} 
-            className={`flex ${
-              message.sender === 'user' ? 'justify-end' : 'justify-start'
-            }`}
-          >
+        {messages.map((message) => {          
+          return (
             <div 
-              className={`
-                max-w-[80%] p-3 rounded-lg shadow-md
-                ${
-                  message.sender === 'user'
-                    ? 'bg-neutral-800 text-white'
-                    : 'bg-neutral-900 text-neutral-200'
-                }
-              `}
+              key={message.id} 
+              className={`flex ${
+                message.sender === 'user' ? 'justify-end' : 'justify-start'
+              }`}
             >
-            {message.content === '...' ? (
-              <span className="typing-dots inline-flex space-x-1">
-                <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0s]"></span>
-                <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0.15s]"></span>
-                <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0.3s]"></span>
-              </span>
-            ) : (
-              message.content
-            )}   
-           </div>
-          </div>
-        ))}
+              <div 
+                className={`
+                  max-w-[80%] p-3 rounded-lg shadow-md
+                  ${
+                    message.sender === 'user'
+                      ? 'bg-neutral-800 text-white'
+                      : 'bg-neutral-900 text-neutral-200 text-left'
+                  }
+                `}
+              >
+                {message.content === '...' ? (
+                  <span className="typing-dots inline-flex space-x-1">
+                    <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0s]"></span>
+                    <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0.15s]"></span>
+                    <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0.3s]"></span>
+                  </span>
+                ) : message.isAnimating ? (
+                  <AnimatedText text={message.content} />
+                ) : (
+                  message.content
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 bg-neutral-950 p-4 border-t border-neutral-900 z-10">
+      <div className="absolute bottom-0 left-0 right-0 bg-neutral-950 p-4 border-t border-neutral-900 z-10 mb-8">
         <div className="flex items-end space-x-2">
           <textarea 
             ref={textareaRef}
@@ -175,10 +244,9 @@ export default function Chatbot() {
               adjustTextareaHeight();
             }}
             onKeyDown={handleKeyPress}
-            placeholder="Ask about stocks or investments..."
-            rows={1}
+            placeholder="Ask about stocks, investments, or market trends"
             className="
-              w-full p-2 rounded-lg bg-neutral-900 text-white 
+              w-full p-2 rounded-lg bg-neutral-900 text-white
               resize-none overflow-hidden
               focus:outline-none focus:ring-2 focus:ring-neutral-700
             "

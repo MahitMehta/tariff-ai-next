@@ -92,12 +92,10 @@ export default function DashboardPage() {
   const [selectedPost, setSelectedPost] = useState(null);
   const [leftPanelWidth, setLeftPanelWidth] = useState(50);
   
-  // Use refs for performance-critical state
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
 
-  // @ts-ignore
   const handlePostClick = (post) => {
     setSelectedPost(post);
   };
@@ -163,7 +161,7 @@ export default function DashboardPage() {
         style={{ width: `${leftPanelWidth}%` }}
       >
         <div className="max-w-4xl mx-auto">
-          <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4">
+          <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4 ml-4">
             <h1 className="text-xl font-bold text-white">Activity</h1>
           </div>
 

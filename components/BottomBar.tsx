@@ -66,7 +66,7 @@ const StockBottomBar: React.FC = () => {
     const animation = container.animate(
       [
         { transform: "translateX(0)" },
-        { transform: `translateX(-${selectedStocks.length * 130}px)` },
+        { transform: `translateX(-${selectedStocks.length * 110}px)` },
       ],
       {
         duration: 40000, // 40 seconds for one complete scroll
@@ -88,7 +88,7 @@ const StockBottomBar: React.FC = () => {
 
     if (isHoveringBar) {
       // Slow down the animation when hovering
-      animationRef.current.playbackRate = 0.6; // 60% of normal speed
+      animationRef.current.playbackRate = 0.7;
     } else {
       // Normal speed when not hovering
       animationRef.current.playbackRate = 1.0;

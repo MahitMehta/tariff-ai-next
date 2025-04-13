@@ -217,7 +217,7 @@ export default function Chatbot() {
   return (
     <div className="relative flex flex-col h-screen bg-black overflow-hidden">
       <div className="absolute top-0 left-0 right-0 bg-neutral-950 p-4 text-center border-b border-neutral-900 z-10">
-        <h2 className="text-lg font-semibold text-white">Ask Chaewon</h2>
+        <h2 className="text-lg font-semibold text-white">Ask Buffett</h2>
       </div>
 
       <div 
@@ -226,7 +226,7 @@ export default function Chatbot() {
       >
         {messages.length === 0 && (
           <div className="text-center text-neutral-500 mt-10">
-            <p className="text-xl mb-2">Ask Chaewon</p>
+            <p className="text-xl mb-2">Ask Buffett</p>
             <p className="text-sm">Ask about stocks, investments, or market trends</p>
           </div>
         )}

@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getMessaging, getToken } from "firebase/messaging";
 
 // Sever Component setup if needed
 // https://medium.com/@jogarcia/set-up-firebase-on-nextjs-21d54be828dc

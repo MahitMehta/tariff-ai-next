@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import Chatbot from './components/chatbot';
 import Post from './components/post';
 import PostModal from './components/postModal';
-import Chatbot from './components/chatbot';
 
 const postsData = [
     {

@@ -34,22 +34,83 @@ const StockBottomBar: React.FC = () => {
   useEffect(() => {
     const fetchStockData = async (): Promise<void> => {
       try {
-        // Now using the change value directly from JSON
+        // Create a comma-separated list of tickers
+        const tickerList = selectedStocks
+          .map((stock) => stock.ticker)
+          .join(",");
+
+        // API key for Polygon.io
+        const apiKey = "Mxop8ZSKkTS6UWih1UP20JbkjlWR4jsa";
+
+        // Fetch data from Polygon API
+        const response = await fetch(
+          `https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers?tickers=${tickerList}&apiKey=${apiKey}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`API responded with status: ${response.status}`);
+        }
+
+        const polygonData = await response.json();
+
+        // Process the data from Polygon API
+        const results: StockData[] = selectedStocks.map((stock: Stock) => {
+          // Find the corresponding ticker data from Polygon API response
+          const tickerData = polygonData.tickers.find(
+            (t: any) => t.ticker === stock.ticker
+          );
+
+          if (tickerData) {
+            // Get the current price from lastTrade.p
+            const currentPrice =
+              tickerData.lastTrade?.p || tickerData.day?.c || 100.0; // Fallback price
+
+            // Calculate percentage change using todaysChangePerc from API
+            const changePercent =
+              tickerData.todaysChangePerc !== undefined
+                ? tickerData.todaysChangePerc
+                : stock.change; // Fallback to our stock data
+
+            return {
+              ...stock,
+              price: currentPrice.toFixed(2),
+              isUp: changePercent >= 0,
+              change: changePercent,
+            };
+          } else {
+            // If ticker not found in API response, use placeholder data
+            return {
+              ...stock,
+              price: "100.00",
+              isUp: stock.change >= 0,
+            };
+          }
+        });
+
+        setStockData(results);
+      } catch (error) {
+        console.error("Error fetching stock data:", error);
+
+        // Fallback to using static data in case of API error
         const results: StockData[] = selectedStocks.map((stock: Stock) => {
           return {
             ...stock,
-            price: "100.00", // Placeholder price since we're not using Polygon API anymore
+            price: "100.00", // Placeholder price
             isUp: stock.change >= 0,
           };
         });
 
         setStockData(results);
-      } catch (error) {
-        console.error("Error processing stock data:", error);
       }
     };
 
     fetchStockData();
+
+    // Set up a polling interval to refresh data every 60 seconds
+    const intervalId = setInterval(fetchStockData, 60000);
+
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   // Set up animation

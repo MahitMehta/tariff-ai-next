@@ -1,4 +1,3 @@
-import React from 'react';
 import { useRouter } from 'next/navigation';
 
 interface PostModalProps {
@@ -46,7 +45,7 @@ export default function PostModal({
             onClick={onClose}
         >
             <div 
-                className="bg-black rounded-xl shadow-2xl w-full max-w-4xl mx-4 relative transform transition-all duration-300 ease-in-out scale-100 opacity-100 max-h-[90vh] overflow-y-auto border border-neutral-800 ring-1 ring-neutral-700 no-scrollbar"
+                className="bg-black rounded-xl shadow-2xl w-full max-w-4xl mx-4 relative transform transition-all duration-500 ease-in-out scale-100 opacity-100 max-h-[90vh] overflow-y-auto border border-neutral-800 ring-1 ring-neutral-700 no-scrollbar"
                 onClick={(e) => e.stopPropagation()}
             >
                 <button 

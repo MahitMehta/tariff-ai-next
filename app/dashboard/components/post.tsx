@@ -8,17 +8,36 @@ interface PostProps {
     timestamp: string;
     negativeTickers?: string[];
     positiveTickers?: string[];
+    report: any;
+    stocks: any;
 }
 
 export default function Post({ 
     username, 
     handle, 
-    verified, 
+    verified = true, 
     content, 
     timestamp,
     negativeTickers = [],
-    positiveTickers = []
+    positiveTickers = [],
+    report,
+    stocks
 }: PostProps) {
+    const formatTimestamp = (isoString: string) => {
+        const now = new Date('2025-04-12T19:40:18-04:00'); 
+        const postDate = new Date(isoString);
+        const diffMs = now.getTime() - postDate.getTime();
+        const diffSeconds = Math.floor(diffMs / 1000);
+        const diffMinutes = Math.floor(diffSeconds / 60);
+        const diffHours = Math.floor(diffMinutes / 60);
+        const diffDays = Math.floor(diffHours / 24);
+
+        if (diffSeconds < 60) return `${diffSeconds}s`;
+        if (diffMinutes < 60) return `${diffMinutes}m`;
+        if (diffHours < 24) return `${diffHours}h`;
+        return `${diffDays}d`;
+    };
+
     return (
         <div className="p-4 transition-colors duration-200 cursor-pointer">
             <div className="flex-1">
@@ -40,7 +59,7 @@ export default function Post({
                         </svg>
                     )}
                     <span className="text-neutral-500 text-lg ml-1">{handle}</span>
-                    <span className="text-neutral-500 text-lg ml-auto">· {timestamp}</span>
+                    <span className="text-neutral-500 text-lg ml-auto">· {formatTimestamp(timestamp)}</span>
                 </div>
                 
                 <p className="text-white mb-2 text-lg">{content}</p>

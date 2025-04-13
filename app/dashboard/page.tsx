@@ -4,7 +4,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Chatbot from './components/chatbot';
 import Post from './components/post';
 import PostModal from './components/postModal';
-
+import { app, auth } from '@/lib/firebase.client';
+import { useRouter } from 'next/navigation';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline';
 
 const postsData = [
     {
@@ -160,6 +163,29 @@ export default function DashboardPage() {
     return () => clearTimeout(timer);
   }, []);
 
+  const router = useRouter();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User signed in:", user);
+      } else {
+          if (user === null) {
+          router.push("/");
+        }
+      }
+    });
+  }, [router]);
+
+  const handleLogOut = useCallback(() => {
+    auth.signOut().then(() => {
+      console.log("User signed out");
+      router.push("/");
+    }).catch((error) => {
+      console.error("Error signing out: ", error);
+    });
+  }, [router]);
+
   return (
     <div 
       ref={containerRef}
@@ -170,8 +196,9 @@ export default function DashboardPage() {
         style={{ width: `${leftPanelWidth}%` }}
       >
         <div className="max-w-4xl mx-auto">
-          <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4 ml-4">
+          <div className="sticky top-0 flex justify-between bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4 ml-4">
             <h1 className="text-xl font-bold text-white">Activity</h1>
+            <ArrowLeftStartOnRectangleIcon className="h-6 w-6 text-white cursor-pointer" onClick={handleLogOut} />
           </div>
 
         <div className="divide-y divide-neutral-800">

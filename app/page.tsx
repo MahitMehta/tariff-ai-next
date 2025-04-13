@@ -82,28 +82,30 @@ export default function Home() {
 
         {/* Button group with hover effects */}
         <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4 animate-fadeIn">
-          <button
-            type="button"
-            className="rounded-md bg-green-500 px-6 py-3 text-base font-semibold text-white shadow-lg hover:bg-green-400 hover:scale-105 transition-all duration-200 group"
-          >
-            <span className="flex items-center justify-center">
-              Get Started
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M14 5l7 7m0 0l-7 7m7-7H3"
-                />
-              </svg>
-            </span>
-          </button>
+          <Link href="/signup">
+            <button
+              type="button"
+              className="rounded-md bg-green-500 px-6 py-3 text-base font-semibold text-white shadow-lg hover:bg-green-400 hover:scale-105 transition-all duration-200 group"
+            >
+              <span className="flex items-center justify-center">
+                Get Started
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  />
+                </svg>
+              </span>
+            </button>
+          </Link>
           <Link target="_blank" href="https://devpost.com/software/902063">
             <button
               type="button"

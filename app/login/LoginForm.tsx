@@ -34,7 +34,7 @@ const LoginForm = () => {
             const docData = userDoc.data() as IUserModel;
             if (docData?.accounts?.length === 0) {
                 console.log("User exists but has no accounts");
-                router.push("/curate");
+                router.push("/configure");
                 return;
             }
             
@@ -47,7 +47,7 @@ const LoginForm = () => {
                 accounts: [],
                 events: [],
             }).then(() => {
-                router.push("/curate");
+                router.push("/configure");
             }).catch((error) => {
                 console.error("Error creating user document: ", error);
             });            

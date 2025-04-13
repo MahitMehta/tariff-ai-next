@@ -1,6 +1,6 @@
 "use client";
 
-import { accountsCollection, auth, usersCollection } from "@/lib/firebase.client";
+import { accountsCollection, app, auth, usersCollection } from "@/lib/firebase.client";
 import { doc, getDocs, setDoc } from "firebase/firestore";
 import { useCallback, useEffect, useState } from "react";
 
@@ -14,6 +14,7 @@ import DropdownSelect from "../../components/Dropdown";
 
 // stocks
 import stocks from "../../data/sp500.json";
+import { getMessaging, getToken } from "firebase/messaging";
 
 const mappedStocks = stocks.map((stock) => ({
     id: stock.ticker,
@@ -65,6 +66,7 @@ const CurateForm = () => {
     const [ selectedAccounts, setSelectedAccounts ] = useState<string[]>([]);
     const [ selectedEvents, setSelectedEvents ] = useState<string[]>([]);
     const [ selectedTickers, setSelectedTickers ] = useState<string[]>([]);
+    const [ notificationToken, setNotificationToken ] = useState<string | null>(null);
 
     const router = useRouter();
 
@@ -82,13 +84,14 @@ const CurateForm = () => {
             accounts: selectedAccounts,
             events: selectedEvents,
             tickers: selectedTickers,
+            notificationToken: notificationToken,
         } as IUserModel).then(() => {
             router.replace("/dashboard");
         }).catch((error) => {
             console.error("Error updating user document: ", error);
         });  
 
-    }, [ router, selectedAccounts, selectedEvents, selectedTickers ]);
+    }, [ router, selectedAccounts, selectedEvents, selectedTickers, notificationToken ]);
 
     useEffect(() => {
         getAccounts().then((data) => {
@@ -106,8 +109,46 @@ const CurateForm = () => {
         return () => clearTimeout(timer);
     }, [getAccounts]);
 
-    const [ name, setName ] = useState("");
-    
+    const [ desktopNotifications, setDesktopNotifications ] = useState(false);
+
+    const setDesktopNotificationsHandle = useCallback(async (value: boolean) => {
+        setDesktopNotifications(value);
+        
+        if (value) {
+            const messaging = getMessaging(app);
+            const token = await getToken(messaging, {vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY }).catch((error) => {
+                console.error("Error getting token: ", error);
+                return null;
+            });
+        
+            if (token) {
+                console.log("Token: ", token);
+                setNotificationToken(token);
+                return;
+            } 
+
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
+                    console.log(permission);
+                    getToken(messaging, {vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY })
+                        .then((token) => {
+                            console.log("Token after Granted Permission: ", token);
+                            setNotificationToken(token);
+                        })
+                        .catch((error) => {
+                            console.error("Error getting token: ", error);
+                            setDesktopNotifications(false);
+                            return null;
+                        });
+                } else if (permission === 'denied') {
+                    console.log('Notification permission denied.');
+                    setDesktopNotifications(false);
+                }
+            });
+        }
+    }, []);
+
     return (
         <div 
             className={`w-screen max-w-[600px] p-6 flex flex-col items-start transition-opacity duration-1000 ease-in-out ${
@@ -120,7 +161,6 @@ const CurateForm = () => {
                 options={netWorthBuckets}
                 onSelect={(value) => console.log(value)}
                 title="Estimated Net Worth"
-                icon={<></>}
                 placeholder="e.g. 1k-10k..."
             />
         {/* <InputField 
@@ -140,7 +180,6 @@ const CurateForm = () => {
                 console.log("Selected events: ", events);
             }}
             title="Event Categories"
-            icon={<></>}
             placeholder="e.g. tariffs, interest rates..."
         />
         <AutocompleteDropdownMulti 
@@ -164,7 +203,6 @@ const CurateForm = () => {
             }}
             title="Stock Portfolio"
             className="mt-3"
-            icon={<></>}
             placeholder="e.g. NVDA, AMD..."
         />
         <DropdownSelect 
@@ -173,7 +211,6 @@ const CurateForm = () => {
             onSelect={(value) => console.log(value)}
             title="Notification Limit"
             className="mt-3"
-            icon={<></>}
             placeholder="e.g. Unlimited..."
         />
         <div className="pl-5 mt-4 flex flex-col gap-2">
@@ -185,9 +222,10 @@ const CurateForm = () => {
             />
             <Checkbox
                 id="desktop-ntifications"
+                checked={desktopNotifications}
                 label={<div>Receive Real-time <b>Desktop Notifications</b></div>}
                 className="mt-3"
-                onChange={(value) => console.log(value)}
+                onChange={setDesktopNotificationsHandle}
             />
             <Checkbox
                 id="terms-and-conditions"

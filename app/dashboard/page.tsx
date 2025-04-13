@@ -96,6 +96,7 @@ export default function DashboardPage() {
   const containerRef = useRef(null);
   const rafRef = useRef(null);
 
+  // @ts-ignore
   const handlePostClick = (post) => {
     setSelectedPost(post);
   };
@@ -165,13 +166,13 @@ export default function DashboardPage() {
             <h1 className="text-xl font-bold text-white">Activity</h1>
           </div>
 
-          <div className="divide-y divide-neutral-800">
-            {postsData.map((post) => (
-              <div 
-                key={post.id} 
-                className="p-4 hover:bg-neutral-900/50 transition-colors duration-200 cursor-pointer"
-                onClick={() => handlePostClick(post)}
-              >    
+        <div className="divide-y divide-neutral-800">
+          {postsData.map((post) => (
+            <div 
+              key={post.id}  
+              className="p-4 hover:bg-neutral-900/50 transition-colors duration-200 cursor-pointer"
+              onClick={() => handlePostClick(post)}
+            >    
                 <Post {...post} />
               </div>
             ))}

@@ -9,18 +9,48 @@ type Message = {
   timestamp: string;
 };
 
+const sendChatMessage = async (question: string, context: string) => {
+  try {
+    const response = await fetch('http://localhost:8000/chat/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        question,
+        context
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error sending chat message:', error);
+    throw error;
+  }
+};
+
 export default function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [chatContext, setChatContext] = useState(
+    "You are Chaewon, a financial analyst AI assistant. Provide professional, accurate responses about stocks, investments, and market trends. Keep answers concise but informative."
+  );
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // Auto-scroll to bottom
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
+  // Adjust textarea height
   const adjustTextareaHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
@@ -28,33 +58,55 @@ export default function Chatbot() {
     }
   };
 
-  const handleSendMessage = () => {
-    if (inputMessage.trim() === '') return;
-
+  const handleSendMessage = async () => {
+    if (inputMessage.trim() === '' || isLoading) return;
+  
     const userMessage: Message = {
       id: Date.now(),
       content: inputMessage,
       sender: 'user',
       timestamp: new Date().toISOString()
     };
-
-    setMessages(prevMessages => [...prevMessages, userMessage]);
+    setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
-
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
+    setIsLoading(true);
+  
+    // Add loading placeholder message
+    const loadingMessage: Message = {
+      id: Date.now() + 1,
+      content: '...',
+      sender: 'ai',
+      timestamp: new Date().toISOString()
+    };
+    setMessages(prev => [...prev, loadingMessage]);
+  
+    try {
+      const response = await sendChatMessage(inputMessage, chatContext);
+  
+      setMessages(prev => {
+        // Replace the last message (loading) with real response
+        const newMessages = [...prev];
+        newMessages[newMessages.length - 1] = {
+          ...loadingMessage,
+          content: response.answer,
+          timestamp: new Date().toISOString()
+        };
+        return newMessages;
+      });
+    } catch (error) {
+      setMessages(prev => {
+        const newMessages = [...prev];
+        newMessages[newMessages.length - 1] = {
+          ...loadingMessage,
+          content: "Sorry, I couldn't process your request. Please try again.",
+          timestamp: new Date().toISOString()
+        };
+        return newMessages;
+      });
+    } finally {
+      setIsLoading(false);
     }
-
-    setTimeout(() => {
-      const aiMessage: Message = {
-        id: Date.now() + 1,
-        content: `You said: "${inputMessage}". I'm a placeholder AI response that demonstrates how a longer response might look in the chat interface.`,
-        sender: 'ai',
-        timestamp: new Date().toISOString()
-      };
-      setMessages(prevMessages => [...prevMessages, aiMessage]);
-    }, 500);
-  };
+  };  
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -77,8 +129,8 @@ export default function Chatbot() {
       >
         {messages.length === 0 && (
           <div className="text-center text-neutral-500 mt-10">
-            <p className="text-xl mb-2">Welcome to AI Assistant</p>
-            <p className="text-sm">Send a message to start the conversation</p>
+            <p className="text-xl mb-2">Ask Chaewon</p>
+            <p className="text-sm">Ask about stocks, investments, or market trends</p>
           </div>
         )}
         
@@ -86,9 +138,7 @@ export default function Chatbot() {
           <div 
             key={message.id} 
             className={`flex ${
-              message.sender === 'user' 
-                ? 'justify-end' 
-                : 'justify-start'
+              message.sender === 'user' ? 'justify-end' : 'justify-start'
             }`}
           >
             <div 
@@ -101,8 +151,16 @@ export default function Chatbot() {
                 }
               `}
             >
-              {message.content}
-            </div>
+            {message.content === '...' ? (
+              <span className="typing-dots inline-flex space-x-1">
+                <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0s]"></span>
+                <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0.15s]"></span>
+                <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0.3s]"></span>
+              </span>
+            ) : (
+              message.content
+            )}   
+           </div>
           </div>
         ))}
       </div>
@@ -117,7 +175,7 @@ export default function Chatbot() {
               adjustTextareaHeight();
             }}
             onKeyDown={handleKeyPress}
-            placeholder="Message the AI assistant..."
+            placeholder="Ask about stocks or investments..."
             rows={1}
             className="
               w-full p-2 rounded-lg bg-neutral-900 text-white 
@@ -129,29 +187,38 @@ export default function Chatbot() {
               minHeight: '40px', 
               maxHeight: '120px' 
             }}
+            disabled={isLoading}
           />
           <button 
             onClick={handleSendMessage}
-            disabled={inputMessage.trim() === ''}
+            disabled={inputMessage.trim() === '' || isLoading}
             className="
               bg-neutral-800 text-white p-2 rounded-lg 
               hover:bg-neutral-700 transition-colors
               disabled:opacity-50 disabled:cursor-not-allowed
               flex items-center justify-center mb-4
+              h-10 w-10
             "
           >
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              className="h-6 w-6" 
-              viewBox="0 0 20 20" 
-              fill="currentColor"
-            >
-              <path 
-                fillRule="evenodd" 
-                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" 
-                clipRule="evenodd" 
-              />
-            </svg>
+            {isLoading ? (
+              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            ) : (
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="h-5 w-5" 
+                viewBox="0 0 20 20" 
+                fill="currentColor"
+              >
+                <path 
+                  fillRule="evenodd" 
+                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" 
+                  clipRule="evenodd" 
+                />
+              </svg>
+            )}
           </button>
         </div>
       </div>

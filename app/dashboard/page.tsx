@@ -18,11 +18,12 @@ import {
 import Chatbot from './components/chatbot';
 import Post from './components/post';
 import PostModal from './components/postModal';
-import { auth, db } from '@/lib/firebase.client';
+import { app, auth, db } from '@/lib/firebase.client';
 import Link from 'next/link';
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid';
 import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
+import { getMessaging, onMessage } from 'firebase/messaging';
 
 // Define proper types for your data structures
 interface StockData {
@@ -60,6 +61,38 @@ export default function DashboardPage() {
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
+    const messaging = getMessaging(app);
+
+    onMessage(messaging, (payload) => {
+      console.log('Message received in foreground:', payload);
+      
+      // Create and display a custom notification for foreground messages
+      const notificationTitle = payload.notification?.title || 'Financial Alert';
+      const notificationOptions = {
+        body: payload.notification?.body || '',
+        icon: '/vercel.svg', // Add your icon path
+        data: payload.data || {}
+      };
+      
+      // Display notification manually since onMessage only works in foreground
+      // and doesn't display notifications automatically
+      if (!("Notification" in window)) {
+        console.log("This browser does not support notifications");
+      } else if (Notification.permission === "granted") {
+        const notification = new Notification(notificationTitle, notificationOptions);
+        
+        // Add click handler to notification
+        notification.onclick = () => {
+          notification.close();
+          window.focus();
+          // Handle any additional click actions here
+          console.log('Notification clicked:', payload);
+        };
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
     });
@@ -91,7 +124,7 @@ export default function DashboardPage() {
      
       const q = query(
         postsRef,
-        orderBy("timestamp", "desc")
+        orderBy("timestamp", 'desc')
       ); 
       const querySnapshot = await getDocs(q);
       const fetchedEventIds = querySnapshot.docs.map(doc => doc.id);

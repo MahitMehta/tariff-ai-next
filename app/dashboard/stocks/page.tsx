@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
@@ -178,7 +178,7 @@ export default function StocksPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [ticker, setTicker] = useState(searchParams.get('ticker') || 'TSLA');
-  const [stockData, setStockData] = useState([]);
+  const [stockData, setStockData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [timeRange, setTimeRange] = useState<TimeRange>('month');
@@ -415,13 +415,13 @@ export default function StocksPage() {
                     </p>
                     <p className={`
                       font-medium text-lg
-                      ${parseFloat(calculatePercentChange()) >= 0 
+                      ${Number.parseFloat(calculatePercentChange() || "0.0") >= 0 
                         ? 'text-green-500' 
                         : 'text-red-500'
                       }
                     `}>
                       {calculatePercentChange()}% 
-                      {parseFloat(calculatePercentChange()) >= 0 ? '▲' : '▼'}
+                      {Number.parseFloat(calculatePercentChange() || "0.0") >= 0 ? '▲' : '▼'}
                     </p>
                   </div>
                 </div>
@@ -510,7 +510,7 @@ export default function StocksPage() {
                 <PostModal 
                     isOpen={!!selectedPost} 
                     onClose={handleCloseModal} 
-                    post={selectedPost} 
+                    post={selectedPost as any} 
                 />
             </div>
         </div>

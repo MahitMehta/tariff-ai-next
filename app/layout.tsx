@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import PageTransition from "../components/PageTransition";
+import { Suspense } from "react";
 
 const inter = Inter(
   {
@@ -24,7 +25,9 @@ export default function RootLayout({
         className={`${inter.className} antialiased`}
       >
        
+        <Suspense fallback={<></>}>
           {children}
+        </Suspense>
 
       </body>
     </html>

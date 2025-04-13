@@ -90,6 +90,7 @@ const postsData = [
 export default function DashboardPage() {
   const [selectedPost, setSelectedPost] = useState(null);
 
+  // @ts-ignore
   const handlePostClick = (post) => {
     setSelectedPost(post);
   };
@@ -108,7 +109,7 @@ export default function DashboardPage() {
         <div className="divide-y divide-neutral-800">
           {postsData.map((post) => (
             <div 
-              key={post.id} 
+              key={post.id}  
               className="p-4 hover:bg-neutral-900/50 transition-colors duration-200 cursor-pointer"
               onClick={() => handlePostClick(post)}
             >    
@@ -120,6 +121,7 @@ export default function DashboardPage() {
         <PostModal 
           isOpen={!!selectedPost} 
           onClose={handleCloseModal} 
+           // @ts-ignore
           post={selectedPost} 
         />
       </div>

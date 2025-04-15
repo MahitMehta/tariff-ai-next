@@ -354,10 +354,16 @@ export default function DashboardPage() {
       </div>
 
       <div
-        className="bg-neutral-900/50 cursor-col-resize hover:bg-emerald-900/50 transition-colors"
-        style={{ width: "5px" }}
+        className="bg-neutral-900/50 cursor-col-resize hover:bg-emerald-900/50 transition-colors duration-200 flex items-center justify-center"
+        style={{ width: "4px" }}
         onMouseDown={handleMouseDown}
-      />
+      >
+        <div className="flex flex-col gap-2">
+          <div className="w-1 h-1 rounded-full bg-gray-600"></div>
+          <div className="w-1 h-1 rounded-full bg-gray-600"></div>
+          <div className="w-1 h-1 rounded-full bg-gray-600"></div>
+        </div>
+      </div>
 
       <div
         className="bg-neutral-950 transition-none duration-0 overflow-hidden"

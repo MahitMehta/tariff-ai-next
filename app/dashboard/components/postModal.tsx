@@ -1,7 +1,7 @@
+import { chatContextAtom } from "@/lib/atom";
+import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useAtom } from "jotai";
-import { chatContextAtom } from "@/lib/atom";
 
 interface PostModalProps {
   isOpen: boolean;
@@ -113,12 +113,12 @@ ${stockDetails}
         {post && (
           <div className="p-6">
             <div
-              className={`flex items-center space-x-2 mb-4 transition-all duration-300 ease-in-out ${
+              className={`flex items-center space-x-2 mb-4 transition-all duration-200 ease-in-out ${
                 animate
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-2"
               }`}
-              style={{ transitionDelay: "100ms" }}
+              style={{ transitionDelay: "10ms" }}
             >
               <span className="font-bold text-white text-lg">
                 {post.username}
@@ -214,7 +214,7 @@ ${stockDetails}
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-2"
                     }`}
-                    style={{ transitionDelay: `${300 + index * 50}ms` }}
+                    style={{ transitionDelay: `${100 + index * 50}ms` }}
                   >
                     <div className="flex justify-between items-center mb-4">
                       <div>
@@ -276,8 +276,8 @@ ${stockDetails}
                           <div
                             key={item.label}
                             className={`
-                                                        p-3 rounded-lg text-center transition-all duration-300 ease-in-out
-                                                        ${getColorClass()} ${
+                              p-3 rounded-lg text-center transition-all duration-200 ease-in-out
+                              ${getColorClass()} ${
                               animate
                                 ? "opacity-100 translate-y-0"
                                 : "opacity-0 translate-y-1"

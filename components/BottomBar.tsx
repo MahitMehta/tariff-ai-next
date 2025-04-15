@@ -24,23 +24,93 @@ const StockBottomBar: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const animationRef = useRef<Animation | null>(null);
 
-  const selectedStocks: Stock[] = stocks.slice(0, 20);
-  const allStocks: Stock[] = [...selectedStocks, ...selectedStocks];
+  // Select 20 random stocks from the SP500 list
+  const getRandomStocks = (): Stock[] => {
+    const shuffled = [...stocks].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 20).map((stock) => ({ ...stock, change: 0 }));
+  };
+
+  const selectedStocks = useRef<Stock[]>(getRandomStocks());
+  const allStocks: Stock[] = [
+    ...selectedStocks.current,
+    ...selectedStocks.current,
+  ];
 
   useEffect(() => {
     const fetchStockData = async (): Promise<void> => {
       try {
-        const results: StockData[] = selectedStocks.map((stock: Stock) => {
-          return {
-            ...stock,
-            price: "100.00",
-            isUp: stock.change >= 0,
-          };
-        });
+        // Create a comma-separated list of tickers
+        const tickerString = selectedStocks.current
+          .map((stock) => stock.ticker)
+          .join(",");
 
-        setStockData(results);
+        // FMP API key
+        const apiKey = "ACUcF99jwKBva0mC0g6pGvGahiiTc4HT";
+
+        // Fetch data from Financial Modeling Prep API
+        const response = await fetch(
+          `https://financialmodelingprep.com/api/v3/quote/${tickerString}?apikey=${apiKey}`
+        );
+        const fmpData = await response.json();
+
+        if (Array.isArray(fmpData) && fmpData.length > 0) {
+          // Map the FMP data to our StockData format
+          const results: StockData[] = selectedStocks.current.map(
+            (stock: Stock) => {
+              // Find the corresponding FMP data
+              const stockInfo = fmpData.find(
+                (item: any) => item.symbol === stock.ticker
+              );
+
+              if (stockInfo) {
+                return {
+                  ticker: stock.ticker,
+                  name: stock.name,
+                  price: stockInfo.price.toFixed(2),
+                  change: stockInfo.changesPercentage,
+                  isUp: stockInfo.changesPercentage >= 0,
+                };
+              }
+
+              // Fallback if stock not found in API response
+              return {
+                ...stock,
+                price: "100.00",
+                isUp: true,
+              };
+            }
+          );
+
+          setStockData(results);
+        } else {
+          // Fallback to the original implementation if the API call fails
+          const results: StockData[] = selectedStocks.current.map(
+            (stock: Stock) => {
+              return {
+                ...stock,
+                price: "100.00",
+                isUp: stock.change >= 0,
+              };
+            }
+          );
+
+          setStockData(results);
+        }
       } catch (error) {
         console.error("Error fetching stock data:", error);
+
+        // Fallback to original implementation
+        const results: StockData[] = selectedStocks.current.map(
+          (stock: Stock) => {
+            return {
+              ...stock,
+              price: "100.00",
+              isUp: stock.change >= 0,
+            };
+          }
+        );
+
+        setStockData(results);
       }
     };
 
@@ -61,7 +131,7 @@ const StockBottomBar: React.FC = () => {
     const animation = container.animate(
       [
         { transform: "translateX(0)" },
-        { transform: `translateX(-${selectedStocks.length * 110}px)` },
+        { transform: `translateX(-${selectedStocks.current.length * 110}px)` },
       ],
       {
         duration: 40000,
@@ -75,7 +145,7 @@ const StockBottomBar: React.FC = () => {
     return () => {
       animation.cancel();
     };
-  }, [stockData, selectedStocks.length]);
+  }, [stockData]);
 
   useEffect(() => {
     if (!animationRef.current) return;
@@ -87,18 +157,21 @@ const StockBottomBar: React.FC = () => {
     }
   }, [isHoveringBar]);
 
-  const [ mounted, setMounted ] = useState(false);
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => {
       setMounted(true);
     }, 100);
 
     return () => clearTimeout(timer);
-  }
-  , []);
+  }, []);
 
   return (
-    <div className={`${ mounted ? "opacity-100" : "opacity-0" } duration-1000 transition-all`}>
+    <div
+      className={`${
+        mounted ? "opacity-100" : "opacity-0"
+      } duration-1000 transition-all`}
+    >
       <div
         className={`w-full ${
           isHoveringBar ? "bg-black bg-opacity-25" : "bg-black bg-opacity-15"
@@ -131,15 +204,17 @@ const StockBottomBar: React.FC = () => {
                     e.preventDefault();
                     e.stopPropagation();
                     try {
-                      console.log(`Attempting to navigate to stock: ${stock.ticker}`);
-                      
+                      console.log(
+                        `Attempting to navigate to stock: ${stock.ticker}`
+                      );
+
                       // Alternative navigation method
                       window.location.href = `/dashboard/stocks?ticker=${stock.ticker}`;
-                      
+
                       // Fallback router push
                       router.push(`/dashboard/stocks?ticker=${stock.ticker}`);
                     } catch (error) {
-                      console.error('Navigation failed:', error);
+                      console.error("Navigation failed:", error);
                     }
                   }}
                 >

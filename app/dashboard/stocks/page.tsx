@@ -1,27 +1,21 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { 
-    collection, 
-    getDocs, 
-    query, 
-    orderBy, 
-    where,
-    doc,
-    getDoc,
-    documentId
-  } from 'firebase/firestore';
-  import { 
-    onAuthStateChanged, 
-    User as FirebaseUser 
-  } from 'firebase/auth';
-import { useSearchParams } from 'next/navigation';
+import { db } from '@/lib/firebase.client';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  where
+} from 'firebase/firestore';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import Post from '../components/post';
 import PostModal from '../components/postModal';
-import { useRouter } from 'next/navigation';
-import { app, auth, db } from '@/lib/firebase.client';
 
 type TimeRange = 'week' | 'month' | 'year' | 'all';
 
@@ -397,28 +391,30 @@ export default function StocksPage() {
 
   return (
     <div className="bg-black h-screen text-white p-6 relative">
-      <button 
+      <button
         onClick={handleGoBack}
-        className="fixed top-6 left-6 bg-emerald-900/40 hover:bg-emerald-900 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center space-x-2 z-50"
+        className="fixed top-6 left-6 text-white cursor-pointer font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center space-x-2 z-50"
       >
-        <svg 
-          xmlns="http://www.w3.org/2000/svg" 
-          className="h-5 w-5" 
-          viewBox="0 0 20 20" 
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5"
+          viewBox="0 0 20 20"
           fill="currentColor"
         >
-          <path 
-            fillRule="evenodd" 
-            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" 
-            clipRule="evenodd" 
+          <path
+            fillRule="evenodd"
+            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+            clipRule="evenodd"
           />
         </svg>
-        <span>Back</span>
+        <span></span>
       </button>
 
       <div className="max-w-6xl mx-auto">
         {loading && (
-          <div className="text-neutral-400 text-center">Loading stock data...</div>
+          <div className="text-neutral-400 text-center">
+            Loading stock data...
+          </div>
         )}
 
         {error && (
@@ -426,45 +422,53 @@ export default function StocksPage() {
             {error}
           </div>
         )}
-        
+
         {ticker && stockData.length > 0 && (
           <div className="flex gap-8">
             <div className="w-3/4 space-y-6">
               <div className="bg-neutral-900 rounded-xl p-8 space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-2xl font-bold text-white">{companyName || ticker}</h2>
+                    <h2 className="text-2xl font-bold text-white">
+                      {companyName || ticker}
+                    </h2>
                     <p className="text-neutral-400">{ticker} • NASDAQ</p>
                   </div>
                   <div className="text-right">
                     <p className="text-3xl font-semibold">
                       ${stockData[stockData.length - 1].close.toFixed(2)}
                     </p>
-                    <p className={`
+                    <p
+                      className={`
                       font-medium text-lg
-                      ${parseFloat(calculatePercentChange(stockData)) >= 0 
-                        ? 'text-green-500' 
-                        : 'text-red-500'
+                      ${
+                        parseFloat(calculatePercentChange(stockData)) >= 0
+                          ? "text-green-500"
+                          : "text-red-500"
                       }
-                    `}>
-                      {parseFloat(calculatePercentChange(stockData))}% 
-                      {parseFloat(calculatePercentChange(stockData)) >= 0 ? '▲' : '▼'}
+                    `}
+                    >
+                      {parseFloat(calculatePercentChange(stockData))}%
+                      {parseFloat(calculatePercentChange(stockData)) >= 0
+                        ? "▲"
+                        : "▼"}
                     </p>
                   </div>
                 </div>
               </div>
 
               <div className="bg-neutral-900 rounded-xl p-8 space-y-4">
-                <div className="flex justify-center space-x-2 mb-4">
+                <div className="flex justify-center space-x-2 mb-4 ">
                   {timeRangeButtons.map(({ label, value }) => (
                     <button
                       key={value}
                       onClick={() => selectTimeRangeData(value)}
                       className={`
                         px-4 py-2 rounded-lg transition-colors
-                        ${timeRange === value 
-                          ? 'bg-green-900 text-green-300' 
-                          : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'
+                        ${
+                          timeRange === value
+                            ? "bg-green-900 text-green-300"
+                            : "bg-neutral-800 text-neutral-400 cursor-pointer hover:bg-neutral-700"
                         }
                       `}
                     >
@@ -475,27 +479,30 @@ export default function StocksPage() {
 
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={stockData}>
-                    <CartesianGrid 
-                      strokeDasharray="3 3" 
-                      stroke="rgba(255,255,255,0.1)" 
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="rgba(255,255,255,0.1)"
                     />
-                    <XAxis 
-                      dataKey="date" 
-                      stroke="rgba(255,255,255,0.3)" 
-                      tick={{fontSize: 10}}
+                    <XAxis
+                      dataKey="date"
+                      stroke="rgba(255,255,255,0.3)"
+                      tick={{ fontSize: 10 }}
                     />
-                    <YAxis 
-                      stroke="rgba(255,255,255,0.3)" 
-                      tick={{fontSize: 10}} 
+                    <YAxis
+                      stroke="rgba(255,255,255,0.3)"
+                      tick={{ fontSize: 10 }}
                     />
-                    <Tooltip 
+                    <Tooltip
                       content={<DayStockInfo />}
-                      cursor={{ stroke: 'rgba(255,255,255,0.2)', strokeWidth: 1 }}
+                      cursor={{
+                        stroke: "rgba(255,255,255,0.2)",
+                        strokeWidth: 1,
+                      }}
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="close" 
-                      stroke="#10b981" 
+                    <Line
+                      type="monotone"
+                      dataKey="close"
+                      stroke="#10b981"
                       strokeWidth={2}
                       dot={false}
                     />
@@ -506,7 +513,9 @@ export default function StocksPage() {
 
             <div className="w-1/3 bg-neutral-900 rounded-xl p-8 space-y-6">
               <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-white">Recommendation</h2>
+                <h2 className="text-2xl font-bold text-white">
+                  Recommendation
+                </h2>
                 <span className="text-neutral-400 text-sm">Latest</span>
               </div>
               {getRecommendationContent()}
@@ -515,57 +524,62 @@ export default function StocksPage() {
         )}
 
         <div className="bg-black text-gray-300 w-full">
-            <div className="max-w-4xl mx-auto">
-                <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4 mt-8">
-                <h1 className="text-xl font-bold text-white">Activity</h1>
-                </div>
+          <div className="max-w-4xl mx-auto">
+            <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4 mt-8">
+              <h1 className="text-xl font-bold text-white">Activity</h1>
+            </div>
 
-                <div className="divide-y divide-neutral-800">
-                {stockPosts && stockPosts.length ? (
-                    stockPosts.map((post) => (
-                    <div 
-                    key={post.id} 
+            <div className="divide-y divide-neutral-800">
+              {stockPosts && stockPosts.length ? (
+                stockPosts.map((post) => (
+                  <div
+                    key={post.id}
                     className="p-4 hover:bg-neutral-900/50 transition-colors duration-200 cursor-pointer"
                     onClick={() => handlePostClick(post)}
-                    >    
-                        <Post {...post} />
-                    </div>
-                ))) : (
-                    <div className="text-center text-neutral-500 p-8">
-                        No posts available for this stock
-                    </div>
-                )}
+                  >
+                    <Post {...post} />
+                  </div>
+                ))
+              ) : (
+                <div className="text-center text-neutral-500 p-8">
+                  No posts available for this stock
                 </div>
-
-                <PostModal 
-                    isOpen={!!selectedPost}
-                    onClose={handleCloseModal}
-                    post={selectedPost ? {
-                        ...selectedPost,
-                        stocks: selectedPost.stocks.map(stock => ({
-                            ticker: 'N/A',
-                            primaryRating: stock.primaryRating || '',
-                            strongBuyPercent: stock.strongBuyPercent || 0,
-                            buyPercent: stock.buyPercent || 0,
-                            holdPercent: stock.holdPercent || 0,
-                            sellPercent: stock.sellPercent || 0,
-                            strongSellPercent: stock.strongSellPercent || 0,
-                            rationale: stock.rationale || ''
-                        }))
-                    } : {
-                        id: 0,
-                        username: '',
-                        handle: '',
-                        verified: false,
-                        content: '',
-                        timestamp: '',
-                        positiveTickers: [],
-                        negativeTickers: [],
-                        report: '',
-                        stocks: []
-                    }}
-                />
+              )}
             </div>
+
+            <PostModal
+              isOpen={!!selectedPost}
+              onClose={handleCloseModal}
+              post={
+                selectedPost
+                  ? {
+                      ...selectedPost,
+                      stocks: selectedPost.stocks.map((stock) => ({
+                        ticker: "N/A",
+                        primaryRating: stock.primaryRating || "",
+                        strongBuyPercent: stock.strongBuyPercent || 0,
+                        buyPercent: stock.buyPercent || 0,
+                        holdPercent: stock.holdPercent || 0,
+                        sellPercent: stock.sellPercent || 0,
+                        strongSellPercent: stock.strongSellPercent || 0,
+                        rationale: stock.rationale || "",
+                      })),
+                    }
+                  : {
+                      id: 0,
+                      username: "",
+                      handle: "",
+                      verified: false,
+                      content: "",
+                      timestamp: "",
+                      positiveTickers: [],
+                      negativeTickers: [],
+                      report: "",
+                      stocks: [],
+                    }
+              }
+            />
+          </div>
         </div>
       </div>
     </div>

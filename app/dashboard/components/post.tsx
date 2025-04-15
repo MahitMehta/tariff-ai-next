@@ -1,28 +1,81 @@
-import { useEffect, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
+import type { PostData } from "../page";
+import { collection, doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase.client";
 
 interface PostProps {
-  username: string;
-  handle: string;
-  verified: boolean;
-  content: string;
-  timestamp: string;
-  negativeTickers?: string[];
-  positiveTickers?: string[];
-  report: any;
-  stocks: any;
+  postId: string;
+  onClick: (post: PostData) => void;
 }
 
 export default function Post({
-  username,
-  handle,
-  verified = true,
-  content,
-  timestamp,
-  negativeTickers = [],
-  positiveTickers = [],
-  report,
-  stocks,
+  postId,
+  onClick
 }: PostProps) {
+  const [post, setPost] = useState<PostData>({ 
+    id: postId,
+    username: "",
+    handle: "",
+    content: "",
+    timestamp: "",
+    positiveTickers: [],
+    negativeTickers: [],
+    verified: true,
+    report: "",
+    stocks: []
+  });
+
+  useEffect(() => {
+      if (!postId) return;
+
+      const eventRef = collection(db, "events");
+      getDoc(doc(eventRef, postId)).then(docSnap => {
+        if (!docSnap.exists()) return;
+
+        const event = docSnap.data();
+
+        const accountsRef = collection(db, 'accounts');
+       
+        getDoc(doc(accountsRef, event.trigger_account_id)).then(accountSnap => {
+          if (!accountSnap.exists()) return;
+
+          const account = accountSnap.data();
+
+          setPost({
+            id: postId,
+            verified: true,
+            username: account.username || '',
+            handle: account.handle || '',
+            content: event.summary || '',
+            timestamp: event.timestamp,
+            positiveTickers: event.stock_tickers || [],
+            negativeTickers: [],
+            report: event.detailed_report || '',
+            stocks: (event.stock_tickers || []).map(ticker => {
+              const tickerData = event.recommendation?.[ticker] || {};
+              return {
+                ticker: ticker,
+                primaryRating: tickerData?.sentiment || 'Neutral',
+                strongBuyPercent: tickerData?.rec?.strongBuy || 0,
+                buyPercent: tickerData?.rec?.buy || 0,
+                holdPercent: tickerData?.rec?.hold || 0,
+                sellPercent: tickerData?.rec?.sell || 0,
+                strongSellPercent: tickerData?.rec?.strongSell || 0,
+                rationale: tickerData?.reasoning || 'No specific rationale available'
+              };
+            })
+          })
+        });
+
+       
+      })
+      .catch(error => {
+        console.error("Error fetching post:", error);
+      });
+  }, [
+    postId,
+  ]);
+
   const [isClicked, setIsClicked] = useState(false);
 
   useEffect(() => {
@@ -50,24 +103,22 @@ export default function Post({
     if (diffMinutes > 0) return `${diffMinutes}m`;
     return `${diffSeconds}s`;
   };
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setMounted(true);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
+
+  const handleClick = useCallback(() => {
+    setIsClicked(true);
+    onClick(post);
+  } , [post, onClick]);
 
   return (
     <div
-      className={`p-4 ${mounted ? "opacity-100" : "opacity-0"} transition-all duration-500 duration-200 cursor-pointer 
+      className={`p-4 ${!!post.content ? "opacity-100" : "opacity-0"} border-b-[1px] hover:bg-neutral-900/50 cursor-pointer border-neutral-800 border-solid transition-all duration-500 cursor-pointer 
                 ${isClicked ? "bg-neutral-700" : "hover:bg-[#111111]"}`}
-      onClick={() => setIsClicked(true)}
+      onClick={handleClick}
     >
       <div className="flex-1">
         <div className="flex items-center space-x-1 mb-1">
-          <span className="font-bold text-white">{username}</span>
-          {verified && (
+          <span className="font-bold text-white">{post.username}</span>
+          {post.verified && (
             <svg
               viewBox="0 0 22 22"
               className="w-5 h-5"
@@ -82,17 +133,17 @@ export default function Post({
               />
             </svg>
           )}
-          <span className="text-neutral-500 text-lg ml-1">{handle}</span>
+          <span className="text-neutral-500 text-lg ml-1">{post.handle}</span>
           <span className="text-neutral-500 text-lg ml-auto">
-            · {formatTimestamp(timestamp)}
+            · {formatTimestamp(post.timestamp)}
           </span>
         </div>
 
-        <p className="text-white mb-2 text-lg">{content}</p>
+        <p className="text-white mb-2 text-lg">{post.content}</p>
 
-        {(positiveTickers.length > 0 || negativeTickers.length > 0) && (
+        {(post.positiveTickers.length > 0 || post.negativeTickers.length > 0) && (
           <div className="flex space-x-2 mb-2">
-            {positiveTickers.map((ticker) => (
+            {post.positiveTickers.map((ticker) => (
               <span
                 key={ticker}
                 className="bg-green-800/50 text-green-300 hover:bg-green-900 hover:text-white px-2 py-1 rounded-full text-sm"
@@ -100,7 +151,7 @@ export default function Post({
                 {ticker}
               </span>
             ))}
-            {negativeTickers.map((ticker) => (
+            {post.negativeTickers.map((ticker) => (
               <span
                 key={ticker}
                 className="bg-red-800/50 text-red-300 hover:bg-red-900 hover:text-white px-2 py-1 rounded-full text-sm"

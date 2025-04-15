@@ -35,8 +35,8 @@ interface StockData {
   rationale: string;
 }
 
-interface PostData {
-  id: number;
+export interface PostData {
+  id: string;
   username: string;
   handle: string;
   verified: boolean;
@@ -49,7 +49,7 @@ interface PostData {
 }
 
 export default function DashboardPage() {
-  const [posts, setPosts] = useState<PostData[]>([]);
+  const [postIds, setPostIds] = useState<string[]>([]);
   const [selectedPost, setSelectedPost] = useState<PostData | null>(null);
   const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
   const [leftPanelWidth, setLeftPanelWidth] = useState(50);
@@ -106,22 +106,6 @@ export default function DashboardPage() {
     if (!currentUser) return;
 
     try {
-      const userDocRef = doc(db, 'users', currentUser.uid);
-      const userDocSnap = await getDoc(userDocRef);
-
-      if (!userDocSnap.exists()) {
-        console.error('No user document found');
-        return;
-      }
-
-      const userTickers = userDocSnap.data().tickers || [];
-
-      if (userTickers.length === 0) {
-        console.log('No tickers found for user');
-        setPosts([]);
-        return;
-      }
-
       const postsRef = collection(db, "users", currentUser.uid, "events");
      
       const q = query(
@@ -133,89 +117,14 @@ export default function DashboardPage() {
 
       if (fetchedEventIds.length === 0) {
         console.log('No events found for user');
-        setPosts([]);
+        setPostIds([]);
         return;
       }
 
-      const eventRef = collection(db, "events");
-      const eventQ = query(
-        eventRef,
-        where(documentId(), "in", fetchedEventIds)
-      );
-
-      const eventSnapshot = await getDocs(eventQ);
-      const fetchedEvents = eventSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as any[];
-      const accountIds = [...new Set(fetchedEvents.map(event => event.trigger_account_id))];
-      const accountsRef = collection(db, 'accounts');
-      
-      const accountPromises = accountIds.map(async (accountId) => {
-        try {
-          const docRef = doc(db, 'accounts', accountId);
-          const docSnap = await getDoc(docRef);
-          
-          if (docSnap.exists()) {
-            const accountData = docSnap.data();
-            return {
-              id: docSnap.id,
-              username: accountData.username,
-              handle: accountData.name
-            };
-          }
-          return null;
-        } catch (error) {
-          console.error(`Error fetching account ${accountId}:`, error);
-          return null;
-        }
-      });
-
-      const accountResults = await Promise.all(accountPromises);
-      
-      const accountsMap: Record<string, any> = accountResults.reduce((acc, account) => {
-        if (account) {
-          acc[account.id] = {
-            username: account.username,
-            handle: account.handle
-          };
-        }
-        return acc;
-      }, {});
-
-      const reformattedPosts: PostData[] = fetchedEvents.map((event, index) => {
-        const account = accountsMap[event.trigger_account_id];
-
-        return {
-          id: index,
-          username: account.username,
-          handle: account.handle,
-          verified: true,
-          content: event.summary || '',
-          timestamp: event.timestamp,
-          positiveTickers: event.stock_tickers || [],
-          negativeTickers: [],
-          report: event.detailed_report || '',
-          stocks: (event.stock_tickers || []).map(ticker => {
-            const tickerData = event.recommendation?.[ticker] || {};
-            return {
-              ticker: ticker,
-              primaryRating: tickerData?.sentiment || 'Neutral',
-              strongBuyPercent: tickerData?.rec?.strongBuy || 0,
-              buyPercent: tickerData?.rec?.buy || 0,
-              holdPercent: tickerData?.rec?.hold || 0,
-              sellPercent: tickerData?.rec?.sell || 0,
-              strongSellPercent: tickerData?.rec?.strongSell || 0,
-              rationale: tickerData?.reasoning || 'No specific rationale available'
-            };
-          })
-        };
-      });
-
-      setPosts(reformattedPosts);
+      setPostIds(fetchedEventIds);
     } catch (error) {
       console.error('Error fetching posts:', error);
-      setPosts([]);
+      setPostIds([]);
     }
   }, [currentUser]);
 
@@ -320,15 +229,13 @@ export default function DashboardPage() {
             />
           </div>
 
-          <div className="divide-y divide-neutral-800">
-            {posts.map((post) => (
-              <div
-                key={post.id}
-                className="p-4 hover:bg-neutral-900/50 transition-colors duration-200 cursor-pointer"
-                onClick={() => handlePostClick(post)}
-              >
-                <Post {...post} />
-              </div>
+          <div className="">
+            {postIds.map((postId) => (
+               <Post 
+                  key={postId}
+                  onClick={(post) => handlePostClick(post)}
+                  postId={postId} 
+                />
             ))}
           </div>
 

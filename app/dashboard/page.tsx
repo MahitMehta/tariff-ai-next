@@ -1,29 +1,27 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { 
-  collection, 
-  getDocs, 
-  query, 
-  orderBy, 
-  where,
-  doc,
-  getDoc,
-  documentId
-} from 'firebase/firestore';
-import { 
-  onAuthStateChanged, 
-  User as FirebaseUser 
+import { app, auth, db } from '@/lib/firebase.client';
+import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline';
+import {
+  User as FirebaseUser,
+  onAuthStateChanged
 } from 'firebase/auth';
+import {
+  collection,
+  doc,
+  documentId,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  where
+} from 'firebase/firestore';
+import { getMessaging, onMessage } from 'firebase/messaging';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Chatbot from './components/chatbot';
 import Post from './components/post';
 import PostModal from './components/postModal';
-import { app, auth, db } from '@/lib/firebase.client';
-import Link from 'next/link';
-import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid';
-import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline';
-import { useRouter } from 'next/navigation';
-import { getMessaging, onMessage } from 'firebase/messaging';
 
 // Define proper types for your data structures
 interface StockData {
@@ -301,61 +299,68 @@ export default function DashboardPage() {
   }, [router]);
 
   return (
-    <div 
+    <div
       ref={containerRef}
-      className={`bg-black ${mounted ? "opacity-100" : "opacity-0" } duration-1000 text-gray-300 transition-all w-full h-screen flex relative`}
+      className={`bg-black ${
+        mounted ? "opacity-100" : "opacity-0"
+      } duration-1000 text-gray-300 transition-all w-full h-screen flex relative`}
     >
-      <div 
-        className="bg-black transition-none duration-0 overflow-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-thumb-rounded-full scrollbar-track-gray-900" 
+      <div
+        className="bg-black transition-none duration-0 overflow-auto no-scrollbar"
         style={{ width: `${leftPanelWidth}%` }}
       >
         <div className="max-w-4xl mx-auto">
           <div className="sticky flex justify-between top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4 ml-4">
             <h1 className="text-xl font-bold text-white">Activity</h1>
-            <ArrowLeftEndOnRectangleIcon className="cursor-pointer" width={24} height={24}
-              onClick={handleLogOut} 
+            <ArrowLeftEndOnRectangleIcon
+              className="cursor-pointer"
+              width={24}
+              height={24}
+              onClick={handleLogOut}
             />
           </div>
 
-        <div className="divide-y divide-neutral-800">
-          {posts.map((post) => (
-            <div 
-              key={post.id}  
-              className="p-4 hover:bg-neutral-900/50 transition-colors duration-200 cursor-pointer"
-              onClick={() => handlePostClick(post)}
-            >    
+          <div className="divide-y divide-neutral-800">
+            {posts.map((post) => (
+              <div
+                key={post.id}
+                className="p-4 hover:bg-neutral-900/50 transition-colors duration-200 cursor-pointer"
+                onClick={() => handlePostClick(post)}
+              >
                 <Post {...post} />
               </div>
             ))}
           </div>
 
-          <PostModal 
+          <PostModal
             isOpen={!!selectedPost}
             onClose={handleCloseModal}
-            post={selectedPost || {
-              id: 0,
-              username: '',
-              handle: '',
-              verified: false,
-              content: '',
-              timestamp: '',
-              positiveTickers: [],
-              negativeTickers: [],
-              report: '',
-              stocks: []
-            }}
+            post={
+              selectedPost || {
+                id: 0,
+                username: "",
+                handle: "",
+                verified: false,
+                content: "",
+                timestamp: "",
+                positiveTickers: [],
+                negativeTickers: [],
+                report: "",
+                stocks: [],
+              }
+            }
           />
         </div>
       </div>
 
-      <div 
+      <div
         className="bg-neutral-900/50 cursor-col-resize hover:bg-emerald-900/50 transition-colors"
-        style={{ width: '5px' }}
+        style={{ width: "5px" }}
         onMouseDown={handleMouseDown}
       />
 
-      <div 
-        className="bg-neutral-950 transition-none duration-0 overflow-hidden" 
+      <div
+        className="bg-neutral-950 transition-none duration-0 overflow-hidden"
         style={{ width: `${100 - leftPanelWidth}%` }}
       >
         <div className="text-neutral-400 text-center h-fit">

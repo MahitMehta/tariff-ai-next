@@ -306,7 +306,7 @@ export default function DashboardPage() {
       className={`bg-black ${mounted ? "opacity-100" : "opacity-0" } duration-1000 text-gray-300 transition-all w-full h-screen flex relative`}
     >
       <div 
-        className="bg-black transition-none duration-0 overflow-auto" 
+        className="bg-black transition-none duration-0 overflow-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-thumb-rounded-full scrollbar-track-gray-900" 
         style={{ width: `${leftPanelWidth}%` }}
       >
         <div className="max-w-4xl mx-auto">

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import type { PostData } from "../page";
 import Post, { type IPostProps } from "./Post";
 import { collection, doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase.client";
+import type { PostData } from "@/app/dashboard/page";
 
 interface ILoadPostProps extends Omit<IPostProps, "post"> {
     postId: string;

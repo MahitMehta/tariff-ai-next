@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { m, motion } from 'framer-motion';
 import { useAtom } from 'jotai';
 import { chatContextAtom } from '@/lib/atom';

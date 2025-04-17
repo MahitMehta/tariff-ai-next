@@ -1,5 +1,5 @@
+import type { PostData } from "@/app/dashboard/page";
 import { useCallback, useEffect, useState } from "react";
-import type { PostData } from "../page";
 
 export interface IPostProps {
   post: PostData;

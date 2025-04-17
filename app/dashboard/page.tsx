@@ -8,21 +8,16 @@ import {
 } from 'firebase/auth';
 import {
   collection,
-  doc,
-  documentId,
-  getDoc,
   getDocs,
   orderBy,
   query,
-  where
 } from 'firebase/firestore';
 import { getMessaging, onMessage } from 'firebase/messaging';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import Chatbot from './components/chatbot';
-import Post from './components/Post';
-import PostModal from './components/postModal';
-import LoadPost from './components/LoadPost';
+import Chatbot from '@/components/dashboard/Chatbot';
+import LoadPost from '@/components/dashboard/LoadPost';
+import PostModal from '@/components/dashboard/PostModal';
 
 // Define proper types for your data structures
 interface StockData {

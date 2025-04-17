@@ -14,9 +14,9 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import Post from '../components/Post';
-import PostModal from '../components/postModal';
 import type { PostData } from '../page';
+import Post from '@/components/dashboard/Post';
+import PostModal from '@/components/dashboard/PostModal';
 
 type TimeRange = 'week' | 'month' | 'year' | 'all';
 

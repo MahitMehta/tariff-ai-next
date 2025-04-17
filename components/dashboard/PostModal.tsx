@@ -1,8 +1,8 @@
+import type { PostData } from "@/app/dashboard/page";
 import { chatContextAtom } from "@/lib/atom";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import type { PostData } from "../page";
 
 interface PostModalProps {
   isOpen: boolean;

@@ -10,8 +10,8 @@ const inter = Inter(
 });
 
 export const metadata: Metadata = {
-  title: "Tariff AI",
-  description: "Tariff AI",
+  title: "PoliStock AI",
+  description: "PoliStock AI",
 };
 
 export default function RootLayout({

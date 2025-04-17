@@ -14,8 +14,9 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import Post from '../components/post';
+import Post from '../components/Post';
 import PostModal from '../components/postModal';
+import type { PostData } from '../page';
 
 type TimeRange = 'week' | 'month' | 'year' | 'all';
 
@@ -28,33 +29,18 @@ type StockDataPoint = {
   volume: number;
 };
 
-type Post = {
-  id: number;
-  username: string;
-  handle: string;
-  verified: boolean;
-  content: string;
-  timestamp: string;
-  positiveTickers: string[];
-  negativeTickers: string[];
-  report: string;
-  stocks: {
-    primaryRating: string;
-    strongBuyPercent: number;
-    buyPercent: number;
-    holdPercent: number;
-    sellPercent: number;
-    strongSellPercent: number;
-    rationale: string;
-  }[];
-};
-
 type StockInfo = {
   ticker: string;
-  posts: Post[];
+  posts: PostData[];
 };
 
-const DayStockInfo = ({ active, payload, label }: any) => {
+interface IDayStockInfoProps {
+  active?: boolean;
+  payload?: { payload: StockDataPoint }[];
+  label?: string;
+}
+
+const DayStockInfo : React.FC<IDayStockInfoProps> = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
@@ -87,11 +73,11 @@ export default function StocksPage() {
 
   const [initialDataFetched, setInitialDataFetched] = useState(false);
 
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+  const [selectedPost, setSelectedPost] = useState<PostData | null>(null);
 
-  const [stockPosts, setStockPosts] = useState<Post[]>([]);
+  const [stockPosts, setStockPosts] = useState<PostData[]>([]);
 
-  const handlePostClick = (post: Post) => {
+  const handlePostClick = (post: PostData) => {
     setSelectedPost(post);
   };
 
@@ -180,11 +166,11 @@ export default function StocksPage() {
         return acc;
       }, {});
 
-      const reformattedPosts: Post[] = fetchedEvents.map((event, index) => {
+      const reformattedPosts: PostData[] = fetchedEvents.map((event, index) => {
         const account = accountsMap[event.trigger_account_id];
 
         return {
-          id: index,
+          id: event.id,
           username: account.username,
           handle: account.handle,
           verified: true,
@@ -407,7 +393,7 @@ export default function StocksPage() {
             clipRule="evenodd"
           />
         </svg>
-        <span></span>
+        <span />
       </button>
 
       <div className="max-w-6xl mx-auto">
@@ -442,14 +428,14 @@ export default function StocksPage() {
                       className={`
                       font-medium text-lg
                       ${
-                        parseFloat(calculatePercentChange(stockData)) >= 0
+                        Number.parseFloat(calculatePercentChange(stockData)) >= 0
                           ? "text-green-500"
                           : "text-red-500"
                       }
                     `}
                     >
-                      {parseFloat(calculatePercentChange(stockData))}%
-                      {parseFloat(calculatePercentChange(stockData)) >= 0
+                      {Number.parseFloat(calculatePercentChange(stockData))}%
+                      {Number.parseFloat(calculatePercentChange(stockData)) >= 0
                         ? "▲"
                         : "▼"}
                     </p>
@@ -461,6 +447,7 @@ export default function StocksPage() {
                 <div className="flex justify-center space-x-2 mb-4 ">
                   {timeRangeButtons.map(({ label, value }) => (
                     <button
+                      type="button"
                       key={value}
                       onClick={() => selectTimeRangeData(value)}
                       className={`
@@ -530,15 +517,9 @@ export default function StocksPage() {
             </div>
 
             <div className="divide-y divide-neutral-800">
-              {stockPosts && stockPosts.length ? (
+              {stockPosts.length ? (
                 stockPosts.map((post) => (
-                  <div
-                    key={post.id}
-                    className="p-4 hover:bg-neutral-900/50 transition-colors duration-200 cursor-pointer"
-                    onClick={() => handlePostClick(post)}
-                  >
-                    <Post {...post} />
-                  </div>
+                  <Post key={post.id} onClick={() => handlePostClick(post)} post={post} />
                 ))
               ) : (
                 <div className="text-center text-neutral-500 p-8">
@@ -550,34 +531,7 @@ export default function StocksPage() {
             <PostModal
               isOpen={!!selectedPost}
               onClose={handleCloseModal}
-              post={
-                selectedPost
-                  ? {
-                      ...selectedPost,
-                      stocks: selectedPost.stocks.map((stock) => ({
-                        ticker: "N/A",
-                        primaryRating: stock.primaryRating || "",
-                        strongBuyPercent: stock.strongBuyPercent || 0,
-                        buyPercent: stock.buyPercent || 0,
-                        holdPercent: stock.holdPercent || 0,
-                        sellPercent: stock.sellPercent || 0,
-                        strongSellPercent: stock.strongSellPercent || 0,
-                        rationale: stock.rationale || "",
-                      })),
-                    }
-                  : {
-                      id: 0,
-                      username: "",
-                      handle: "",
-                      verified: false,
-                      content: "",
-                      timestamp: "",
-                      positiveTickers: [],
-                      negativeTickers: [],
-                      report: "",
-                      stocks: [],
-                    }
-              }
+              post={ selectedPost}
             />
           </div>
         </div>

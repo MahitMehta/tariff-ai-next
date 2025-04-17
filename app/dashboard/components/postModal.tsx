@@ -2,31 +2,12 @@ import { chatContextAtom } from "@/lib/atom";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import type { PostData } from "../page";
 
 interface PostModalProps {
   isOpen: boolean;
   onClose: () => void;
-  post: {
-    id: number;
-    username: string;
-    handle: string;
-    verified: boolean;
-    content: string;
-    timestamp: string;
-    positiveTickers?: string[];
-    negativeTickers?: string[];
-    report: string;
-    stocks: {
-      ticker: string;
-      primaryRating?: string;
-      strongBuyPercent?: number;
-      buyPercent?: number;
-      holdPercent?: number;
-      sellPercent?: number;
-      strongSellPercent?: number;
-      rationale?: string;
-    }[];
-  };
+  post: PostData | null
 }
 
 export default function PostModal({ isOpen, onClose, post }: PostModalProps) {

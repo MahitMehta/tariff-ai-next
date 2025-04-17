@@ -3,7 +3,7 @@
 import { app, auth, db } from '@/lib/firebase.client';
 import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline';
 import {
-  User as FirebaseUser,
+  type User as FirebaseUser,
   onAuthStateChanged
 } from 'firebase/auth';
 import {
@@ -20,8 +20,9 @@ import { getMessaging, onMessage } from 'firebase/messaging';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Chatbot from './components/chatbot';
-import Post from './components/post';
+import Post from './components/Post';
 import PostModal from './components/postModal';
+import LoadPost from './components/LoadPost';
 
 // Define proper types for your data structures
 interface StockData {
@@ -231,7 +232,7 @@ export default function DashboardPage() {
 
           <div className="">
             {postIds.map((postId) => (
-               <Post 
+               <LoadPost 
                   key={postId}
                   onClick={(post) => handlePostClick(post)}
                   postId={postId} 
@@ -243,18 +244,7 @@ export default function DashboardPage() {
             isOpen={!!selectedPost}
             onClose={handleCloseModal}
             post={
-              selectedPost || {
-                id: 0,
-                username: "",
-                handle: "",
-                verified: false,
-                content: "",
-                timestamp: "",
-                positiveTickers: [],
-                negativeTickers: [],
-                report: "",
-                stocks: [],
-              }
+              selectedPost
             }
           />
         </div>
@@ -266,9 +256,9 @@ export default function DashboardPage() {
         onMouseDown={handleMouseDown}
       >
         <div className="flex flex-col gap-2">
-          <div className="w-1 h-1 rounded-full bg-gray-600"></div>
-          <div className="w-1 h-1 rounded-full bg-gray-600"></div>
-          <div className="w-1 h-1 rounded-full bg-gray-600"></div>
+          <div className="w-1 h-1 rounded-full bg-gray-600" />
+          <div className="w-1 h-1 rounded-full bg-gray-600" />
+          <div className="w-1 h-1 rounded-full bg-gray-600" />
         </div>
       </div>
 

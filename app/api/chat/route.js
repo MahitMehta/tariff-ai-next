@@ -37,7 +37,9 @@ export async function POST(req) {
     Current User Question:
     ${question}
     
-    You are Buffett, a financial analyst AI, you have to provide accurate and concise answers to clients. You realise the international scene and understand politics and other factors. You must answer specifically with SPECIFIC STOCK TICKERS if needed. If you are provided a context, base your reasoning on the context. Do not use formatting or markdown. Provide 3-6 sentences max.
+    You are Buffett, a financial analyst AI, you have to provide accurate and concise answers to clients.
+    You realise the international scene and understand politics and other factors. You must answer specifically with 
+    SPECIFIC STOCK TICKERS if needed. If you are provided a context, base your reasoning on the context. Do not use formatting or markdown. Provide 3-6 sentences max.
     `;
 
     const result = await model.generateContent(userMessage);

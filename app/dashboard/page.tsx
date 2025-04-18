@@ -50,6 +50,8 @@ export default function DashboardPage() {
   const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
   const [leftPanelWidth, setLeftPanelWidth] = useState(50);
   
+  const eventsContainerRef = useRef<HTMLDivElement>(null);
+
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
@@ -133,6 +135,18 @@ export default function DashboardPage() {
   };
 
   const handleCloseModal = () => {
+    if (eventsContainerRef.current) {
+      eventsContainerRef.current.style.transitionDuration = "0.4s";
+    };
+
+    setLeftPanelWidth(35);
+    setTimeout(() => {
+      if (eventsContainerRef.current) {
+        eventsContainerRef.current.style.transitionDuration = "0s";
+      }
+    }, 500);
+
+
     setSelectedPost(null);
   };
 
@@ -159,7 +173,7 @@ export default function DashboardPage() {
       const mouseX = e.clientX - container.getBoundingClientRect().left;
       const newWidth = (mouseX / containerWidth) * 100;
       
-      const constrainedWidth = Math.max(10, Math.min(90, newWidth));
+      const constrainedWidth = Math.max(35, Math.min(65, newWidth));
       setLeftPanelWidth(constrainedWidth);
     });
   }, []);
@@ -211,11 +225,15 @@ export default function DashboardPage() {
       } duration-1000 text-gray-300 transition-all w-full h-screen flex relative`}
     >
       <div
-        className="bg-black transition-none duration-0 overflow-auto no-scrollbar"
-        style={{ width: `${leftPanelWidth}%` }}
+        ref={eventsContainerRef}
+        className="bg-black transition-all overflow-auto no-scrollbar"
+        style={{ 
+          width: `${leftPanelWidth}%`,
+          transitionDuration: "0s",
+        }}
       >
         <div className="max-w-4xl mx-auto">
-          <div className="sticky flex justify-between top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4 ml-4">
+          <div className="sticky flex justify-between top-0 bg-black/80 backdrop-blur-md border-b border-neutral-800 p-4 ml-4">
             <h1 className="text-xl font-bold text-white">Activity</h1>
             <ArrowLeftEndOnRectangleIcon
               className="cursor-pointer"
@@ -225,7 +243,7 @@ export default function DashboardPage() {
             />
           </div>
 
-          <div className="">
+          <div className="pb-10">
             {postIds.map((postId) => (
                <LoadPost 
                   key={postId}
@@ -244,7 +262,6 @@ export default function DashboardPage() {
           />
         </div>
       </div>
-
       <div
         className="bg-neutral-900/50 cursor-col-resize hover:bg-emerald-900/50 transition-colors duration-200 flex items-center justify-center"
         style={{ width: "4px" }}

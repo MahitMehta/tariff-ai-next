@@ -22,7 +22,6 @@ export default function Post({
   }, [isClicked]);
 
   const formatTimestamp = (rawString: string) => {
-      console.log("rawString", rawString);
     const isoString = `${rawString.replace(" ", "T")}:00Z`;
 
     const now = new Date();

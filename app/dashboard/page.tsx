@@ -134,18 +134,19 @@ export default function DashboardPage() {
     setSelectedPost(post);
   };
 
-  const handleCloseModal = () => {
-    if (eventsContainerRef.current) {
-      eventsContainerRef.current.style.transitionDuration = "0.4s";
-    };
-
-    setLeftPanelWidth(35);
-    setTimeout(() => {
+  const handleCloseModal = (consultAI: boolean) => {
+    if (consultAI) {
       if (eventsContainerRef.current) {
-        eventsContainerRef.current.style.transitionDuration = "0s";
-      }
-    }, 500);
-
+        eventsContainerRef.current.style.transitionDuration = "0.4s";
+      };
+  
+      setLeftPanelWidth(35);
+      setTimeout(() => {
+        if (eventsContainerRef.current) {
+          eventsContainerRef.current.style.transitionDuration = "0s";
+        }
+      }, 500);
+    }
 
     setSelectedPost(null);
   };

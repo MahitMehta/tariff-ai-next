@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 
 interface PostModalProps {
   isOpen: boolean;
-  onClose: () => void;
-  post: PostData | null
+  onClose: (consultAI: boolean) => void;
+  post: PostData | null,
 }
 
 export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
@@ -45,7 +45,7 @@ ${stockDetails}
     `.trim();
 
     setChatContext(combinedContext);
-    onClose();
+    onClose(true);
   };
 
   return (
@@ -53,7 +53,7 @@ ${stockDetails}
       className={`fixed inset-0 bg-black/65 backdrop-blur-sm flex items-center justify-center z-50 overflow-hidden transition-opacity duration-300 ease-in-out ${
         animate ? "opacity-100" : "opacity-0"
       }`}
-      onClick={onClose}
+      onClick={() => onClose(false)}
     >
       <div
         className={`bg-black rounded-xl w-full max-w-4xl mx-4 relative transform transition-all duration-300 ease-in-out max-h-[90vh] overflow-y-auto border border-neutral-800 ring-1 ring-neutral-700 no-scrollbar ${
@@ -65,13 +65,15 @@ ${stockDetails}
       >
         <div className="flex justify-between items-center p-4">
           <button
+            type="button"
             onClick={sendReportToChatbot}
             className="bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 rounded-lg px-4 py-2 transition-colors duration-200"
           >
             Consult AI
           </button>
           <button
-            onClick={onClose}
+            type="button"
+            onClick={() => onClose(false)} 
             className="text-neutral-400 hover:text-white z-60 transition-colors duration-200"
           >
             <svg

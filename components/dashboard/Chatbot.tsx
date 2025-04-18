@@ -120,10 +120,10 @@ export default function Chatbot() {
     if (chatContext) {
       const contextMessage: Message = {
         id: Date.now(),
-        content: "Report Imported!",
+        content: "Report Imported.",
         sender: 'user',
         timestamp: new Date().toISOString(),
-        isAnimating: false
+        isAnimating: true
       };
 
       setMessages(prevMessages => [...prevMessages, contextMessage]);
@@ -222,7 +222,7 @@ export default function Chatbot() {
 
       <div 
         ref={chatContainerRef}
-        className="flex-grow overflow-y-auto p-4 space-y-4 no-scrollbar pt-16 pb-16 max-h-[90vh]"
+        className="flex-grow overflow-y-auto p-4 space-y-4 no-scrollbar pb-16 pt-20 max-h-[90vh]"
       >
         {messages.length === 0 && (
           <div className="text-center text-neutral-500 mt-10">
@@ -251,9 +251,9 @@ export default function Chatbot() {
               >
                 {message.content === '...' ? (
                   <span className="typing-dots inline-flex space-x-1">
-                    <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0s]"></span>
-                    <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0.15s]"></span>
-                    <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0.3s]"></span>
+                    <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0s]"/>
+                    <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0.15s]"/>
+                    <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0.3s]" />
                   </span>
                 ) : message.isAnimating ? (
                   <AnimatedText text={message.content} />
@@ -290,6 +290,7 @@ export default function Chatbot() {
             disabled={isLoading}
           />
           <button 
+            type="button"
             onClick={handleSendMessage}
             disabled={inputMessage.trim() === '' || isLoading}
             className="

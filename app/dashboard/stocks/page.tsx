@@ -17,6 +17,7 @@ import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YA
 import type { PostData } from '../page';
 import Post from '@/components/dashboard/Post';
 import PostModal from '@/components/dashboard/PostModal';
+import LoadPost from '@/components/dashboard/LoadPost';
 
 type TimeRange = 'week' | 'month' | 'year' | 'all';
 
@@ -27,6 +28,28 @@ type StockDataPoint = {
   high: number;
   low: number;
   volume: number;
+};
+
+type Post = {
+  id: number;
+  username: string;
+  handle: string;
+  verified: boolean;
+  content: string;
+  timestamp: string;
+  positiveTickers: string[];
+  negativeTickers: string[];
+  report: string;
+  stocks: {
+    ticker: string;
+    primaryRating: string;
+    strongBuyPercent: number;
+    buyPercent: number;
+    holdPercent: number;
+    sellPercent: number;
+    strongSellPercent: number;
+    rationale: string;
+  }[];
 };
 
 type StockInfo = {
@@ -210,6 +233,22 @@ export default function StocksPage() {
     }
   }, [ticker, fetchStockPosts]);
 
+  useEffect(() => {
+    console.log('Posts updated:', stockPosts);
+    
+    // Use the most recent post (index 0) for recommendation if available
+    if (stockPosts.length > 0) {
+      const mostRecentPost = stockPosts[0];
+      
+      // Find stock recommendation for the current ticker in the most recent post
+      const stockRecommendation = mostRecentPost.stocks.find(stock => stock.ticker === ticker);
+      
+      if (stockRecommendation) {
+        console.log('Most recent recommendation for', ticker, ':', stockRecommendation);
+      }
+    }
+  }, [stockPosts, ticker]);
+
   const fetchStockData = async (symbol: string) => {
     if (initialDataFetched) return;
 
@@ -283,41 +322,31 @@ export default function StocksPage() {
   ];
 
   const getRecommendationContent = () => {
-    const emptyRecommendation = {
-      primaryRating: 'No Data',
-      strongBuyPercent: 0,
-      buyPercent: 0,
-      holdPercent: 0,
-      sellPercent: 0,
-      strongSellPercent: 0,
-      rationale: 'No AI insights available for this stock.'
-    };
+    if (!stockPosts || stockPosts.length === 0) {
+      return null;
+    }
 
-    // Find the most recent post for the current ticker
-    const relevantPosts = stockPosts.filter(post => 
-      post.positiveTickers.includes(ticker) || 
-      post.stocks.some(stock => ((stock as any).ticker) === ticker)
-    );
+    const mostRecentPost = stockPosts[0];
 
-    // Sort posts by timestamp in descending order and get the most recent
-    const latestPost = relevantPosts.length > 0 
-      ? relevantPosts.sort((a, b) => 
-          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-        )[0]
-      : null;
+    if (!mostRecentPost.stocks || mostRecentPost.stocks.length === 0) {
+      return null;
+    }
 
-    // Get the stock recommendation from the latest post
-    const stockRecommendation = latestPost?.stocks?.find(stock => ((stock as any).ticker) === ticker) || emptyRecommendation;
+    const stockRecommendation = mostRecentPost.stocks.find(stock => stock.ticker === ticker);
+
+    if (!stockRecommendation) {
+      return null;
+    }
     
     return (
-      <div className="space-y-4">
-        <div className="flex justify-between items-center mb-6">
+      <div className="space-y-6">
+        <div className="flex justify-between items-center mb-4">
           <span className="text-neutral-300 text-sm font-bold">
             Primary Rating: {stockRecommendation.primaryRating}
           </span>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-3">
           {[
             { label: 'Strong Buy', value: stockRecommendation.strongBuyPercent },
             { label: 'Buy', value: stockRecommendation.buyPercent },
@@ -350,20 +379,20 @@ export default function StocksPage() {
               <div 
                 key={item.label} 
                 className={`
-                  w-full p-2 rounded-lg flex justify-between items-center transition-all duration-300 ease-in-out
+                  w-full p-3 rounded-lg flex justify-between items-center transition-all duration-300 ease-in-out
                   ${getColorClass()}
                 `}
               >
-                <span className="text-xs font-semibold">{item.label}</span>
-                <span className="text-sm font-bold">{item.value}%</span>
+                <span className="text-sm font-semibold">{item.label}</span>
+                <span className="text-base font-bold">{item.value}%</span>
               </div>
             );
           })}
         </div>
 
-        <div className="p-2">
-          <h3 className="text-md font-semibold text-neutral-300 mb-1">AI Insight</h3>
-          <p className="text-neutral-300 text-sm mt-4">
+        <div className="p-3 mt-4 bg-neutral-800/30 rounded-lg">
+          <h3 className="text-md font-semibold text-neutral-300 mb-2">AI Insight</h3>
+          <p className="text-neutral-300 text-sm leading-relaxed">
             {stockRecommendation.rationale}
           </p>
         </div>
@@ -375,16 +404,38 @@ export default function StocksPage() {
     router.push('/dashboard');
   };
 
+  const renderPosts = () => {
+    return (
+      <div className="mt-4">
+        <div className="space-y-2">
+          {stockPosts.map((post) => (
+            <LoadPost 
+              key={post.id} 
+              postId={post.id}
+              onClick={(post) => setSelectedPost(post)}
+            />
+          ))}
+        </div>
+
+        <PostModal
+          isOpen={!!selectedPost}
+          onClose={() => setSelectedPost(null)}
+          post={selectedPost}
+        />
+      </div>
+    );
+  };
+
   return (
-    <div className="bg-black h-screen text-white p-6 relative">
-      <button
+    <div className="bg-black min-h-screen text-white p-4 sm:p-6 relative">
+      <button 
         onClick={handleGoBack}
-        className="fixed top-6 left-6 text-white cursor-pointer font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center space-x-2 z-50"
+        className="fixed top-4 sm:top-6 left-4 sm:left-6 bg-emerald-900/40 hover:bg-emerald-900 text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg transition-colors duration-300 flex items-center space-x-3 z-50"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          viewBox="0 0 20 20"
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          className="h-5 w-5 sm:h-6 sm:w-6" 
+          viewBox="0 0 20 20" 
           fill="currentColor"
         >
           <path
@@ -393,44 +444,45 @@ export default function StocksPage() {
             clipRule="evenodd"
           />
         </svg>
-        <span />
+        <span className="text-sm sm:text-base">Back</span>
       </button>
 
       <div className="max-w-6xl mx-auto">
         {loading && (
-          <div className="text-neutral-400 text-center">
-            Loading stock data...
-          </div>
+          <div className="text-neutral-400 text-center text-sm sm:text-base">Loading stock data...</div>
         )}
 
         {error && (
-          <div className="bg-red-900/30 text-red-300 p-4 rounded-xl">
+          <div className="bg-red-900/30 text-red-300 p-3 sm:p-4 rounded-xl text-sm sm:text-base">
             {error}
           </div>
         )}
 
         {ticker && stockData.length > 0 && (
-          <div className="flex gap-8">
-            <div className="w-3/4 space-y-6">
-              <div className="bg-neutral-900 rounded-xl p-8 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-2xl font-bold text-white">
-                      {companyName || ticker}
-                    </h2>
-                    <p className="text-neutral-400">{ticker} • NASDAQ</p>
+          <div className="flex flex-col lg:flex-row mt-12 gap-4 sm:gap-8">
+            <div className="w-full flex flex-col">
+              <div className="bg-neutral-900 rounded-xl p-4 sm:p-8 flex-grow mb-4 sm:mb-0">
+                <div className="flex items-center justify-between w-full h-full">
+                  <div className="flex flex-col items-start">
+                    <div className="flex items-center space-x-3 mb-2">
+                      <h2 className="text-xl sm:text-2xl font-bold text-white">{companyName || ticker}</h2>
+                      <span className="text-xs text-neutral-400 bg-neutral-800 px-2 py-1 rounded-md">
+                        {ticker}
+                      </span>
+                    </div>
+                    <p className="text-sm text-neutral-400 tracking-wider">
+                      Listed on NASDAQ
+                    </p>
                   </div>
-                  <div className="text-right">
-                    <p className="text-3xl font-semibold">
+                  <div className="text-right space-y-1">
+                    <p className="text-2xl sm:text-3xl font-semibold text-white">
                       ${stockData[stockData.length - 1].close.toFixed(2)}
                     </p>
-                    <p
-                      className={`
-                      font-medium text-lg
-                      ${
-                        Number.parseFloat(calculatePercentChange(stockData)) >= 0
-                          ? "text-green-500"
-                          : "text-red-500"
+                    <p className={`
+                      font-medium text-base sm:text-lg
+                      ${parseFloat(calculatePercentChange(stockData)) >= 0 
+                        ? 'text-green-500' 
+                        : 'text-red-500'
                       }
                     `}
                     >
@@ -443,20 +495,21 @@ export default function StocksPage() {
                 </div>
               </div>
 
-              <div className="bg-neutral-900 rounded-xl p-8 space-y-4">
-                <div className="flex justify-center space-x-2 mb-4 ">
+              <div className="bg-neutral-900 rounded-xl p-4 sm:p-8 mb-4 sm:mt-8 flex-grow">
+                <div className="flex justify-center space-x-1 mb-4 sm:space-x-2 mb-2 sm:mb-4">
                   {timeRangeButtons.map(({ label, value }) => (
                     <button
                       type="button"
                       key={value}
                       onClick={() => selectTimeRangeData(value)}
                       className={`
-                        px-4 py-2 rounded-lg transition-colors
-                        ${
-                          timeRange === value
-                            ? "bg-green-900 text-green-300"
-                            : "bg-neutral-800 text-neutral-400 cursor-pointer hover:bg-neutral-700"
+                        px-3 py-2 sm:px-5 sm:py-3 text-sm sm:text-base rounded-lg transition-colors
+                        ${timeRange === value 
+                          ? 'bg-green-900 text-green-300' 
+                          : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'
                         }
+                        hover:scale-105 active:scale-95 transform transition-transform duration-200
+                        min-w-[60px] sm:min-w-[80px] text-center
                       `}
                     >
                       {label}
@@ -464,20 +517,25 @@ export default function StocksPage() {
                   ))}
                 </div>
 
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={stockData}>
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      stroke="rgba(255,255,255,0.1)"
+                <ResponsiveContainer width="100%" height={350} className="sm:h-[500px]">
+                  <LineChart 
+                    data={stockData} 
+                    margin={{ left: -20, right: -20, top: 10, bottom: 0 }}
+                  >
+                    <CartesianGrid 
+                      strokeDasharray="3 3" 
+                      stroke="rgba(255,255,255,0.1)" 
                     />
-                    <XAxis
-                      dataKey="date"
-                      stroke="rgba(255,255,255,0.3)"
-                      tick={{ fontSize: 10 }}
+                    <XAxis 
+                      dataKey="date" 
+                      stroke="rgba(255,255,255,0.3)" 
+                      tick={{fontSize: 10}}
+                      padding={{ left: 0, right: 0 }}
                     />
-                    <YAxis
-                      stroke="rgba(255,255,255,0.3)"
-                      tick={{ fontSize: 10 }}
+                    <YAxis 
+                      stroke="rgba(255,255,255,0.3)" 
+                      tick={{fontSize: 10}} 
+                      padding={{ top: 0, bottom: 0 }}
                     />
                     <Tooltip
                       content={<DayStockInfo />}
@@ -498,41 +556,29 @@ export default function StocksPage() {
               </div>
             </div>
 
-            <div className="w-1/3 bg-neutral-900 rounded-xl p-8 space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-white">
-                  Recommendation
-                </h2>
-                <span className="text-neutral-400 text-sm">Latest</span>
+            <div className="w-full lg:w-[40%] bg-neutral-900 rounded-xl p-4 sm:p-8 flex flex-col justify-between h-full">
+              <div className="flex flex-col justify-between h-full">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white">Recommendation</h2>
+                    <span className="text-xs sm:text-sm text-neutral-400">Latest</span>
+                  </div>
+                  {getRecommendationContent()}
+                </div>
               </div>
-              {getRecommendationContent()}
             </div>
           </div>
         )}
 
         <div className="bg-black text-gray-300 w-full">
           <div className="max-w-4xl mx-auto">
-            <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4 mt-8">
-              <h1 className="text-xl font-bold text-white">Activity</h1>
+            <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-2 sm:p-4 mt-4 sm:mt-8">
+              <h1 className="text-lg sm:text-xl font-bold text-white">Activity</h1>
             </div>
 
             <div className="divide-y divide-neutral-800">
-              {stockPosts.length ? (
-                stockPosts.map((post) => (
-                  <Post key={post.id} onClick={() => handlePostClick(post)} post={post} />
-                ))
-              ) : (
-                <div className="text-center text-neutral-500 p-8">
-                  No posts available for this stock
-                </div>
-              )}
+              {renderPosts()}
             </div>
-
-            <PostModal
-              isOpen={!!selectedPost}
-              onClose={handleCloseModal}
-              post={ selectedPost}
-            />
           </div>
         </div>
       </div>

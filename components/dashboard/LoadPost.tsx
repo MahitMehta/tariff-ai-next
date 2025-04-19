@@ -37,30 +37,30 @@ const LoadPost : React.FC<ILoadPostProps> = ({ postId, ...props }) => {
             if (!accountSnap.exists()) return;
 
             const account = accountSnap.data();
-
+            
             setPost({
-            id: postId,
-            verified: true,
-            username: account.username || '',
-            handle: account.handle || '',
-            content: event.summary || '',
-            timestamp: event.timestamp,
-            positiveTickers: event.stock_tickers || [],
-            negativeTickers: [],
-            report: event.detailed_report || '',
-            stocks: (event.stock_tickers || []).map(ticker => {
-                const tickerData = event.recommendation?.[ticker] || {};
-                return {
-                ticker: ticker,
-                primaryRating: tickerData?.sentiment || 'Neutral',
-                strongBuyPercent: tickerData?.rec?.strongBuy || 0,
-                buyPercent: tickerData?.rec?.buy || 0,
-                holdPercent: tickerData?.rec?.hold || 0,
-                sellPercent: tickerData?.rec?.sell || 0,
-                strongSellPercent: tickerData?.rec?.strongSell || 0,
-                rationale: tickerData?.reasoning || 'No specific rationale available'
-                };
-            })
+                id: postId,
+                verified: true,
+                username: account.username || '',
+                handle: account.handle || '',
+                content: event.summary || '',
+                timestamp: event.timestamp,
+                positiveTickers: event.stock_tickers || [],
+                negativeTickers: [],
+                report: event.detailed_report || '',
+                stocks: (event.stock_tickers || []).map(ticker => {
+                    const tickerData = event.recommendation?.[ticker] || {};
+
+                    return {
+                        primaryRating: tickerData?.sentiment || 'Neutral',
+                        strongBuyPercent: tickerData?.rec?.strongBuy || 0,
+                        buyPercent: tickerData?.rec?.buy || 0,
+                        holdPercent: tickerData?.rec?.hold || 0,
+                        sellPercent: tickerData?.rec?.sell || 0,
+                        strongSellPercent: tickerData?.rec?.strongSell || 0,
+                        rationale: tickerData?.reasoning || 'No specific rationale available'
+                    };
+                })
             })
         });
         })

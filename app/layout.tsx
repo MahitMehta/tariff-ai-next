@@ -27,7 +27,9 @@ export default function RootLayout({
        
         <Suspense fallback={<></>}>
           {children}
-          <BottomBar />
+          <div className="hidden sm:block">
+            <BottomBar />
+          </div>
         </Suspense>
 
       </body>

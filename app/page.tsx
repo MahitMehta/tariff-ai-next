@@ -2,11 +2,9 @@
 
 import Link from "next/link";
 
-
 export default function Home() {
   return (
-    // Main container with pure black background
-    <main className="relative flex min-h-screen flex-col items-center justify-center bg-black overflow-hidden px-4 sm:px-6 lg:px-8">
+    <main className="relative flex min-h-screen flex-col items-center justify-center bg-black overflow-hidden px-4 sm:px-6 lg:px-8 py-4">
       {/* Enhanced green glow effects - three layers for better visibility */}
       <div
         className="fixed w-full h-full rounded-full bg-green-500 opacity-6 blur-xl"
@@ -39,17 +37,17 @@ export default function Home() {
         }}
       />
 
-      {/* Header with PoliStocks and account buttons */}
-      <header className="absolute top-0 left-0 w-full flex justify-between items-center p-4 z-10">
-        <div className="text-2xl font-bold text-white flex items-center">
+      {/* Header with responsive adjustments */}
+      <header className="absolute top-0 left-0 w-full flex justify-between items-center p-2 sm:p-4 z-10">
+        <div className="text-xl sm:text-2xl font-bold text-white flex items-center">
           <span className="text-green-400">Poli</span>
           <span>Stocks</span>
         </div>
-        <div className="flex space-x-4">
+        <div className="flex space-x-2 sm:space-x-4">
           <Link href="/signup">
             <button
               type="button"
-              className="px-4 py-2 font-semibold text-white bg-transparent border border-gray-500 rounded-md hover:bg-grey-900 hover:border-green-400 hover:scale-105 transition-all duration-200"
+              className="px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-white bg-transparent border border-gray-500 rounded-md hover:bg-grey-900 hover:border-green-400 hover:scale-105 transition-all duration-200"
             >
               Create Account
             </button>
@@ -57,7 +55,7 @@ export default function Home() {
           <Link href="/login">
             <button
               type="button"
-              className="px-4 py-2 font-semibold text-white cursor-pointer bg-green-500 rounded-md hover:bg-green-350 hover:scale-105 transition-all duration-200"
+              className="px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-white cursor-pointer bg-green-500 rounded-md hover:bg-green-350 hover:scale-105 transition-all duration-200"
             >
               Sign In
             </button>
@@ -65,33 +63,33 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Content container with animations */}
-      <div className="w-full max-w-3xl text-center z-10">
-        {/* Headline with simple fade-in animation */}
-        <h1 style={{ lineHeight: 1.1 }} className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl mb-6 animate-fadeIn">
+      {/* Content container with mobile-first approach */}
+      <div className="w-full max-w-3xl text-center z-10 px-4">
+        {/* Headline with responsive text sizes */}
+        <h1 style={{ lineHeight: 1.1 }} className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white mb-4 sm:mb-6 animate-fadeIn">
           <span className="block">Helping Retail Investors</span>
           <span className="block">Stay on Top of </span>
           <span className="block text-green-400">Critical Financial News</span>
         </h1>
 
-        {/* Subheading */}
-        <p className="mt-6 text-lg text-gray-300 animate-fadeIn">
+        {/* Subheading with responsive text */}
+        <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-300 animate-fadeIn">
           Real-time insights, analysis, and alerts to make informed investment
           decisions
         </p>
 
-        {/* Button group with hover effects */}
-        <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4 animate-fadeIn">
+        {/* Button group with mobile-friendly layout */}
+        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 animate-fadeIn">
           <Link href="/signup">
             <button
               type="button"
-              className="rounded-md bg-green-500 px-6 py-3 text-base font-semibold text-white shadow-lg hover:bg-green-400 hover:scale-105 transition-all duration-200 group"
+              className="w-full sm:w-auto rounded-md bg-green-500 px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold text-white shadow-lg hover:bg-green-400 hover:scale-105 transition-all duration-200 group"
             >
               <span className="flex items-center justify-center">
                 Get Started
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200"
+                  className="h-4 w-4 sm:h-5 sm:w-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-200"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -109,32 +107,32 @@ export default function Home() {
           <Link target="_blank" href="https://devpost.com/software/902063">
             <button
               type="button"
-              className="rounded-md bg-transparent border border-green-500 px-6 py-3 text-base font-semibold text-green-400 shadow-lg hover:bg-green-900 hover:bg-opacity-30 hover:scale-105 transition-all duration-200"
+              className="w-full sm:w-auto rounded-md bg-transparent border border-green-500 px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold text-green-400 shadow-lg hover:bg-green-900 hover:bg-opacity-30 hover:scale-105 transition-all duration-200"
             >
               Learn More
             </button>
           </Link>
         </div>
 
-        {/* Feature highlights */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 animate-fadeIn">
-          <div className="p-6 rounded-lg border border-gray-500 bg-black-900 bg-opacity-70 hover:border-green-500 transition-all duration-300 hover:transform hover:scale-105">
-            <div className="text-green-400 text-xl mb-2">Real-time Alerts</div>
-            <p className="text-gray-300">
+        {/* Feature highlights with responsive grid */}
+        <div className="mt-10 sm:mt-16 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8 animate-fadeIn">
+          <div className="p-4 sm:p-6 rounded-lg border border-gray-500 bg-black-900 bg-opacity-70 hover:border-green-500 transition-all duration-300 hover:transform hover:scale-105">
+            <div className="text-green-400 text-lg sm:text-xl mb-2">Real-time Alerts</div>
+            <p className="text-xs sm:text-base text-gray-300">
               Get instant notifications on market movements and breaking news
             </p>
           </div>
-          <div className="p-6 rounded-lg border border-gray-500 bg-black-900 bg-opacity-70 hover:border-green-500 transition-all duration-300 hover:transform hover:scale-105">
-            <div className="text-green-400 text-xl mb-2">Smart Analysis</div>
-            <p className="text-gray-300">
+          <div className="p-4 sm:p-6 rounded-lg border border-gray-500 bg-black-900 bg-opacity-70 hover:border-green-500 transition-all duration-300 hover:transform hover:scale-105">
+            <div className="text-green-400 text-lg sm:text-xl mb-2">Smart Analysis</div>
+            <p className="text-xs sm:text-base text-gray-300">
               AI-powered insights to help you make better investment decisions
             </p>
           </div>
-          <div className="p-6 rounded-lg border border-gray-500 bg-black-900 bg-opacity-70 hover:border-green-500 transition-all duration-300 hover:transform hover:scale-105">
-            <div className="text-green-400 text-xl mb-2">
+          <div className="p-4 sm:p-6 rounded-lg border border-gray-500 bg-black-900 bg-opacity-70 hover:border-green-500 transition-all duration-300 hover:transform hover:scale-105">
+            <div className="text-green-400 text-lg sm:text-xl mb-2">
               Portfolio Tracking
             </div>
-            <p className="text-gray-300">
+            <p className="text-xs sm:text-base text-gray-300">
               Monitor all your investments in one place with customized
               dashboards
             </p>
@@ -142,9 +140,9 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="absolute bottom-0 w-full p-4 text-center text-gray-400 text-sm">
-        <p>© 2025 PoliStocks. All rights reserved.</p>
+      {/* Footer with responsive text */}
+      <footer className="absolute bottom-0 w-full p-2 sm:p-4 text-center text-gray-400 text-xs sm:text-sm">
+        <p> 2025 PoliStocks. All rights reserved.</p>
       </footer>
 
       {/* Simplified CSS animations */}

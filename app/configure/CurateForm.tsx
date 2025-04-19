@@ -4,21 +4,23 @@ import { accountsCollection, app, auth, usersCollection } from "@/lib/firebase.c
 import { doc, getDocs, setDoc } from "firebase/firestore";
 import { useCallback, useEffect, useState } from "react";
 
-import AutocompleteDropdownMulti from "../../components/AutocompleteDropdown";
 import { UserIcon } from "@heroicons/react/24/outline";
-import BrandButton from "../../components/BrandButton";
 import { useRouter } from "next/navigation";
+import AutocompleteDropdownMulti from "../../components/AutocompleteDropdown";
+import BrandButton from "../../components/BrandButton";
 import Checkbox from "../../components/Checkbox";
 import DropdownSelect from "../../components/Dropdown";
 
 // stocks
-import stocks from "../../data/sp500.json";
 import { getMessaging, getToken } from "firebase/messaging";
+import stocks from "../../data/nasdaq.json";
 
-const mappedStocks = stocks.map((stock) => ({
-    id: stock.ticker,
-    value: `${stock.ticker} - ${stock.name}`,
-}));
+const mappedStocks = stocks
+    .filter(stock => stock.Symbol) // Filter out stocks with null Symbol
+    .map((stock) => ({
+        id: stock.Symbol!, // Use non-null assertion as we've filtered out nulls
+        value: `${stock.Symbol} - ${stock.Name}`,
+    }));
 
 interface IAccount {
     id: string;

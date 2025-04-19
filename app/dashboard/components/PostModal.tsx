@@ -1,8 +1,9 @@
 "use client"
+import type { PostData } from "@/app/dashboard/page";
+import { chatContextAtom } from "@/lib/atom";
+import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useAtom } from "jotai";
-import { chatContextAtom } from "@/lib/atom";
 
 interface PostModalProps {
   isOpen: boolean;
@@ -78,7 +79,7 @@ ${stockDetails}
       className={`fixed inset-0 bg-black/65 backdrop-blur-sm flex items-center justify-center z-50 overflow-hidden transition-opacity duration-300 ease-in-out ${
         animate ? "opacity-100" : "opacity-0"
       }`}
-      onClick={onClose}
+      onClick={() => onClose(false)}
     >
       <div
         className={`bg-black rounded-xl w-full max-w-4xl mx-4 relative transform transition-all duration-300 ease-in-out max-h-[90vh] overflow-y-auto border border-neutral-800 ring-1 ring-neutral-700 no-scrollbar ${
@@ -90,13 +91,15 @@ ${stockDetails}
       >
         <div className="flex justify-between items-center p-4">
           <button
+            type="button"
             onClick={sendReportToChatbot}
             className="bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 rounded-lg px-4 py-2 transition-colors duration-200"
           >
             Consult AI
           </button>
           <button
-            onClick={onClose}
+            type="button"
+            onClick={() => onClose(false)} 
             className="text-neutral-400 hover:text-white z-60 transition-colors duration-200"
           >
             <svg
@@ -119,12 +122,12 @@ ${stockDetails}
         {post && (
           <div className="p-4 md:p-6">
             <div
-              className={`flex items-center space-x-2 mb-4 transition-all duration-300 ease-in-out ${
+              className={`flex items-center space-x-2 mb-4 transition-all duration-200 ease-in-out ${
                 animate
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-2"
               }`}
-              style={{ transitionDelay: "100ms" }}
+              style={{ transitionDelay: "10ms" }}
             >
               <span className="font-bold text-white text-lg">
                 {post.username}
@@ -167,6 +170,7 @@ ${stockDetails}
                 <div className="flex flex-wrap gap-2">
                   {post.positiveTickers?.map((ticker, idx) => (
                     <button
+                      type="button"
                       key={ticker}
                       onClick={() => handleTickerClick(ticker)}
                       className="bg-emerald-900/50 text-emerald-300 px-3 py-1 rounded-full text-sm hover:bg-emerald-900/70 transition-colors"
@@ -177,6 +181,7 @@ ${stockDetails}
                   ))}
                   {post.negativeTickers?.map((ticker, idx) => (
                     <button
+                      type="button"
                       key={ticker}
                       onClick={() => handleTickerClick(ticker)}
                       className="bg-red-900/50 text-red-300 px-3 py-1 rounded-full text-sm hover:bg-red-900/70 transition-colors"
@@ -211,16 +216,15 @@ ${stockDetails}
                 {post.report || "No detailed report available."}
               </p>
 
-              {post.stocks &&
-                post.stocks.map((stock, index) => (
+              {post.stocks?.map((stock, index) => (
                   <div
-                    key={index}
+                    key={stock.ticker}
                     className={`mt-6 p-4 bg-neutral-900 rounded-xl border border-neutral-800 shadow-md transition-all duration-300 ease-in-out ${
                       animate
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-2"
                     }`}
-                    style={{ transitionDelay: `${300 + index * 50}ms` }}
+                    style={{ transitionDelay: `${100 + index * 50}ms` }}
                   >
                     <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
                       <div className="mb-2 md:mb-0">

@@ -1,2517 +1,2014 @@
 [
   {
     "ticker": "MMM",
-    "name": "3M",
-    "change": -1.24
+    "name": "3M"
   },
   {
     "ticker": "AOS",
-    "name": "A. O. Smith",
-    "change": -1.4
+    "name": "A. O. Smith"
   },
   {
     "ticker": "ABT",
-    "name": "Abbott Laboratories",
-    "change": -1.38
+    "name": "Abbott Laboratories"
   },
   {
     "ticker": "ABBV",
-    "name": "AbbVie",
-    "change": -1.3
+    "name": "AbbVie"
   },
   {
     "ticker": "ACN",
-    "name": "Accenture",
-    "change": 2.23
+    "name": "Accenture"
   },
   {
     "ticker": "ADBE",
-    "name": "Adobe Inc.",
-    "change": -1.35
+    "name": "Adobe Inc."
   },
   {
     "ticker": "AMD",
-    "name": "Advanced Micro Devices",
-    "change": -1.62
+    "name": "Advanced Micro Devices"
   },
   {
     "ticker": "AES",
-    "name": "AES Corporation",
-    "change": 2.97
+    "name": "AES Corporation"
   },
   {
     "ticker": "AFL",
-    "name": "Aflac",
-    "change": -1.24
+    "name": "Aflac"
   },
   {
     "ticker": "A",
-    "name": "Agilent Technologies",
-    "change": 1.82
+    "name": "Agilent Technologies"
   },
   {
     "ticker": "APD",
-    "name": "Air Products",
-    "change": 2.59
+    "name": "Air Products"
   },
   {
     "ticker": "ABNB",
-    "name": "Airbnb",
-    "change": 1.76
+    "name": "Airbnb"
   },
   {
     "ticker": "AKAM",
-    "name": "Akamai Technologies",
-    "change": 1.8
+    "name": "Akamai Technologies"
   },
   {
     "ticker": "ALB",
-    "name": "Albemarle Corporation",
-    "change": 1.37
+    "name": "Albemarle Corporation"
   },
   {
     "ticker": "ARE",
-    "name": "Alexandria Real Estate Equities",
-    "change": 1.03
+    "name": "Alexandria Real Estate Equities"
   },
   {
     "ticker": "ALGN",
-    "name": "Align Technology",
-    "change": 1.5
+    "name": "Align Technology"
   },
   {
     "ticker": "ALLE",
-    "name": "Allegion",
-    "change": 2.27
+    "name": "Allegion"
   },
   {
     "ticker": "LNT",
-    "name": "Alliant Energy",
-    "change": 2.84
+    "name": "Alliant Energy"
   },
   {
     "ticker": "ALL",
-    "name": "Allstate",
-    "change": 1.66
+    "name": "Allstate"
   },
   {
     "ticker": "GOOGL",
-    "name": "Alphabet Inc. (Class A)",
-    "change": 1.45
+    "name": "Alphabet Inc. (Class A)"
   },
   {
     "ticker": "GOOG",
-    "name": "Alphabet Inc. (Class C)",
-    "change": 1.21
+    "name": "Alphabet Inc. (Class C)"
   },
   {
     "ticker": "MO",
-    "name": "Altria",
-    "change": 1.65
+    "name": "Altria"
   },
   {
     "ticker": "AMZN",
-    "name": "Amazon",
-    "change": -2.42
+    "name": "Amazon"
   },
   {
     "ticker": "AMCR",
-    "name": "Amcor",
-    "change": 1.25
+    "name": "Amcor"
   },
   {
     "ticker": "AEE",
-    "name": "Ameren",
-    "change": 2.66
+    "name": "Ameren"
   },
   {
     "ticker": "AEP",
-    "name": "American Electric Power",
-    "change": 2.03
+    "name": "American Electric Power"
   },
   {
     "ticker": "AXP",
-    "name": "American Express",
-    "change": 1.28
+    "name": "American Express"
   },
   {
     "ticker": "AIG",
-    "name": "American International Group",
-    "change": 1.06
+    "name": "American International Group"
   },
   {
     "ticker": "AMT",
-    "name": "American Tower",
-    "change": 1.82
+    "name": "American Tower"
   },
   {
     "ticker": "AWK",
-    "name": "American Water Works",
-    "change": 1.92
+    "name": "American Water Works"
   },
   {
     "ticker": "AMP",
-    "name": "Ameriprise Financial",
-    "change": 2.73
+    "name": "Ameriprise Financial"
   },
   {
     "ticker": "AME",
-    "name": "Ametek",
-    "change": 1.31
+    "name": "Ametek"
   },
   {
     "ticker": "AMGN",
-    "name": "Amgen",
-    "change": 2.39
+    "name": "Amgen"
   },
   {
     "ticker": "APH",
-    "name": "Amphenol",
-    "change": 2.26
+    "name": "Amphenol"
   },
   {
     "ticker": "ADI",
-    "name": "Analog Devices",
-    "change": 1.5
+    "name": "Analog Devices"
   },
   {
     "ticker": "ANSS",
-    "name": "Ansys",
-    "change": 2.19
+    "name": "Ansys"
   },
   {
     "ticker": "AON",
-    "name": "Aon plc",
-    "change": 2.57
+    "name": "Aon plc"
   },
   {
     "ticker": "APA",
-    "name": "APA Corporation",
-    "change": 2.82
+    "name": "APA Corporation"
   },
   {
     "ticker": "APO",
-    "name": "Apollo Global Management",
-    "change": 1.46
+    "name": "Apollo Global Management"
   },
   {
     "ticker": "AAPL",
-    "name": "Apple Inc.",
-    "change": 2.56
+    "name": "Apple Inc."
   },
   {
     "ticker": "AMAT",
-    "name": "Applied Materials",
-    "change": 2.65
+    "name": "Applied Materials"
   },
   {
     "ticker": "APTV",
-    "name": "Aptiv",
-    "change": 2.2
+    "name": "Aptiv"
   },
   {
     "ticker": "ACGL",
-    "name": "Arch Capital Group",
-    "change": 1.62
+    "name": "Arch Capital Group"
   },
   {
     "ticker": "ADM",
-    "name": "Archer Daniels Midland",
-    "change": 2.0
+    "name": "Archer Daniels Midland"
   },
   {
     "ticker": "ANET",
-    "name": "Arista Networks",
-    "change": 1.77
+    "name": "Arista Networks"
   },
   {
     "ticker": "AJG",
-    "name": "Arthur J. Gallagher & Co.",
-    "change": 2.03
+    "name": "Arthur J. Gallagher & Co."
   },
   {
     "ticker": "AIZ",
-    "name": "Assurant",
-    "change": -2.42
+    "name": "Assurant"
   },
   {
     "ticker": "T",
-    "name": "AT&T",
-    "change": 1.97
+    "name": "AT&T"
   },
   {
     "ticker": "ATO",
-    "name": "Atmos Energy",
-    "change": 2.08
+    "name": "Atmos Energy"
   },
   {
     "ticker": "ADSK",
-    "name": "Autodesk",
-    "change": 2.79
+    "name": "Autodesk"
   },
   {
     "ticker": "ADP",
-    "name": "Automatic Data Processing",
-    "change": 2.58
+    "name": "Automatic Data Processing"
   },
   {
     "ticker": "AZO",
-    "name": "AutoZone",
-    "change": 2.23
+    "name": "AutoZone"
   },
   {
     "ticker": "AVB",
-    "name": "AvalonBay Communities",
-    "change": 2.92
+    "name": "AvalonBay Communities"
   },
   {
     "ticker": "AVY",
-    "name": "Avery Dennison",
-    "change": 1.25
+    "name": "Avery Dennison"
   },
   {
     "ticker": "AXON",
-    "name": "Axon Enterprise",
-    "change": -1.65
+    "name": "Axon Enterprise"
   },
   {
     "ticker": "BKR",
-    "name": "Baker Hughes",
-    "change": 2.18
+    "name": "Baker Hughes"
   },
   {
     "ticker": "BALL",
-    "name": "Ball Corporation",
-    "change": 2.75
+    "name": "Ball Corporation"
   },
   {
     "ticker": "BAC",
-    "name": "Bank of America",
-    "change": 2.69
+    "name": "Bank of America"
   },
   {
     "ticker": "BAX",
-    "name": "Baxter International",
-    "change": -1.85
+    "name": "Baxter International"
   },
   {
     "ticker": "BDX",
-    "name": "Becton Dickinson",
-    "change": 2.72
+    "name": "Becton Dickinson"
   },
   {
     "ticker": "BRK.B",
-    "name": "Berkshire Hathaway",
-    "change": 1.14
+    "name": "Berkshire Hathaway"
   },
   {
     "ticker": "BBY",
-    "name": "Best Buy",
-    "change": 1.32
+    "name": "Best Buy"
   },
   {
     "ticker": "TECH",
-    "name": "Bio-Techne",
-    "change": 1.44
+    "name": "Bio-Techne"
   },
   {
     "ticker": "BIIB",
-    "name": "Biogen",
-    "change": 1.82
+    "name": "Biogen"
   },
   {
     "ticker": "BLK",
-    "name": "BlackRock",
-    "change": -2.46
+    "name": "BlackRock"
   },
   {
     "ticker": "BX",
-    "name": "Blackstone Inc.",
-    "change": 2.79
+    "name": "Blackstone Inc."
   },
   {
     "ticker": "BK",
-    "name": "BNY Mellon",
-    "change": 2.13
+    "name": "BNY Mellon"
   },
   {
     "ticker": "BA",
-    "name": "Boeing",
-    "change": 1.47
+    "name": "Boeing"
   },
   {
     "ticker": "BKNG",
-    "name": "Booking Holdings",
-    "change": 2.36
+    "name": "Booking Holdings"
   },
   {
     "ticker": "BSX",
-    "name": "Boston Scientific",
-    "change": 2.96
+    "name": "Boston Scientific"
   },
   {
     "ticker": "BMY",
-    "name": "Bristol Myers Squibb",
-    "change": -1.47
+    "name": "Bristol Myers Squibb"
   },
   {
     "ticker": "AVGO",
-    "name": "Broadcom",
-    "change": -1.51
+    "name": "Broadcom"
   },
   {
     "ticker": "BR",
-    "name": "Broadridge Financial Solutions",
-    "change": 2.1
+    "name": "Broadridge Financial Solutions"
   },
   {
     "ticker": "BRO",
-    "name": "Brown & Brown",
-    "change": -2.46
+    "name": "Brown & Brown"
   },
   {
     "ticker": "BF.B",
-    "name": "Brown\u2013Forman",
-    "change": -1.55
+    "name": "Brown\u2013Forman"
   },
   {
     "ticker": "BLDR",
-    "name": "Builders FirstSource",
-    "change": -1.59
+    "name": "Builders FirstSource"
   },
   {
     "ticker": "BG",
-    "name": "Bunge Global",
-    "change": -1.24
+    "name": "Bunge Global"
   },
   {
     "ticker": "BXP",
-    "name": "BXP, Inc.",
-    "change": 2.16
+    "name": "BXP, Inc."
   },
   {
     "ticker": "CHRW",
-    "name": "C.H. Robinson",
-    "change": -2.48
+    "name": "C.H. Robinson"
   },
   {
     "ticker": "CDNS",
-    "name": "Cadence Design Systems",
-    "change": 2.96
+    "name": "Cadence Design Systems"
   },
   {
     "ticker": "CZR",
-    "name": "Caesars Entertainment",
-    "change": 2.01
+    "name": "Caesars Entertainment"
   },
   {
     "ticker": "CPT",
-    "name": "Camden Property Trust",
-    "change": 2.06
+    "name": "Camden Property Trust"
   },
   {
     "ticker": "CPB",
-    "name": "Campbell's Company (The)",
-    "change": 2.57
+    "name": "Campbell's Company (The)"
   },
   {
     "ticker": "COF",
-    "name": "Capital One",
-    "change": 2.24
+    "name": "Capital One"
   },
   {
     "ticker": "CAH",
-    "name": "Cardinal Health",
-    "change": -1.45
+    "name": "Cardinal Health"
   },
   {
     "ticker": "KMX",
-    "name": "CarMax",
-    "change": 2.65
+    "name": "CarMax"
   },
   {
     "ticker": "CCL",
-    "name": "Carnival",
-    "change": -1.95
+    "name": "Carnival"
   },
   {
     "ticker": "CARR",
-    "name": "Carrier Global",
-    "change": 1.71
+    "name": "Carrier Global"
   },
   {
     "ticker": "CAT",
-    "name": "Caterpillar Inc.",
-    "change": -2.0
+    "name": "Caterpillar Inc."
   },
   {
     "ticker": "CBOE",
-    "name": "Cboe Global Markets",
-    "change": 1.56
+    "name": "Cboe Global Markets"
   },
   {
     "ticker": "CBRE",
-    "name": "CBRE Group",
-    "change": -2.59
+    "name": "CBRE Group"
   },
   {
     "ticker": "CDW",
-    "name": "CDW Corporation",
-    "change": 1.06
+    "name": "CDW Corporation"
   },
   {
     "ticker": "COR",
-    "name": "Cencora",
-    "change": -2.48
+    "name": "Cencora"
   },
   {
     "ticker": "CNC",
-    "name": "Centene Corporation",
-    "change": -2.53
+    "name": "Centene Corporation"
   },
   {
     "ticker": "CNP",
-    "name": "CenterPoint Energy",
-    "change": 1.73
+    "name": "CenterPoint Energy"
   },
   {
     "ticker": "CF",
-    "name": "CF Industries",
-    "change": 1.2
+    "name": "CF Industries"
   },
   {
     "ticker": "CRL",
-    "name": "Charles River Laboratories",
-    "change": 1.35
+    "name": "Charles River Laboratories"
   },
   {
     "ticker": "SCHW",
-    "name": "Charles Schwab Corporation",
-    "change": 1.49
+    "name": "Charles Schwab Corporation"
   },
   {
     "ticker": "CHTR",
-    "name": "Charter Communications",
-    "change": -2.37
+    "name": "Charter Communications"
   },
   {
     "ticker": "CVX",
-    "name": "Chevron Corporation",
-    "change": -2.32
+    "name": "Chevron Corporation"
   },
   {
     "ticker": "CMG",
-    "name": "Chipotle Mexican Grill",
-    "change": -2.47
+    "name": "Chipotle Mexican Grill"
   },
   {
     "ticker": "CB",
-    "name": "Chubb Limited",
-    "change": -2.8
+    "name": "Chubb Limited"
   },
   {
     "ticker": "CHD",
-    "name": "Church & Dwight",
-    "change": 1.24
+    "name": "Church & Dwight"
   },
   {
     "ticker": "CI",
-    "name": "Cigna",
-    "change": 1.37
+    "name": "Cigna"
   },
   {
     "ticker": "CINF",
-    "name": "Cincinnati Financial",
-    "change": 1.89
+    "name": "Cincinnati Financial"
   },
   {
     "ticker": "CTAS",
-    "name": "Cintas",
-    "change": 1.77
+    "name": "Cintas"
   },
   {
     "ticker": "CSCO",
-    "name": "Cisco",
-    "change": -2.92
+    "name": "Cisco"
   },
   {
     "ticker": "C",
-    "name": "Citigroup",
-    "change": 1.15
+    "name": "Citigroup"
   },
   {
     "ticker": "CFG",
-    "name": "Citizens Financial Group",
-    "change": -2.58
+    "name": "Citizens Financial Group"
   },
   {
     "ticker": "CLX",
-    "name": "Clorox",
-    "change": 1.97
+    "name": "Clorox"
   },
   {
     "ticker": "CME",
-    "name": "CME Group",
-    "change": -2.91
+    "name": "CME Group"
   },
   {
     "ticker": "CMS",
-    "name": "CMS Energy",
-    "change": 1.12
+    "name": "CMS Energy"
   },
   {
     "ticker": "KO",
-    "name": "Coca-Cola Company (The)",
-    "change": -2.81
+    "name": "Coca-Cola Company (The)"
   },
   {
     "ticker": "CTSH",
-    "name": "Cognizant",
-    "change": 2.57
+    "name": "Cognizant"
   },
   {
     "ticker": "CL",
-    "name": "Colgate-Palmolive",
-    "change": 2.54
+    "name": "Colgate-Palmolive"
   },
   {
     "ticker": "CMCSA",
-    "name": "Comcast",
-    "change": 2.27
+    "name": "Comcast"
   },
   {
     "ticker": "CAG",
-    "name": "Conagra Brands",
-    "change": 2.32
+    "name": "Conagra Brands"
   },
   {
     "ticker": "COP",
-    "name": "ConocoPhillips",
-    "change": 2.95
+    "name": "ConocoPhillips"
   },
   {
     "ticker": "ED",
-    "name": "Consolidated Edison",
-    "change": 1.76
+    "name": "Consolidated Edison"
   },
   {
     "ticker": "STZ",
-    "name": "Constellation Brands",
-    "change": 1.11
+    "name": "Constellation Brands"
   },
   {
     "ticker": "CEG",
-    "name": "Constellation Energy",
-    "change": 1.86
+    "name": "Constellation Energy"
   },
   {
     "ticker": "COO",
-    "name": "Cooper Companies (The)",
-    "change": 2.39
+    "name": "Cooper Companies (The)"
   },
   {
     "ticker": "CPRT",
-    "name": "Copart",
-    "change": 2.98
+    "name": "Copart"
   },
   {
     "ticker": "GLW",
-    "name": "Corning Inc.",
-    "change": 1.53
+    "name": "Corning Inc."
   },
   {
     "ticker": "CPAY",
-    "name": "Corpay",
-    "change": -2.2
+    "name": "Corpay"
   },
   {
     "ticker": "CTVA",
-    "name": "Corteva",
-    "change": 1.85
+    "name": "Corteva"
   },
   {
     "ticker": "CSGP",
-    "name": "CoStar Group",
-    "change": -2.34
+    "name": "CoStar Group"
   },
   {
     "ticker": "COST",
-    "name": "Costco",
-    "change": 1.52
+    "name": "Costco"
   },
   {
     "ticker": "CTRA",
-    "name": "Coterra",
-    "change": 1.92
+    "name": "Coterra"
   },
   {
     "ticker": "CRWD",
-    "name": "CrowdStrike",
-    "change": 1.51
+    "name": "CrowdStrike"
   },
   {
     "ticker": "CCI",
-    "name": "Crown Castle",
-    "change": -2.32
+    "name": "Crown Castle"
   },
   {
     "ticker": "CSX",
-    "name": "CSX Corporation",
-    "change": 1.23
+    "name": "CSX Corporation"
   },
   {
     "ticker": "CMI",
-    "name": "Cummins",
-    "change": -2.27
+    "name": "Cummins"
   },
   {
     "ticker": "CVS",
-    "name": "CVS Health",
-    "change": 2.77
+    "name": "CVS Health"
   },
   {
     "ticker": "DHR",
-    "name": "Danaher Corporation",
-    "change": 1.1
+    "name": "Danaher Corporation"
   },
   {
     "ticker": "DRI",
-    "name": "Darden Restaurants",
-    "change": 2.94
+    "name": "Darden Restaurants"
   },
   {
     "ticker": "DVA",
-    "name": "DaVita",
-    "change": 1.15
+    "name": "DaVita"
   },
   {
     "ticker": "DAY",
-    "name": "Dayforce",
-    "change": 1.87
+    "name": "Dayforce"
   },
   {
     "ticker": "DECK",
-    "name": "Deckers Brands",
-    "change": 1.64
+    "name": "Deckers Brands"
   },
   {
     "ticker": "DE",
-    "name": "Deere & Company",
-    "change": 1.84
+    "name": "Deere & Company"
   },
   {
     "ticker": "DELL",
-    "name": "Dell Technologies",
-    "change": 1.39
+    "name": "Dell Technologies"
   },
   {
     "ticker": "DAL",
-    "name": "Delta Air Lines",
-    "change": 1.2
+    "name": "Delta Air Lines"
   },
   {
     "ticker": "DVN",
-    "name": "Devon Energy",
-    "change": 1.09
+    "name": "Devon Energy"
   },
   {
     "ticker": "DXCM",
-    "name": "Dexcom",
-    "change": 1.47
+    "name": "Dexcom"
   },
   {
     "ticker": "FANG",
-    "name": "Diamondback Energy",
-    "change": 2.93
+    "name": "Diamondback Energy"
   },
   {
     "ticker": "DLR",
-    "name": "Digital Realty",
-    "change": 1.2
+    "name": "Digital Realty"
   },
   {
     "ticker": "DFS",
-    "name": "Discover Financial",
-    "change": 1.94
+    "name": "Discover Financial"
   },
   {
     "ticker": "DG",
-    "name": "Dollar General",
-    "change": 2.51
+    "name": "Dollar General"
   },
   {
     "ticker": "DLTR",
-    "name": "Dollar Tree",
-    "change": 2.38
+    "name": "Dollar Tree"
   },
   {
     "ticker": "D",
-    "name": "Dominion Energy",
-    "change": -2.61
+    "name": "Dominion Energy"
   },
   {
     "ticker": "DPZ",
-    "name": "Domino's",
-    "change": 1.38
+    "name": "Domino's"
   },
   {
     "ticker": "DASH",
-    "name": "DoorDash",
-    "change": 1.98
+    "name": "DoorDash"
   },
   {
     "ticker": "DOV",
-    "name": "Dover Corporation",
-    "change": -2.85
+    "name": "Dover Corporation"
   },
   {
     "ticker": "DOW",
-    "name": "Dow Inc.",
-    "change": 1.2
+    "name": "Dow Inc."
   },
   {
     "ticker": "DHI",
-    "name": "D. R. Horton",
-    "change": -2.43
+    "name": "D. R. Horton"
   },
   {
     "ticker": "DTE",
-    "name": "DTE Energy",
-    "change": 1.34
+    "name": "DTE Energy"
   },
   {
     "ticker": "DUK",
-    "name": "Duke Energy",
-    "change": 1.53
+    "name": "Duke Energy"
   },
   {
     "ticker": "DD",
-    "name": "DuPont",
-    "change": -2.68
+    "name": "DuPont"
   },
   {
     "ticker": "EMN",
-    "name": "Eastman Chemical Company",
-    "change": 1.72
+    "name": "Eastman Chemical Company"
   },
   {
     "ticker": "ETN",
-    "name": "Eaton Corporation",
-    "change": 1.43
+    "name": "Eaton Corporation"
   },
   {
     "ticker": "EBAY",
-    "name": "eBay Inc.",
-    "change": 1.0
+    "name": "eBay Inc."
   },
   {
     "ticker": "ECL",
-    "name": "Ecolab",
-    "change": -2.72
+    "name": "Ecolab"
   },
   {
     "ticker": "EIX",
-    "name": "Edison International",
-    "change": 1.96
+    "name": "Edison International"
   },
   {
     "ticker": "EW",
-    "name": "Edwards Lifesciences",
-    "change": -2.03
+    "name": "Edwards Lifesciences"
   },
   {
     "ticker": "EA",
-    "name": "Electronic Arts",
-    "change": 1.34
+    "name": "Electronic Arts"
   },
   {
     "ticker": "ELV",
-    "name": "Elevance Health",
-    "change": -2.92
+    "name": "Elevance Health"
   },
   {
     "ticker": "EMR",
-    "name": "Emerson Electric",
-    "change": -2.86
+    "name": "Emerson Electric"
   },
   {
     "ticker": "ENPH",
-    "name": "Enphase Energy",
-    "change": -2.69
+    "name": "Enphase Energy"
   },
   {
     "ticker": "ETR",
-    "name": "Entergy",
-    "change": 1.85
+    "name": "Entergy"
   },
   {
     "ticker": "EOG",
-    "name": "EOG Resources",
-    "change": 1.4
+    "name": "EOG Resources"
   },
   {
     "ticker": "EPAM",
-    "name": "EPAM Systems",
-    "change": 1.62
+    "name": "EPAM Systems"
   },
   {
     "ticker": "EQT",
-    "name": "EQT Corporation",
-    "change": -2.29
+    "name": "EQT Corporation"
   },
   {
     "ticker": "EFX",
-    "name": "Equifax",
-    "change": 1.52
+    "name": "Equifax"
   },
   {
     "ticker": "EQIX",
-    "name": "Equinix",
-    "change": 2.57
+    "name": "Equinix"
   },
   {
     "ticker": "EQR",
-    "name": "Equity Residential",
-    "change": -2.41
+    "name": "Equity Residential"
   },
   {
     "ticker": "ERIE",
-    "name": "Erie Indemnity",
-    "change": 2.93
+    "name": "Erie Indemnity"
   },
   {
     "ticker": "ESS",
-    "name": "Essex Property Trust",
-    "change": 1.67
+    "name": "Essex Property Trust"
   },
   {
     "ticker": "EL",
-    "name": "Est\u00e9e Lauder Companies (The)",
-    "change": 2.87
+    "name": "Est\u00e9e Lauder Companies (The)"
   },
   {
     "ticker": "EG",
-    "name": "Everest Group",
-    "change": 2.81
+    "name": "Everest Group"
   },
   {
     "ticker": "EVRG",
-    "name": "Evergy",
-    "change": 2.18
+    "name": "Evergy"
   },
   {
     "ticker": "ES",
-    "name": "Eversource Energy",
-    "change": 2.39
+    "name": "Eversource Energy"
   },
   {
     "ticker": "EXC",
-    "name": "Exelon",
-    "change": 2.19
+    "name": "Exelon"
   },
   {
     "ticker": "EXE",
-    "name": "Expand Energy",
-    "change": 2.83
+    "name": "Expand Energy"
   },
   {
     "ticker": "EXPE",
-    "name": "Expedia Group",
-    "change": 2.78
+    "name": "Expedia Group"
   },
   {
     "ticker": "EXPD",
-    "name": "Expeditors International",
-    "change": 2.56
+    "name": "Expeditors International"
   },
   {
     "ticker": "EXR",
-    "name": "Extra Space Storage",
-    "change": -2.47
+    "name": "Extra Space Storage"
   },
   {
     "ticker": "XOM",
-    "name": "ExxonMobil",
-    "change": 2.39
+    "name": "ExxonMobil"
   },
   {
     "ticker": "FFIV",
-    "name": "F5, Inc.",
-    "change": 2.74
+    "name": "F5, Inc."
   },
   {
     "ticker": "FDS",
-    "name": "FactSet",
-    "change": 2.11
+    "name": "FactSet"
   },
   {
     "ticker": "FICO",
-    "name": "Fair Isaac",
-    "change": 2.35
+    "name": "Fair Isaac"
   },
   {
     "ticker": "FAST",
-    "name": "Fastenal",
-    "change": 2.77
+    "name": "Fastenal"
   },
   {
     "ticker": "FRT",
-    "name": "Federal Realty Investment Trust",
-    "change": 2.03
+    "name": "Federal Realty Investment Trust"
   },
   {
     "ticker": "FDX",
-    "name": "FedEx",
-    "change": 2.36
+    "name": "FedEx"
   },
   {
     "ticker": "FIS",
-    "name": "Fidelity National Information Services",
-    "change": 1.18
+    "name": "Fidelity National Information Services"
   },
   {
     "ticker": "FITB",
-    "name": "Fifth Third Bancorp",
-    "change": 2.53
+    "name": "Fifth Third Bancorp"
   },
   {
     "ticker": "FSLR",
-    "name": "First Solar",
-    "change": 1.86
+    "name": "First Solar"
   },
   {
     "ticker": "FE",
-    "name": "FirstEnergy",
-    "change": -2.47
+    "name": "FirstEnergy"
   },
   {
     "ticker": "FI",
-    "name": "Fiserv",
-    "change": 2.61
+    "name": "Fiserv"
   },
   {
     "ticker": "F",
-    "name": "Ford Motor Company",
-    "change": -2.48
+    "name": "Ford Motor Company"
   },
   {
     "ticker": "FTNT",
-    "name": "Fortinet",
-    "change": 1.05
+    "name": "Fortinet"
   },
   {
     "ticker": "FTV",
-    "name": "Fortive",
-    "change": 2.07
+    "name": "Fortive"
   },
   {
     "ticker": "FOXA",
-    "name": "Fox Corporation (Class A)",
-    "change": 2.21
+    "name": "Fox Corporation (Class A)"
   },
   {
     "ticker": "FOX",
-    "name": "Fox Corporation (Class B)",
-    "change": 2.52
+    "name": "Fox Corporation (Class B)"
   },
   {
     "ticker": "BEN",
-    "name": "Franklin Resources",
-    "change": 2.18
+    "name": "Franklin Resources"
   },
   {
     "ticker": "FCX",
-    "name": "Freeport-McMoRan",
-    "change": 2.27
+    "name": "Freeport-McMoRan"
   },
   {
     "ticker": "GRMN",
-    "name": "Garmin",
-    "change": 2.71
+    "name": "Garmin"
   },
   {
     "ticker": "IT",
-    "name": "Gartner",
-    "change": 1.4
+    "name": "Gartner"
   },
   {
     "ticker": "GE",
-    "name": "GE Aerospace",
-    "change": 1.39
+    "name": "GE Aerospace"
   },
   {
     "ticker": "GEHC",
-    "name": "GE HealthCare",
-    "change": 1.9
+    "name": "GE HealthCare"
   },
   {
     "ticker": "GEV",
-    "name": "GE Vernova",
-    "change": 1.57
+    "name": "GE Vernova"
   },
   {
     "ticker": "GEN",
-    "name": "Gen Digital",
-    "change": 2.01
+    "name": "Gen Digital"
   },
   {
     "ticker": "GNRC",
-    "name": "Generac",
-    "change": 2.32
+    "name": "Generac"
   },
   {
     "ticker": "GD",
-    "name": "General Dynamics",
-    "change": 1.99
+    "name": "General Dynamics"
   },
   {
     "ticker": "GIS",
-    "name": "General Mills",
-    "change": 1.4
+    "name": "General Mills"
   },
   {
     "ticker": "GM",
-    "name": "General Motors",
-    "change": 1.52
+    "name": "General Motors"
   },
   {
     "ticker": "GPC",
-    "name": "Genuine Parts Company",
-    "change": 2.11
+    "name": "Genuine Parts Company"
   },
   {
     "ticker": "GILD",
-    "name": "Gilead Sciences",
-    "change": 1.58
+    "name": "Gilead Sciences"
   },
   {
     "ticker": "GPN",
-    "name": "Global Payments",
-    "change": 1.5
+    "name": "Global Payments"
   },
   {
     "ticker": "GL",
-    "name": "Globe Life",
-    "change": 2.39
+    "name": "Globe Life"
   },
   {
     "ticker": "GDDY",
-    "name": "GoDaddy",
-    "change": 2.87
+    "name": "GoDaddy"
   },
   {
     "ticker": "GS",
-    "name": "Goldman Sachs",
-    "change": 2.21
+    "name": "Goldman Sachs"
   },
   {
     "ticker": "HAL",
-    "name": "Halliburton",
-    "change": 1.78
+    "name": "Halliburton"
   },
   {
     "ticker": "HIG",
-    "name": "Hartford (The)",
-    "change": 1.17
+    "name": "Hartford (The)"
   },
   {
     "ticker": "HAS",
-    "name": "Hasbro",
-    "change": 2.52
+    "name": "Hasbro"
   },
   {
     "ticker": "HCA",
-    "name": "HCA Healthcare",
-    "change": 1.73
+    "name": "HCA Healthcare"
   },
   {
     "ticker": "DOC",
-    "name": "Healthpeak Properties",
-    "change": 1.44
+    "name": "Healthpeak Properties"
   },
   {
     "ticker": "HSIC",
-    "name": "Henry Schein",
-    "change": 2.73
+    "name": "Henry Schein"
   },
   {
     "ticker": "HSY",
-    "name": "Hershey Company (The)",
-    "change": 1.57
+    "name": "Hershey Company (The)"
   },
   {
     "ticker": "HES",
-    "name": "Hess Corporation",
-    "change": 1.95
+    "name": "Hess Corporation"
   },
   {
     "ticker": "HPE",
-    "name": "Hewlett Packard Enterprise",
-    "change": 2.81
+    "name": "Hewlett Packard Enterprise"
   },
   {
     "ticker": "HLT",
-    "name": "Hilton Worldwide",
-    "change": 2.15
+    "name": "Hilton Worldwide"
   },
   {
     "ticker": "HOLX",
-    "name": "Hologic",
-    "change": 2.85
+    "name": "Hologic"
   },
   {
     "ticker": "HD",
-    "name": "Home Depot (The)",
-    "change": -2.42
+    "name": "Home Depot (The)"
   },
   {
     "ticker": "HON",
-    "name": "Honeywell",
-    "change": 1.11
+    "name": "Honeywell"
   },
   {
     "ticker": "HRL",
-    "name": "Hormel Foods",
-    "change": 1.68
+    "name": "Hormel Foods"
   },
   {
     "ticker": "HST",
-    "name": "Host Hotels & Resorts",
-    "change": 1.32
+    "name": "Host Hotels & Resorts"
   },
   {
     "ticker": "HWM",
-    "name": "Howmet Aerospace",
-    "change": 2.57
+    "name": "Howmet Aerospace"
   },
   {
     "ticker": "HPQ",
-    "name": "HP Inc.",
-    "change": 1.53
+    "name": "HP Inc."
   },
   {
     "ticker": "HUBB",
-    "name": "Hubbell Incorporated",
-    "change": 2.13
+    "name": "Hubbell Incorporated"
   },
   {
     "ticker": "HUM",
-    "name": "Humana",
-    "change": 2.15
+    "name": "Humana"
   },
   {
     "ticker": "HBAN",
-    "name": "Huntington Bancshares",
-    "change": 1.55
+    "name": "Huntington Bancshares"
   },
   {
     "ticker": "HII",
-    "name": "Huntington Ingalls Industries",
-    "change": 1.67
+    "name": "Huntington Ingalls Industries"
   },
   {
     "ticker": "IBM",
-    "name": "IBM",
-    "change": 1.58
+    "name": "IBM"
   },
   {
     "ticker": "IEX",
-    "name": "IDEX Corporation",
-    "change": 1.69
+    "name": "IDEX Corporation"
   },
   {
     "ticker": "IDXX",
-    "name": "Idexx Laboratories",
-    "change": 1.54
+    "name": "Idexx Laboratories"
   },
   {
     "ticker": "ITW",
-    "name": "Illinois Tool Works",
-    "change": 2.11
+    "name": "Illinois Tool Works"
   },
   {
     "ticker": "INCY",
-    "name": "Incyte",
-    "change": 2.32
+    "name": "Incyte"
   },
   {
     "ticker": "IR",
-    "name": "Ingersoll Rand",
-    "change": 2.27
+    "name": "Ingersoll Rand"
   },
   {
     "ticker": "PODD",
-    "name": "Insulet Corporation",
-    "change": 1.07
+    "name": "Insulet Corporation"
   },
   {
     "ticker": "INTC",
-    "name": "Intel",
-    "change": 1.07
+    "name": "Intel"
   },
   {
     "ticker": "ICE",
-    "name": "Intercontinental Exchange",
-    "change": 1.99
+    "name": "Intercontinental Exchange"
   },
   {
     "ticker": "IFF",
-    "name": "International Flavors & Fragrances",
-    "change": 1.44
+    "name": "International Flavors & Fragrances"
   },
   {
     "ticker": "IP",
-    "name": "International Paper",
-    "change": 1.12
+    "name": "International Paper"
   },
   {
     "ticker": "IPG",
-    "name": "Interpublic Group of Companies (The)",
-    "change": 2.8
+    "name": "Interpublic Group of Companies (The)"
   },
   {
     "ticker": "INTU",
-    "name": "Intuit",
-    "change": 1.7
+    "name": "Intuit"
   },
   {
     "ticker": "ISRG",
-    "name": "Intuitive Surgical",
-    "change": 2.82
+    "name": "Intuitive Surgical"
   },
   {
     "ticker": "IVZ",
-    "name": "Invesco",
-    "change": 1.82
+    "name": "Invesco"
   },
   {
     "ticker": "INVH",
-    "name": "Invitation Homes",
-    "change": 2.18
+    "name": "Invitation Homes"
   },
   {
     "ticker": "IQV",
-    "name": "IQVIA",
-    "change": 2.56
+    "name": "IQVIA"
   },
   {
     "ticker": "IRM",
-    "name": "Iron Mountain",
-    "change": 1.26
+    "name": "Iron Mountain"
   },
   {
     "ticker": "JBHT",
-    "name": "J.B. Hunt",
-    "change": 2.17
+    "name": "J.B. Hunt"
   },
   {
     "ticker": "JBL",
-    "name": "Jabil",
-    "change": 2.68
+    "name": "Jabil"
   },
   {
     "ticker": "JKHY",
-    "name": "Jack Henry & Associates",
-    "change": 2.05
+    "name": "Jack Henry & Associates"
   },
   {
     "ticker": "J",
-    "name": "Jacobs Solutions",
-    "change": 1.32
+    "name": "Jacobs Solutions"
   },
   {
     "ticker": "JNJ",
-    "name": "Johnson & Johnson",
-    "change": -2.49
+    "name": "Johnson & Johnson"
   },
   {
     "ticker": "JCI",
-    "name": "Johnson Controls",
-    "change": 2.87
+    "name": "Johnson Controls"
   },
   {
     "ticker": "JPM",
-    "name": "JPMorgan Chase",
-    "change": -2.44
+    "name": "JPMorgan Chase"
   },
   {
     "ticker": "JNPR",
-    "name": "Juniper Networks",
-    "change": 2.27
+    "name": "Juniper Networks"
   },
   {
     "ticker": "K",
-    "name": "Kellanova",
-    "change": 2.31
+    "name": "Kellanova"
   },
   {
     "ticker": "KVUE",
-    "name": "Kenvue",
-    "change": 1.71
+    "name": "Kenvue"
   },
   {
     "ticker": "KDP",
-    "name": "Keurig Dr Pepper",
-    "change": 1.39
+    "name": "Keurig Dr Pepper"
   },
   {
     "ticker": "KEY",
-    "name": "KeyCorp",
-    "change": 1.87
+    "name": "KeyCorp"
   },
   {
     "ticker": "KEYS",
-    "name": "Keysight Technologies",
-    "change": 1.1
+    "name": "Keysight Technologies"
   },
   {
     "ticker": "KMB",
-    "name": "Kimberly-Clark",
-    "change": 1.89
+    "name": "Kimberly-Clark"
   },
   {
     "ticker": "KIM",
-    "name": "Kimco Realty",
-    "change": 1.01
+    "name": "Kimco Realty"
   },
   {
     "ticker": "KMI",
-    "name": "Kinder Morgan",
-    "change": 2.18
+    "name": "Kinder Morgan"
   },
   {
     "ticker": "KKR",
-    "name": "KKR & Co.",
-    "change": 1.27
+    "name": "KKR & Co."
   },
   {
     "ticker": "KLAC",
-    "name": "KLA Corporation",
-    "change": 2.34
+    "name": "KLA Corporation"
   },
   {
     "ticker": "KHC",
-    "name": "Kraft Heinz",
-    "change": 2.21
+    "name": "Kraft Heinz"
   },
   {
     "ticker": "KR",
-    "name": "Kroger",
-    "change": 2.51
+    "name": "Kroger"
   },
   {
     "ticker": "LHX",
-    "name": "L3Harris",
-    "change": -2.44
+    "name": "L3Harris"
   },
   {
     "ticker": "LH",
-    "name": "Labcorp",
-    "change": 1.99
+    "name": "Labcorp"
   },
   {
     "ticker": "LRCX",
-    "name": "Lam Research",
-    "change": 1.01
+    "name": "Lam Research"
   },
   {
     "ticker": "LW",
-    "name": "Lamb Weston",
-    "change": 2.82
+    "name": "Lamb Weston"
   },
   {
     "ticker": "LVS",
-    "name": "Las Vegas Sands",
-    "change": 1.14
+    "name": "Las Vegas Sands"
   },
   {
     "ticker": "LDOS",
-    "name": "Leidos",
-    "change": 2.96
+    "name": "Leidos"
   },
   {
     "ticker": "LEN",
-    "name": "Lennar",
-    "change": 1.56
+    "name": "Lennar"
   },
   {
     "ticker": "LII",
-    "name": "Lennox International",
-    "change": 1.11
+    "name": "Lennox International"
   },
   {
     "ticker": "LLY",
-    "name": "Lilly (Eli)",
-    "change": 2.13
+    "name": "Lilly (Eli)"
   },
   {
     "ticker": "LIN",
-    "name": "Linde plc",
-    "change": 2.57
+    "name": "Linde plc"
   },
   {
     "ticker": "LYV",
-    "name": "Live Nation Entertainment",
-    "change": 1.02
+    "name": "Live Nation Entertainment"
   },
   {
     "ticker": "LKQ",
-    "name": "LKQ Corporation",
-    "change": 2.72
+    "name": "LKQ Corporation"
   },
   {
     "ticker": "LMT",
-    "name": "Lockheed Martin",
-    "change": 1.09
+    "name": "Lockheed Martin"
   },
   {
     "ticker": "L",
-    "name": "Loews Corporation",
-    "change": 1.67
+    "name": "Loews Corporation"
   },
   {
     "ticker": "LOW",
-    "name": "Lowe's",
-    "change": 1.91
+    "name": "Lowe's"
   },
   {
     "ticker": "LULU",
-    "name": "Lululemon Athletica",
-    "change": 1.05
+    "name": "Lululemon Athletica"
   },
   {
     "ticker": "LYB",
-    "name": "LyondellBasell",
-    "change": 2.55
+    "name": "LyondellBasell"
   },
   {
     "ticker": "MTB",
-    "name": "M&T Bank",
-    "change": 1.2
+    "name": "M&T Bank"
   },
   {
     "ticker": "MPC",
-    "name": "Marathon Petroleum",
-    "change": 1.06
+    "name": "Marathon Petroleum"
   },
   {
     "ticker": "MKTX",
-    "name": "MarketAxess",
-    "change": 1.11
+    "name": "MarketAxess"
   },
   {
     "ticker": "MAR",
-    "name": "Marriott International",
-    "change": 1.02
+    "name": "Marriott International"
   },
   {
     "ticker": "MMC",
-    "name": "Marsh McLennan",
-    "change": 2.82
+    "name": "Marsh McLennan"
   },
   {
     "ticker": "MLM",
-    "name": "Martin Marietta Materials",
-    "change": 2.21
+    "name": "Martin Marietta Materials"
   },
   {
     "ticker": "MAS",
-    "name": "Masco",
-    "change": 2.24
+    "name": "Masco"
   },
   {
     "ticker": "MA",
-    "name": "Mastercard",
-    "change": 2.56
+    "name": "Mastercard"
   },
   {
     "ticker": "MTCH",
-    "name": "Match Group",
-    "change": 1.28
+    "name": "Match Group"
   },
   {
     "ticker": "MKC",
-    "name": "McCormick & Company",
-    "change": 1.61
+    "name": "McCormick & Company"
   },
   {
     "ticker": "MCD",
-    "name": "McDonald's",
-    "change": 1.8
+    "name": "McDonald's"
   },
   {
     "ticker": "MCK",
-    "name": "McKesson Corporation",
-    "change": 1.71
+    "name": "McKesson Corporation"
   },
   {
     "ticker": "MDT",
-    "name": "Medtronic",
-    "change": 1.74
+    "name": "Medtronic"
   },
   {
     "ticker": "MRK",
-    "name": "Merck & Co.",
-    "change": -2.46
+    "name": "Merck & Co."
   },
   {
     "ticker": "META",
-    "name": "Meta Platforms",
-    "change": 2.19
+    "name": "Meta Platforms"
   },
   {
     "ticker": "MET",
-    "name": "MetLife",
-    "change": 1.58
+    "name": "MetLife"
   },
   {
     "ticker": "MTD",
-    "name": "Mettler Toledo",
-    "change": 1.37
+    "name": "Mettler Toledo"
   },
   {
     "ticker": "MGM",
-    "name": "MGM Resorts",
-    "change": 1.06
+    "name": "MGM Resorts"
   },
   {
     "ticker": "MCHP",
-    "name": "Microchip Technology",
-    "change": 2.85
+    "name": "Microchip Technology"
   },
   {
     "ticker": "MU",
-    "name": "Micron Technology",
-    "change": 2.07
+    "name": "Micron Technology"
   },
   {
     "ticker": "MSFT",
-    "name": "Microsoft",
-    "change": 1.55
+    "name": "Microsoft"
   },
   {
     "ticker": "MAA",
-    "name": "Mid-America Apartment Communities",
-    "change": 2.38
+    "name": "Mid-America Apartment Communities"
   },
   {
     "ticker": "MRNA",
-    "name": "Moderna",
-    "change": 1.62
+    "name": "Moderna"
   },
   {
     "ticker": "MHK",
-    "name": "Mohawk Industries",
-    "change": 2.29
+    "name": "Mohawk Industries"
   },
   {
     "ticker": "MOH",
-    "name": "Molina Healthcare",
-    "change": 2.01
+    "name": "Molina Healthcare"
   },
   {
     "ticker": "TAP",
-    "name": "Molson Coors Beverage Company",
-    "change": 1.21
+    "name": "Molson Coors Beverage Company"
   },
   {
     "ticker": "MDLZ",
-    "name": "Mondelez International",
-    "change": 2.06
+    "name": "Mondelez International"
   },
   {
     "ticker": "MPWR",
-    "name": "Monolithic Power Systems",
-    "change": 1.05
+    "name": "Monolithic Power Systems"
   },
   {
     "ticker": "MNST",
-    "name": "Monster Beverage",
-    "change": 1.83
+    "name": "Monster Beverage"
   },
   {
     "ticker": "MCO",
-    "name": "Moody's Corporation",
-    "change": 2.58
+    "name": "Moody's Corporation"
   },
   {
     "ticker": "MS",
-    "name": "Morgan Stanley",
-    "change": 2.36
+    "name": "Morgan Stanley"
   },
   {
     "ticker": "MOS",
-    "name": "Mosaic Company (The)",
-    "change": 2.75
+    "name": "Mosaic Company (The)"
   },
   {
     "ticker": "MSI",
-    "name": "Motorola Solutions",
-    "change": 2.82
+    "name": "Motorola Solutions"
   },
   {
     "ticker": "MSCI",
-    "name": "MSCI Inc.",
-    "change": 2.34
+    "name": "MSCI Inc."
   },
   {
     "ticker": "NDAQ",
-    "name": "Nasdaq, Inc.",
-    "change": 1.54
+    "name": "Nasdaq, Inc."
   },
   {
     "ticker": "NTAP",
-    "name": "NetApp",
-    "change": 1.7
+    "name": "NetApp"
   },
   {
     "ticker": "NFLX",
-    "name": "Netflix",
-    "change": 2.36
+    "name": "Netflix"
   },
   {
     "ticker": "NEM",
-    "name": "Newmont",
-    "change": 1.11
+    "name": "Newmont"
   },
   {
     "ticker": "NWSA",
-    "name": "News Corp (Class A)",
-    "change": 1.66
+    "name": "News Corp (Class A)"
   },
   {
     "ticker": "NWS",
-    "name": "News Corp (Class B)",
-    "change": 1.92
+    "name": "News Corp (Class B)"
   },
   {
     "ticker": "NEE",
-    "name": "NextEra Energy",
-    "change": 1.56
+    "name": "NextEra Energy"
   },
   {
     "ticker": "NKE",
-    "name": "Nike, Inc.",
-    "change": 1.35
+    "name": "Nike, Inc."
   },
   {
     "ticker": "NI",
-    "name": "NiSource",
-    "change": 1.43
+    "name": "NiSource"
   },
   {
     "ticker": "NDSN",
-    "name": "Nordson Corporation",
-    "change": 1.46
+    "name": "Nordson Corporation"
   },
   {
     "ticker": "NSC",
-    "name": "Norfolk Southern",
-    "change": -2.48
+    "name": "Norfolk Southern"
   },
   {
     "ticker": "NTRS",
-    "name": "Northern Trust",
-    "change": 2.75
+    "name": "Northern Trust"
   },
   {
     "ticker": "NOC",
-    "name": "Northrop Grumman",
-    "change": 1.3
+    "name": "Northrop Grumman"
   },
   {
     "ticker": "NCLH",
-    "name": "Norwegian Cruise Line Holdings",
-    "change": 1.2
+    "name": "Norwegian Cruise Line Holdings"
   },
   {
     "ticker": "NRG",
-    "name": "NRG Energy",
-    "change": 2.54
+    "name": "NRG Energy"
   },
   {
     "ticker": "NUE",
-    "name": "Nucor",
-    "change": 1.98
+    "name": "Nucor"
   },
   {
     "ticker": "NVDA",
-    "name": "Nvidia",
-    "change": 2.38
+    "name": "Nvidia"
   },
   {
     "ticker": "NVR",
-    "name": "NVR, Inc.",
-    "change": 2.76
+    "name": "NVR, Inc."
   },
   {
     "ticker": "NXPI",
-    "name": "NXP Semiconductors",
-    "change": 2.91
+    "name": "NXP Semiconductors"
   },
   {
     "ticker": "ORLY",
-    "name": "O\u2019Reilly Automotive",
-    "change": 1.28
+    "name": "O\u2019Reilly Automotive"
   },
   {
     "ticker": "OXY",
-    "name": "Occidental Petroleum",
-    "change": 1.22
+    "name": "Occidental Petroleum"
   },
   {
     "ticker": "ODFL",
-    "name": "Old Dominion",
-    "change": -2.44
+    "name": "Old Dominion"
   },
   {
     "ticker": "OMC",
-    "name": "Omnicom Group",
-    "change": 2.2
+    "name": "Omnicom Group"
   },
   {
     "ticker": "ON",
-    "name": "ON Semiconductor",
-    "change": 2.27
+    "name": "ON Semiconductor"
   },
   {
     "ticker": "OKE",
-    "name": "Oneok",
-    "change": 2.8
+    "name": "Oneok"
   },
   {
     "ticker": "ORCL",
-    "name": "Oracle Corporation",
-    "change": 1.49
+    "name": "Oracle Corporation"
   },
   {
     "ticker": "OTIS",
-    "name": "Otis Worldwide",
-    "change": -2.48
+    "name": "Otis Worldwide"
   },
   {
     "ticker": "PCAR",
-    "name": "Paccar",
-    "change": 1.51
+    "name": "Paccar"
   },
   {
     "ticker": "PKG",
-    "name": "Packaging Corporation of America",
-    "change": 1.95
+    "name": "Packaging Corporation of America"
   },
   {
     "ticker": "PLTR",
-    "name": "Palantir Technologies",
-    "change": 2.64
+    "name": "Palantir Technologies"
   },
   {
     "ticker": "PANW",
-    "name": "Palo Alto Networks",
-    "change": 2.04
+    "name": "Palo Alto Networks"
   },
   {
     "ticker": "PARA",
-    "name": "Paramount Global",
-    "change": 1.31
+    "name": "Paramount Global"
   },
   {
     "ticker": "PH",
-    "name": "Parker Hannifin",
-    "change": 2.12
+    "name": "Parker Hannifin"
   },
   {
     "ticker": "PAYX",
-    "name": "Paychex",
-    "change": 2.79
+    "name": "Paychex"
   },
   {
     "ticker": "PAYC",
-    "name": "Paycom",
-    "change": 1.71
+    "name": "Paycom"
   },
   {
     "ticker": "PYPL",
-    "name": "PayPal",
-    "change": 1.04
+    "name": "PayPal"
   },
   {
     "ticker": "PNR",
-    "name": "Pentair",
-    "change": 2.74
+    "name": "Pentair"
   },
   {
     "ticker": "PEP",
-    "name": "PepsiCo",
-    "change": 1.79
+    "name": "PepsiCo"
   },
   {
     "ticker": "PFE",
-    "name": "Pfizer",
-    "change": 1.56
+    "name": "Pfizer"
   },
   {
     "ticker": "PCG",
-    "name": "PG&E Corporation",
-    "change": -2.4
+    "name": "PG&E Corporation"
   },
   {
     "ticker": "PM",
-    "name": "Philip Morris International",
-    "change": 2.57
+    "name": "Philip Morris International"
   },
   {
     "ticker": "PSX",
-    "name": "Phillips 66",
-    "change": 2.06
+    "name": "Phillips 66"
   },
   {
     "ticker": "PNW",
-    "name": "Pinnacle West Capital",
-    "change": 1.52
+    "name": "Pinnacle West Capital"
   },
   {
     "ticker": "PNC",
-    "name": "PNC Financial Services",
-    "change": 1.61
+    "name": "PNC Financial Services"
   },
   {
     "ticker": "POOL",
-    "name": "Pool Corporation",
-    "change": 2.0
+    "name": "Pool Corporation"
   },
   {
     "ticker": "PPG",
-    "name": "PPG Industries",
-    "change": 2.14
+    "name": "PPG Industries"
   },
   {
     "ticker": "PPL",
-    "name": "PPL Corporation",
-    "change": 2.86
+    "name": "PPL Corporation"
   },
   {
     "ticker": "PFG",
-    "name": "Principal Financial Group",
-    "change": 1.49
+    "name": "Principal Financial Group"
   },
   {
     "ticker": "PG",
-    "name": "Procter & Gamble",
-    "change": 1.43
+    "name": "Procter & Gamble"
   },
   {
     "ticker": "PGR",
-    "name": "Progressive Corporation",
-    "change": 2.2
+    "name": "Progressive Corporation"
   },
   {
     "ticker": "PLD",
-    "name": "Prologis",
-    "change": 1.85
+    "name": "Prologis"
   },
   {
     "ticker": "PRU",
-    "name": "Prudential Financial",
-    "change": 2.68
+    "name": "Prudential Financial"
   },
   {
     "ticker": "PEG",
-    "name": "Public Service Enterprise Group",
-    "change": 1.27
+    "name": "Public Service Enterprise Group"
   },
   {
     "ticker": "PTC",
-    "name": "PTC Inc.",
-    "change": 2.21
+    "name": "PTC Inc."
   },
   {
     "ticker": "PSA",
-    "name": "Public Storage",
-    "change": 1.77
+    "name": "Public Storage"
   },
   {
     "ticker": "PHM",
-    "name": "PulteGroup",
-    "change": 2.33
+    "name": "PulteGroup"
   },
   {
     "ticker": "PWR",
-    "name": "Quanta Services",
-    "change": 2.06
+    "name": "Quanta Services"
   },
   {
     "ticker": "QCOM",
-    "name": "Qualcomm",
-    "change": -2.44
+    "name": "Qualcomm"
   },
   {
     "ticker": "DGX",
-    "name": "Quest Diagnostics",
-    "change": 1.07
+    "name": "Quest Diagnostics"
   },
   {
     "ticker": "RL",
-    "name": "Ralph Lauren Corporation",
-    "change": 1.52
+    "name": "Ralph Lauren Corporation"
   },
   {
     "ticker": "RJF",
-    "name": "Raymond James Financial",
-    "change": 2.7
+    "name": "Raymond James Financial"
   },
   {
     "ticker": "RTX",
-    "name": "RTX Corporation",
-    "change": 2.01
+    "name": "RTX Corporation"
   },
   {
     "ticker": "O",
-    "name": "Realty Income",
-    "change": -2.49
+    "name": "Realty Income"
   },
   {
     "ticker": "REG",
-    "name": "Regency Centers",
-    "change": 2.92
+    "name": "Regency Centers"
   },
   {
     "ticker": "REGN",
-    "name": "Regeneron Pharmaceuticals",
-    "change": 1.35
+    "name": "Regeneron Pharmaceuticals"
   },
   {
     "ticker": "RF",
-    "name": "Regions Financial Corporation",
-    "change": 1.3
+    "name": "Regions Financial Corporation"
   },
   {
     "ticker": "RSG",
-    "name": "Republic Services",
-    "change": 1.96
+    "name": "Republic Services"
   },
   {
     "ticker": "RMD",
-    "name": "ResMed",
-    "change": 1.33
+    "name": "ResMed"
   },
   {
     "ticker": "RVTY",
-    "name": "Revvity",
-    "change": 2.84
+    "name": "Revvity"
   },
   {
     "ticker": "ROK",
-    "name": "Rockwell Automation",
-    "change": 1.52
+    "name": "Rockwell Automation"
   },
   {
     "ticker": "ROL",
-    "name": "Rollins, Inc.",
-    "change": 1.87
+    "name": "Rollins, Inc."
   },
   {
     "ticker": "ROP",
-    "name": "Roper Technologies",
-    "change": 1.26
+    "name": "Roper Technologies"
   },
   {
     "ticker": "ROST",
-    "name": "Ross Stores",
-    "change": 1.49
+    "name": "Ross Stores"
   },
   {
     "ticker": "RCL",
-    "name": "Royal Caribbean Group",
-    "change": 2.53
+    "name": "Royal Caribbean Group"
   },
   {
     "ticker": "SPGI",
-    "name": "S&P Global",
-    "change": 2.92
+    "name": "S&P Global"
   },
   {
     "ticker": "CRM",
-    "name": "Salesforce",
-    "change": 1.4
+    "name": "Salesforce"
   },
   {
     "ticker": "SBAC",
-    "name": "SBA Communications",
-    "change": 2.71
+    "name": "SBA Communications"
   },
   {
     "ticker": "SLB",
-    "name": "Schlumberger",
-    "change": 2.13
+    "name": "Schlumberger"
   },
   {
     "ticker": "STX",
-    "name": "Seagate Technology",
-    "change": 2.15
+    "name": "Seagate Technology"
   },
   {
     "ticker": "SRE",
-    "name": "Sempra",
-    "change": 2.31
+    "name": "Sempra"
   },
   {
     "ticker": "NOW",
-    "name": "ServiceNow",
-    "change": 1.9
+    "name": "ServiceNow"
   },
   {
     "ticker": "SHW",
-    "name": "Sherwin-Williams",
-    "change": 2.21
+    "name": "Sherwin-Williams"
   },
   {
     "ticker": "SPG",
-    "name": "Simon Property Group",
-    "change": 1.9
+    "name": "Simon Property Group"
   },
   {
     "ticker": "SWKS",
-    "name": "Skyworks Solutions",
-    "change": -2.43
+    "name": "Skyworks Solutions"
   },
   {
     "ticker": "SJM",
-    "name": "J.M. Smucker Company (The)",
-    "change": 1.22
+    "name": "J.M. Smucker Company (The)"
   },
   {
     "ticker": "SW",
-    "name": "Smurfit Westrock",
-    "change": 2.2
+    "name": "Smurfit Westrock"
   },
   {
     "ticker": "SNA",
-    "name": "Snap-on",
-    "change": 1.24
+    "name": "Snap-on"
   },
   {
     "ticker": "SOLV",
-    "name": "Solventum",
-    "change": 1.67
+    "name": "Solventum"
   },
   {
     "ticker": "SO",
-    "name": "Southern Company",
-    "change": 1.76
+    "name": "Southern Company"
   },
   {
     "ticker": "LUV",
-    "name": "Southwest Airlines",
-    "change": 2.18
+    "name": "Southwest Airlines"
   },
   {
     "ticker": "SWK",
-    "name": "Stanley Black & Decker",
-    "change": 2.67
+    "name": "Stanley Black & Decker"
   },
   {
     "ticker": "SBUX",
-    "name": "Starbucks",
-    "change": 1.74
+    "name": "Starbucks"
   },
   {
     "ticker": "STT",
-    "name": "State Street Corporation",
-    "change": 1.3
+    "name": "State Street Corporation"
   },
   {
     "ticker": "STLD",
-    "name": "Steel Dynamics",
-    "change": 2.62
+    "name": "Steel Dynamics"
   },
   {
     "ticker": "STE",
-    "name": "Steris",
-    "change": 1.82
+    "name": "Steris"
   },
   {
     "ticker": "SYK",
-    "name": "Stryker Corporation",
-    "change": 1.44
+    "name": "Stryker Corporation"
   },
   {
     "ticker": "SMCI",
-    "name": "Supermicro",
-    "change": 1.5
+    "name": "Supermicro"
   },
   {
     "ticker": "SYF",
-    "name": "Synchrony Financial",
-    "change": 2.07
+    "name": "Synchrony Financial"
   },
   {
     "ticker": "SNPS",
-    "name": "Synopsys",
-    "change": 1.52
+    "name": "Synopsys"
   },
   {
     "ticker": "SYY",
-    "name": "Sysco",
-    "change": 2.94
+    "name": "Sysco"
   },
   {
     "ticker": "TMUS",
-    "name": "T-Mobile US",
-    "change": 1.62
+    "name": "T-Mobile US"
   },
   {
     "ticker": "TROW",
-    "name": "T. Rowe Price",
-    "change": 1.58
+    "name": "T. Rowe Price"
   },
   {
     "ticker": "TTWO",
-    "name": "Take-Two Interactive",
-    "change": 2.99
+    "name": "Take-Two Interactive"
   },
   {
     "ticker": "TPR",
-    "name": "Tapestry, Inc.",
-    "change": -2.44
+    "name": "Tapestry, Inc."
   },
   {
     "ticker": "TRGP",
-    "name": "Targa Resources",
-    "change": 2.77
+    "name": "Targa Resources"
   },
   {
     "ticker": "TGT",
-    "name": "Target Corporation",
-    "change": 2.74
+    "name": "Target Corporation"
   },
   {
     "ticker": "TEL",
-    "name": "TE Connectivity",
-    "change": 2.62
+    "name": "TE Connectivity"
   },
   {
     "ticker": "TDY",
-    "name": "Teledyne Technologies",
-    "change": 1.46
+    "name": "Teledyne Technologies"
   },
   {
     "ticker": "TER",
-    "name": "Teradyne",
-    "change": 1.58
+    "name": "Teradyne"
   },
   {
     "ticker": "TSLA",
-    "name": "Tesla, Inc.",
-    "change": 1.82
+    "name": "Tesla, Inc."
   },
   {
     "ticker": "TXN",
-    "name": "Texas Instruments",
-    "change": 2.51
+    "name": "Texas Instruments"
   },
   {
     "ticker": "TPL",
-    "name": "Texas Pacific Land Corporation",
-    "change": 1.9
+    "name": "Texas Pacific Land Corporation"
   },
   {
     "ticker": "TXT",
-    "name": "Textron",
-    "change": 1.12
+    "name": "Textron"
   },
   {
     "ticker": "TMO",
-    "name": "Thermo Fisher Scientific",
-    "change": 1.28
+    "name": "Thermo Fisher Scientific"
   },
   {
     "ticker": "TJX",
-    "name": "TJX Companies",
-    "change": 2.5
+    "name": "TJX Companies"
   },
   {
     "ticker": "TKO",
-    "name": "TKO Group Holdings",
-    "change": 1.71
+    "name": "TKO Group Holdings"
   },
   {
     "ticker": "TSCO",
-    "name": "Tractor Supply",
-    "change": 1.38
+    "name": "Tractor Supply"
   },
   {
     "ticker": "TT",
-    "name": "Trane Technologies",
-    "change": 2.11
+    "name": "Trane Technologies"
   },
   {
     "ticker": "TDG",
-    "name": "TransDigm Group",
-    "change": 1.64
+    "name": "TransDigm Group"
   },
   {
     "ticker": "TRV",
-    "name": "Travelers Companies (The)",
-    "change": 2.69
+    "name": "Travelers Companies (The)"
   },
   {
     "ticker": "TRMB",
-    "name": "Trimble Inc.",
-    "change": 1.59
+    "name": "Trimble Inc."
   },
   {
     "ticker": "TFC",
-    "name": "Truist Financial",
-    "change": -2.44
+    "name": "Truist Financial"
   },
   {
     "ticker": "TYL",
-    "name": "Tyler Technologies",
-    "change": 1.88
+    "name": "Tyler Technologies"
   },
   {
     "ticker": "TSN",
-    "name": "Tyson Foods",
-    "change": 2.99
+    "name": "Tyson Foods"
   },
   {
     "ticker": "USB",
-    "name": "U.S. Bancorp",
-    "change": 2.83
+    "name": "U.S. Bancorp"
   },
   {
     "ticker": "UBER",
-    "name": "Uber",
-    "change": 2.82
+    "name": "Uber"
   },
   {
     "ticker": "UDR",
-    "name": "UDR, Inc.",
-    "change": 1.68
+    "name": "UDR, Inc."
   },
   {
     "ticker": "ULTA",
-    "name": "Ulta Beauty",
-    "change": 1.58
+    "name": "Ulta Beauty"
   },
   {
     "ticker": "UNP",
-    "name": "Union Pacific Corporation",
-    "change": 2.59
+    "name": "Union Pacific Corporation"
   },
   {
     "ticker": "UAL",
-    "name": "United Airlines Holdings",
-    "change": 2.37
+    "name": "United Airlines Holdings"
   },
   {
     "ticker": "UPS",
-    "name": "United Parcel Service",
-    "change": 2.38
+    "name": "United Parcel Service"
   },
   {
     "ticker": "URI",
-    "name": "United Rentals",
-    "change": 1.66
+    "name": "United Rentals"
   },
   {
     "ticker": "UNH",
-    "name": "UnitedHealth Group",
-    "change": 1.62
+    "name": "UnitedHealth Group"
   },
   {
     "ticker": "UHS",
-    "name": "Universal Health Services",
-    "change": 1.3
+    "name": "Universal Health Services"
   },
   {
     "ticker": "VLO",
-    "name": "Valero Energy",
-    "change": 1.14
+    "name": "Valero Energy"
   },
   {
     "ticker": "VTR",
-    "name": "Ventas",
-    "change": 1.55
+    "name": "Ventas"
   },
   {
     "ticker": "VLTO",
-    "name": "Veralto",
-    "change": 2.92
+    "name": "Veralto"
   },
   {
     "ticker": "VRSN",
-    "name": "Verisign",
-    "change": 1.15
+    "name": "Verisign"
   },
   {
     "ticker": "VRSK",
-    "name": "Verisk Analytics",
-    "change": 2.14
+    "name": "Verisk Analytics"
   },
   {
     "ticker": "VZ",
-    "name": "Verizon",
-    "change": 2.81
+    "name": "Verizon"
   },
   {
     "ticker": "VRTX",
-    "name": "Vertex Pharmaceuticals",
-    "change": 2.18
+    "name": "Vertex Pharmaceuticals"
   },
   {
     "ticker": "VTRS",
-    "name": "Viatris",
-    "change": 2.66
+    "name": "Viatris"
   },
   {
     "ticker": "VICI",
-    "name": "Vici Properties",
-    "change": 2.19
+    "name": "Vici Properties"
   },
   {
     "ticker": "V",
-    "name": "Visa Inc.",
-    "change": 2.04
+    "name": "Visa Inc."
   },
   {
     "ticker": "VST",
-    "name": "Vistra Corp.",
-    "change": 1.58
+    "name": "Vistra Corp."
   },
   {
     "ticker": "VMC",
-    "name": "Vulcan Materials Company",
-    "change": 2.34
+    "name": "Vulcan Materials Company"
   },
   {
     "ticker": "WRB",
-    "name": "W. R. Berkley Corporation",
-    "change": 2.08
+    "name": "W. R. Berkley Corporation"
   },
   {
     "ticker": "GWW",
-    "name": "W. W. Grainger",
-    "change": 1.64
+    "name": "W. W. Grainger"
   },
   {
     "ticker": "WAB",
-    "name": "Wabtec",
-    "change": 1.31
+    "name": "Wabtec"
   },
   {
     "ticker": "WBA",
-    "name": "Walgreens Boots Alliance",
-    "change": 2.62
+    "name": "Walgreens Boots Alliance"
   },
   {
     "ticker": "WMT",
-    "name": "Walmart",
-    "change": 2.85
+    "name": "Walmart"
   },
   {
     "ticker": "DIS",
-    "name": "Walt Disney Company (The)",
-    "change": 1.36
+    "name": "Walt Disney Company (The)"
   },
   {
     "ticker": "WBD",
-    "name": "Warner Bros. Discovery",
-    "change": 1.41
+    "name": "Warner Bros. Discovery"
   },
   {
     "ticker": "WM",
-    "name": "Waste Management",
-    "change": 1.89
+    "name": "Waste Management"
   },
   {
     "ticker": "WAT",
-    "name": "Waters Corporation",
-    "change": -2.45
+    "name": "Waters Corporation"
   },
   {
     "ticker": "WEC",
-    "name": "WEC Energy Group",
-    "change": 1.98
+    "name": "WEC Energy Group"
   },
   {
     "ticker": "WFC",
-    "name": "Wells Fargo",
-    "change": 1.85
+    "name": "Wells Fargo"
   },
   {
     "ticker": "WELL",
-    "name": "Welltower",
-    "change": 2.83
+    "name": "Welltower"
   },
   {
     "ticker": "WST",
-    "name": "West Pharmaceutical Services",
-    "change": 2.33
+    "name": "West Pharmaceutical Services"
   },
   {
     "ticker": "WDC",
-    "name": "Western Digital",
-    "change": 2.05
+    "name": "Western Digital"
   },
   {
     "ticker": "WY",
-    "name": "Weyerhaeuser",
-    "change": 1.69
+    "name": "Weyerhaeuser"
   },
   {
     "ticker": "WSM",
-    "name": "Williams-Sonoma, Inc.",
-    "change": 1.75
+    "name": "Williams-Sonoma, Inc."
   },
   {
     "ticker": "WMB",
-    "name": "Williams Companies",
-    "change": 2.17
+    "name": "Williams Companies"
   },
   {
     "ticker": "WTW",
-    "name": "Willis Towers Watson",
-    "change": 1.43
+    "name": "Willis Towers Watson"
   },
   {
     "ticker": "WDAY",
-    "name": "Workday, Inc.",
-    "change": 2.34
+    "name": "Workday, Inc."
   },
   {
     "ticker": "WYNN",
-    "name": "Wynn Resorts",
-    "change": 1.73
+    "name": "Wynn Resorts"
   },
   {
     "ticker": "XEL",
-    "name": "Xcel Energy",
-    "change": 1.9
+    "name": "Xcel Energy"
   },
   {
     "ticker": "XYL",
-    "name": "Xylem Inc.",
-    "change": 2.82
+    "name": "Xylem Inc."
   },
   {
     "ticker": "YUM",
-    "name": "Yum! Brands",
-    "change": 2.64
+    "name": "Yum! Brands"
   },
   {
     "ticker": "ZBRA",
-    "name": "Zebra Technologies",
-    "change": 1.53
+    "name": "Zebra Technologies"
   },
   {
     "ticker": "ZBH",
-    "name": "Zimmer Biomet",
-    "change": 1.24
+    "name": "Zimmer Biomet"
   },
   {
     "ticker": "ZTS",
-    "name": "Zoetis",
-    "change": 1.82
+    "name": "Zoetis"
   }
 ]

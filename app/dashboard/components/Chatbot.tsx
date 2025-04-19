@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { m, motion } from 'framer-motion';
 import { useAtom } from 'jotai';
 import { chatContextAtom } from '@/lib/atom';
+import ChatMessage from './ChatMessage';
 
-type Message = {
+export type IMessage = {
   id: number;
   content: string;
   sender: 'user' | 'ai';
@@ -43,6 +44,7 @@ const sendChatMessage = async (
     }
 
     const data = await response.json();
+  
     
     if (!data || !data.answer) {
       throw new Error('Invalid response from server');
@@ -70,71 +72,65 @@ const sendChatMessage = async (
   }
 };
 
-const AnimatedText = ({ text }: { text: string }) => {
-  const [displayText, setDisplayText] = useState('');
-
-  useEffect(() => {
-    const cleanText = (text || '')
-      .toString()
-      .replace(/\s*undefined\s*$/i, '')
-      .trim();
-
-    if (!cleanText) {
-      setDisplayText('');
-      return;
-    }
-
-    let isMounted = true;
-    let currentIndex = 0;
-
-    const animateText = () => {
-      if (currentIndex < cleanText.length && isMounted) {
-        setDisplayText(prev => {
-          const nextChar = cleanText[currentIndex];
-          return prev + (nextChar || '');
-        });
-        currentIndex++;
-        setTimeout(animateText, 5);
-      }
-    };
-
-    animateText();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [text]);
-
-  return <>{displayText}</>;
-};
-
 export default function Chatbot() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [chatContext, setChatContext] = useAtom(chatContextAtom);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const chatBottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (chatContext) {
-      const contextMessage: Message = {
+      textareaRef.current?.focus();
+
+      const contextMessage: IMessage = {
         id: Date.now(),
-        content: "Report Imported!",
+        content: "Report Imported.",
         sender: 'user',
         timestamp: new Date().toISOString(),
-        isAnimating: false
+        isAnimating: true
       };
 
       setMessages(prevMessages => [...prevMessages, contextMessage]);
+
+      chatBottomRef.current?.scrollIntoView({ 
+        behavior: 'smooth',
+      });
+
+      sendChatMessage(
+        "Provide a response asking the user to ask about stocks, investments, or market trends (30 WORDS MAX).", 
+        chatContext,
+        []
+      ).then((response) => {
+        const aiMessage: IMessage = {
+          id: Date.now(),
+          content: response.answer,
+          sender: 'ai',
+          timestamp: new Date().toISOString(),
+          isAnimating: true
+        };
+
+        setMessages(prevMessages => [...prevMessages, aiMessage]);
+
+        const scrollInterval = setInterval(() => {
+          chatBottomRef.current?.scrollIntoView({ 
+            behavior: 'smooth',
+          });
+        },  5 * aiMessage.content.length / 3 );
+        setTimeout(() => {
+          clearInterval(scrollInterval);
+        }, 5 * aiMessage.content.length);
+      });
     }
-  }, [chatContext, setChatContext]);
+  }, [chatContext]);
 
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, []);
 
   const adjustTextareaHeight = () => {
     if (textareaRef.current) {
@@ -146,7 +142,7 @@ export default function Chatbot() {
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
 
-    const userMessage: Message = {
+    const userMessage: IMessage = {
       id: Date.now(),
       content: inputMessage,
       sender: 'user',
@@ -156,6 +152,10 @@ export default function Chatbot() {
 
     setMessages(prevMessages => [...prevMessages, userMessage]);
     
+    chatBottomRef.current?.scrollIntoView({ 
+      behavior: 'smooth',
+    });
+
     const currentInput = inputMessage;
     setInputMessage('');
     setIsLoading(true);
@@ -173,7 +173,7 @@ export default function Chatbot() {
         recentHistory
       );
 
-      const aiMessage: Message = {
+      const aiMessage: IMessage = {
         id: Date.now(),
         content: response.answer,
         sender: 'ai',
@@ -182,6 +182,19 @@ export default function Chatbot() {
       };
 
       setMessages(prevMessages => [...prevMessages, aiMessage]);
+
+      chatBottomRef.current?.scrollIntoView({ 
+        behavior: 'smooth',
+      });
+
+      const scrollInterval = setInterval(() => {
+        chatBottomRef.current?.scrollIntoView({ 
+          behavior: 'smooth',
+        });
+      },  5 * aiMessage.content.length / 5 );
+      setTimeout(() => {
+        clearInterval(scrollInterval);
+      }, 5 * aiMessage.content.length);
       
       if (chatContext) {
         setChatContext(null);
@@ -191,7 +204,7 @@ export default function Chatbot() {
       
       setInputMessage(currentInput);
       
-      const errorMessage: Message = {
+      const errorMessage: IMessage = {
         id: Date.now(),
         content: "Sorry, I couldn't process your request. Please try again.",
         sender: 'ai',
@@ -222,48 +235,21 @@ export default function Chatbot() {
 
       <div 
         ref={chatContainerRef}
-        className="flex-grow overflow-y-auto p-4 space-y-4 no-scrollbar pt-16 pb-16 max-h-[90vh]"
+        className="flex-grow overflow-y-auto p-4 space-y-4 no-scrollbar pb-16 pt-20 max-h-[90vh]"
       >
         {messages.length === 0 && (
           <div className="text-center text-neutral-500 mt-10">
-            <p className="text-xl mb-2">Ask Chaewon</p>
+            <p className="text-xl mb-2">Ask Buffett</p>
             <p className="text-sm">Ask about stocks, investments, or market trends</p>
           </div>
         )}
         
         {messages.map((message) => {          
           return (
-            <div 
-              key={message.id} 
-              className={`flex ${
-                message.sender === 'user' ? 'justify-end' : 'justify-start'
-              }`}
-            >
-              <div 
-                className={`
-                  max-w-[80%] p-3 rounded-lg shadow-md
-                  ${
-                    message.sender === 'user'
-                      ? 'bg-neutral-800 text-white'
-                      : 'bg-neutral-900 text-neutral-200 text-left'
-                  }
-                `}
-              >
-                {message.content === '...' ? (
-                  <span className="typing-dots inline-flex space-x-1">
-                    <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0s]"></span>
-                    <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0.15s]"></span>
-                    <span className="dot w-2 h-2 bg-neutral-400 rounded-full animate-bounce [animation-delay:0.3s]"></span>
-                  </span>
-                ) : message.isAnimating ? (
-                  <AnimatedText text={message.content} />
-                ) : (
-                  message.content
-                )}
-              </div>
-            </div>
+            <ChatMessage key={message.id} message={message} />
           );
         })}
+        <div className="pt-10" ref={chatBottomRef} />
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 bg-neutral-950 p-4 border-t border-neutral-900 z-10 mb-18 md:mb-8">
@@ -290,6 +276,7 @@ export default function Chatbot() {
             disabled={isLoading}
           />
           <button 
+            type="button"
             onClick={handleSendMessage}
             disabled={inputMessage.trim() === '' || isLoading}
             className="
@@ -302,8 +289,8 @@ export default function Chatbot() {
           >
             {isLoading ? (
               <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
             ) : (
               <svg 

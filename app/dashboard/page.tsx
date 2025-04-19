@@ -15,9 +15,9 @@ import {
   onAuthStateChanged, 
   User as FirebaseUser 
 } from 'firebase/auth';
-import Chatbot from './components/chatbot';
-import Post from './components/post';
-import PostModal from './components/postModal';
+import Chatbot from './components/Chatbot';
+import Post from './components/Post';
+import PostModal from './components/PostModal';
 import { app, auth, db } from '@/lib/firebase.client';
 import Link from 'next/link';
 import { ArrowLeftOnRectangleIcon, XMarkIcon } from '@heroicons/react/24/solid';
@@ -63,31 +63,32 @@ export default function DashboardPage() {
 
   const [isChatOpen, setIsChatOpen] = useState(false);
 
-  const openChat = () => {
-    setIsChatOpen(true);
-  };
-
   useEffect(() => {
     const messaging = getMessaging(app);
 
     onMessage(messaging, (payload) => {
       console.log('Message received in foreground:', payload);
       
+      // Create and display a custom notification for foreground messages
       const notificationTitle = payload.notification?.title || 'Financial Alert';
       const notificationOptions = {
         body: payload.notification?.body || '',
-        icon: '/vercel.svg',
+        icon: '/vercel.svg', // Add your icon path
         data: payload.data || {}
       };
       
+      // Display notification manually since onMessage only works in foreground
+      // and doesn't display notifications automatically
       if (!("Notification" in window)) {
         console.log("This browser does not support notifications");
       } else if (Notification.permission === "granted") {
         const notification = new Notification(notificationTitle, notificationOptions);
         
+        // Add click handler to notification
         notification.onclick = () => {
           notification.close();
           window.focus();
+          // Handle any additional click actions here
           console.log('Notification clicked:', payload);
         };
       }
@@ -282,17 +283,28 @@ export default function DashboardPage() {
   const [windowWidth, setWindowWidth] = useState(0);
 
   useEffect(() => {
-    setMounted(true);
-    const handleResize = () => {
+    // Only run on client-side
+    if (typeof window !== 'undefined') {
+      setMounted(true);
       setWindowWidth(window.innerWidth);
-    };
-    
-    handleResize();
-    
-    window.addEventListener('resize', handleResize);
-    
-    return () => window.removeEventListener('resize', handleResize);
+
+      const handleResize = () => {
+        setWindowWidth(window.innerWidth);
+      };
+
+      window.addEventListener('resize', handleResize);
+      
+      return () => window.removeEventListener('resize', handleResize);
+    }
   }, []);
+
+  const getPanelWidth = () => {
+    // Only calculate width on client-side
+    if (typeof window !== 'undefined') {
+      return isChatOpen ? '0%' : (window.innerWidth >= 768 ? `${leftPanelWidth}%` : '100%');
+    }
+    return '100%';
+  };
 
   const router = useRouter();
 
@@ -310,10 +322,11 @@ export default function DashboardPage() {
       ref={containerRef}
       className={`bg-black ${mounted ? "opacity-100" : "opacity-0" } duration-1000 text-gray-300 transition-all w-full h-screen flex relative`}
     >
+      {/* Activity Feed Panel */}
       <div 
         className={`bg-black transition-none duration-0 overflow-auto ${isChatOpen ? 'hidden md:block' : 'block'}`}
         style={{ 
-          width: isChatOpen ? '0%' : (windowWidth >= 768 ? `${leftPanelWidth}%` : '100%') 
+          width: mounted ? getPanelWidth() : '100%'
         }}
       >
         <div className="max-w-4xl mx-auto">
@@ -350,7 +363,6 @@ export default function DashboardPage() {
           <PostModal 
             isOpen={!!selectedPost}
             onClose={handleCloseModal}
-            openChat={openChat}
             post={selectedPost || {
               id: 0,
               username: '',
@@ -367,6 +379,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* Resizable Divider - Only visible on desktop */}
       <div 
         className="hidden md:block bg-neutral-900/50 cursor-col-resize hover:bg-emerald-900/50 transition-colors"
         style={{ width: '5px' }}

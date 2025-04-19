@@ -1,27 +1,22 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { 
-    collection, 
-    getDocs, 
-    query, 
-    orderBy, 
-    where,
-    doc,
-    getDoc,
-    documentId
-  } from 'firebase/firestore';
-  import { 
-    onAuthStateChanged, 
-    User as FirebaseUser 
-  } from 'firebase/auth';
-import { useSearchParams } from 'next/navigation';
+import { db } from '@/lib/firebase.client';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import Post from '../components/post';
-import PostModal from '../components/postModal';
-import { useRouter } from 'next/navigation';
-import { app, auth, db } from '@/lib/firebase.client';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  where
+} from 'firebase/firestore';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import type { PostData } from '../page';
+import Post from '../components/Post';
+import PostModal from '../components/PostModal';
 
 type TimeRange = 'week' | 'month' | 'year' | 'all';
 
@@ -58,10 +53,16 @@ type Post = {
 
 type StockInfo = {
   ticker: string;
-  posts: Post[];
+  posts: PostData[];
 };
 
-const DayStockInfo = ({ active, payload, label }: any) => {
+interface IDayStockInfoProps {
+  active?: boolean;
+  payload?: { payload: StockDataPoint }[];
+  label?: string;
+}
+
+const DayStockInfo : React.FC<IDayStockInfoProps> = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
@@ -94,11 +95,11 @@ export default function StocksPage() {
 
   const [initialDataFetched, setInitialDataFetched] = useState(false);
 
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+  const [selectedPost, setSelectedPost] = useState<PostData | null>(null);
 
-  const [stockPosts, setStockPosts] = useState<Post[]>([]);
+  const [stockPosts, setStockPosts] = useState<PostData[]>([]);
 
-  const handlePostClick = (post: Post) => {
+  const handlePostClick = (post: PostData) => {
     setSelectedPost(post);
   };
 
@@ -187,11 +188,11 @@ export default function StocksPage() {
         return acc;
       }, {});
 
-      const reformattedPosts: Post[] = fetchedEvents.map((event, index) => {
+      const reformattedPosts: PostData[] = fetchedEvents.map((event, index) => {
         const account = accountsMap[event.trigger_account_id];
 
         return {
-          id: index,
+          id: event.id,
           username: account.username,
           handle: account.handle,
           verified: true,
@@ -223,7 +224,7 @@ export default function StocksPage() {
   useEffect(() => {
     const loadStockPosts = async () => {
       const posts = await fetchStockPosts();
-      setStockPosts(posts);
+      setStockPosts(posts || []);
     };
 
     if (ticker) {
@@ -317,7 +318,7 @@ export default function StocksPage() {
     // Find the most recent post for the current ticker
     const relevantPosts = stockPosts.filter(post => 
       post.positiveTickers.includes(ticker) || 
-      post.stocks.some(stock => stock.ticker === ticker)
+      post.stocks.some(stock => ((stock as any).ticker) === ticker)
     );
 
     // Sort posts by timestamp in descending order and get the most recent
@@ -328,7 +329,7 @@ export default function StocksPage() {
       : null;
 
     // Get the stock recommendation from the latest post
-    const stockRecommendation = latestPost?.stocks?.find(stock => stock.ticker === ticker) || emptyRecommendation;
+    const stockRecommendation = latestPost?.stocks?.find(stock => ((stock as any).ticker) === ticker) || emptyRecommendation;
     
     return (
       <div className="space-y-6">
@@ -408,10 +409,10 @@ export default function StocksPage() {
           viewBox="0 0 20 20" 
           fill="currentColor"
         >
-          <path 
-            fillRule="evenodd" 
-            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" 
-            clipRule="evenodd" 
+          <path
+            fillRule="evenodd"
+            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+            clipRule="evenodd"
           />
         </svg>
         <span className="text-sm sm:text-base">Back</span>
@@ -427,7 +428,7 @@ export default function StocksPage() {
             {error}
           </div>
         )}
-        
+
         {ticker && stockData.length > 0 && (
           <div className="flex flex-col lg:flex-row mt-12 gap-4 sm:gap-8">
             <div className="w-full flex flex-col">
@@ -454,9 +455,12 @@ export default function StocksPage() {
                         ? 'text-green-500' 
                         : 'text-red-500'
                       }
-                    `}>
-                      {parseFloat(calculatePercentChange(stockData))}% 
-                      {parseFloat(calculatePercentChange(stockData)) >= 0 ? '▲' : '▼'}
+                    `}
+                    >
+                      {Number.parseFloat(calculatePercentChange(stockData))}%
+                      {Number.parseFloat(calculatePercentChange(stockData)) >= 0
+                        ? "▲"
+                        : "▼"}
                     </p>
                   </div>
                 </div>
@@ -466,6 +470,7 @@ export default function StocksPage() {
                 <div className="flex justify-center space-x-1 mb-4 sm:space-x-2 mb-2 sm:mb-4">
                   {timeRangeButtons.map(({ label, value }) => (
                     <button
+                      type="button"
                       key={value}
                       onClick={() => selectTimeRangeData(value)}
                       className={`
@@ -503,14 +508,17 @@ export default function StocksPage() {
                       tick={{fontSize: 10}} 
                       padding={{ top: 0, bottom: 0 }}
                     />
-                    <Tooltip 
+                    <Tooltip
                       content={<DayStockInfo />}
-                      cursor={{ stroke: 'rgba(255,255,255,0.2)', strokeWidth: 1 }}
+                      cursor={{
+                        stroke: "rgba(255,255,255,0.2)",
+                        strokeWidth: 1,
+                      }}
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="close" 
-                      stroke="#10b981" 
+                    <Line
+                      type="monotone"
+                      dataKey="close"
+                      stroke="#10b981"
                       strokeWidth={2}
                       dot={false}
                     />

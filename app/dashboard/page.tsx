@@ -1,16 +1,21 @@
 'use client';
 
 import { app, auth, db } from '@/lib/firebase.client';
-import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftEndOnRectangleIcon, CogIcon } from '@heroicons/react/24/outline';
 import {
   type User as FirebaseUser,
   onAuthStateChanged
 } from 'firebase/auth';
 import {
   collection,
+  type DocumentData,
+  getCountFromServer,
   getDocs,
+  limit,
   orderBy,
   query,
+  type QueryDocumentSnapshot,
+  startAfter,
 } from 'firebase/firestore';
 import { getMessaging, onMessage } from 'firebase/messaging';
 import { useRouter } from 'next/navigation';
@@ -18,6 +23,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Chatbot from '@/components/dashboard/Chatbot';
 import LoadPost from '@/components/dashboard/LoadPost';
 import PostModal from '@/components/dashboard/PostModal';
+import BrandButton from '@/components/BrandButton';
 
 // Define proper types for your data structures
 interface StockData {
@@ -62,6 +68,9 @@ export default function DashboardPage() {
     onMessage(messaging, (payload) => {
       console.log('Message received in foreground:', payload);
       
+      skip.current = 0;
+      lastDoc.current = null;
+
       fetchPosts().then(() => {
         console.log('Posts refetched after receiving message:', payload);
       });
@@ -100,35 +109,65 @@ export default function DashboardPage() {
     return () => unsubscribe();
   }, []);
 
-  const fetchPosts = useCallback(async () => {
-    if (!currentUser) return;
+  const skip = useRef(0);
+  const lastDoc = useRef<QueryDocumentSnapshot<DocumentData, DocumentData> | null>(null);
+  const totalEventCountRef = useRef(0);
+  const [ hasMorePosts, setHasMorePosts ] = useState(true);
+
+  const fetchPosts = useCallback(async (docLimit = 10) => {
+    if (!currentUser) {
+      return;
+    }
 
     try {
-      const postsRef = collection(db, "users", currentUser.uid, "events");
-     
-      const q = query(
-        postsRef,
-        orderBy("timestamp", 'desc')
-      ); 
-      const querySnapshot = await getDocs(q);
-      const fetchedEventIds = querySnapshot.docs.map(doc => doc.id);
+      const eventsRef = collection(db, "users", currentUser.uid, "events");
+   
+      const q = lastDoc.current === null ? query(
+        eventsRef,
+        orderBy("timestamp", 'desc'),
+        limit(docLimit)) : query(
+        eventsRef,
+        orderBy("timestamp", 'desc'),
+        startAfter(lastDoc.current),
+        limit(docLimit)
+      );
 
-      if (fetchedEventIds.length === 0) {
-        console.log('No events found for user');
-        setPostIds([]);
-        return;
+      const querySnapshot = await getDocs(q);
+
+      const fetchedEventIds = querySnapshot.docs.map(doc => doc.id);
+      setPostIds(prev => [...prev, ...fetchedEventIds]);
+
+      skip.current +=fetchedEventIds.length;
+      lastDoc.current = querySnapshot.docs[querySnapshot.docs.length - 1];
+
+      const totalEventCount = await getCountFromServer(eventsRef);
+      totalEventCountRef.current = (totalEventCount.data().count);
+
+      if (skip.current >= totalEventCountRef.current) {
+        setHasMorePosts(false);
       }
 
-      setPostIds(fetchedEventIds);
     } catch (error) {
       console.error('Error fetching posts:', error);
-      setPostIds([]);
     }
-  }, [currentUser]);
+  }
+  , [currentUser]);
+
+  const fetchInitialPosts = useCallback(async () => {
+    if (!currentUser) {
+      return;
+    }
+
+    if (postIds.length !== 0) {
+      return;
+    }
+
+    await fetchPosts();
+  }, [currentUser, postIds, fetchPosts]);
 
   useEffect(() => {
-    fetchPosts();
-  }, [fetchPosts]);
+    fetchInitialPosts();
+  }, [fetchInitialPosts]);
 
   const handlePostClick = (post: PostData) => {
     setSelectedPost(post);
@@ -140,7 +179,7 @@ export default function DashboardPage() {
         eventsContainerRef.current.style.transitionDuration = "0.4s";
       };
   
-      setLeftPanelWidth(35);
+      setLeftPanelWidth(30);
       setTimeout(() => {
         if (eventsContainerRef.current) {
           eventsContainerRef.current.style.transitionDuration = "0s";
@@ -174,7 +213,7 @@ export default function DashboardPage() {
       const mouseX = e.clientX - container.getBoundingClientRect().left;
       const newWidth = (mouseX / containerWidth) * 100;
       
-      const constrainedWidth = Math.max(35, Math.min(65, newWidth));
+      const constrainedWidth = Math.max(30, Math.min(65, newWidth));
       setLeftPanelWidth(constrainedWidth);
     });
   }, []);
@@ -209,6 +248,32 @@ export default function DashboardPage() {
 
   const router = useRouter();
 
+  const [ loadingMorePosts, setLoadingMorePosts ] = useState(false);
+  const fetchMorePosts = useCallback(async () => {
+      if (!currentUser) {
+        return;
+      }
+      
+      setLoadingMorePosts(true);
+
+      setTimeout(async () => {
+        await fetchPosts(5);
+        setLoadingMorePosts(false);
+      }, 500); // artificial delay
+  }, [ currentUser, fetchPosts ]);
+
+  const onScroll = useCallback(async (e) => {
+    const el = e.currentTarget
+
+    if (el.scrollHeight - el.scrollTop === el.clientHeight) {
+      if (loadingMorePosts || !hasMorePosts) {
+        return;
+      }
+
+      await fetchMorePosts();
+    }
+  }, [ loadingMorePosts, fetchMorePosts, hasMorePosts ]);
+
   const handleLogOut = useCallback(() => {
     auth.signOut().then(() => {
       console.log('User signed out');
@@ -227,24 +292,33 @@ export default function DashboardPage() {
     >
       <div
         ref={eventsContainerRef}
+        onScroll={onScroll}
         className="bg-black transition-all overflow-auto no-scrollbar"
         style={{ 
           width: `${leftPanelWidth}%`,
           transitionDuration: "0s",
         }}
       >
-        <div className="max-w-4xl mx-auto">
-          <div className="sticky flex justify-between top-0 bg-black/80 backdrop-blur-md border-b border-neutral-800 p-4 ml-4">
+        <div className="mx-auto">
+          <div className="sticky flex gap-3 justify-between items-center top-0 bg-black/35 backdrop-blur-md border-b border-neutral-800 p-4">
+            <h1 className="text-xl font-bold text-white">P<span style={{ transform: "translate(-9px,7px)"}} className="text-green-500 inline-block">s</span></h1>
             <h1 className="text-xl font-bold text-white">Activity</h1>
+            <CogIcon 
+              className="cursor-pointer"
+              width={24}
+              height={24}
+              onClick={() => router.push("/settings")}
+            />
+{/*          
             <ArrowLeftEndOnRectangleIcon
               className="cursor-pointer"
               width={24}
               height={24}
               onClick={handleLogOut}
-            />
+            /> */}
           </div>
 
-          <div className="pb-10">
+          <div className="pb-10 flex flex-col items-center">
             {postIds.map((postId) => (
                <LoadPost 
                   key={postId}
@@ -252,6 +326,15 @@ export default function DashboardPage() {
                   postId={postId} 
                 />
             ))}
+            { 
+            loadingMorePosts &&
+                <div className="pt-2">
+                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                </div>
+            }
           </div>
 
           <PostModal

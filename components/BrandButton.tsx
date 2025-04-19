@@ -1,4 +1,4 @@
-import { useState, FC, ButtonHTMLAttributes } from "react";
+import { useState, type FC, type ButtonHTMLAttributes } from "react";
 
 interface BrandButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   text?: string;
@@ -12,6 +12,7 @@ const BrandButton: FC<BrandButtonProps> = ({
   onClick,
   disabled = false,
   loading = false,
+  className,
   ...rest
 }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -37,6 +38,7 @@ const BrandButton: FC<BrandButtonProps> = ({
           flex items-center justify-center gap-2
           w-full
           ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+          ${className}
         `}
         onMouseEnter={() => !isDisabled && setIsHovered(true)}
         onMouseLeave={() => !isDisabled && setIsHovered(false)}
@@ -65,6 +67,7 @@ const BrandButton: FC<BrandButtonProps> = ({
               <div className="absolute top-0 left-0 w-full h-full">
                 {[...Array(8)].map((_, i) => (
                   <div
+                    // biome-ignore lint/suspicious/noArrayIndexKey: acceptable for this case
                     key={i}
                     className="absolute w-1 h-1 bg-white rounded-full opacity-0 animate-ios-spinner"
                     style={{

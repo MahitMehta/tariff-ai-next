@@ -144,6 +144,7 @@ ${stockDetails}
                 <div className="flex flex-wrap gap-2">
                   {post.positiveTickers?.map((ticker, idx) => (
                     <button
+                      type="button"
                       key={ticker}
                       onClick={() => handleTickerClick(ticker)}
                       className="bg-emerald-900/50 text-emerald-300 px-3 py-1 rounded-full text-sm hover:bg-emerald-900/70 transition-colors"
@@ -154,6 +155,7 @@ ${stockDetails}
                   ))}
                   {post.negativeTickers?.map((ticker, idx) => (
                     <button
+                      type="button"
                       key={ticker}
                       onClick={() => handleTickerClick(ticker)}
                       className="bg-red-900/50 text-red-300 px-3 py-1 rounded-full text-sm hover:bg-red-900/70 transition-colors"
@@ -188,10 +190,9 @@ ${stockDetails}
                 {post.report || "No detailed report available."}
               </p>
 
-              {post.stocks &&
-                post.stocks.map((stock, index) => (
+              {post.stocks?.map((stock, index) => (
                   <div
-                    key={index}
+                    key={stock.ticker}
                     className={`mt-6 p-4 bg-neutral-900 rounded-xl border border-neutral-800 shadow-md transition-all duration-300 ease-in-out ${
                       animate
                         ? "opacity-100 translate-y-0"

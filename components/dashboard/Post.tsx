@@ -45,7 +45,7 @@ export default function Post({
 
   return (
     <div
-      className={`p-4 ${!!post.content ? "opacity-100" : "opacity-0"} border-b-[1px] hover:bg-neutral-900/50 cursor-pointer border-neutral-800 border-solid transition-all duration-500 cursor-pointer 
+      className={`p-4 ${post.content ? "opacity-100" : "opacity-0"} border-b-[1px] hover:bg-neutral-900/50 border-neutral-800 border-solid transition-all duration-500 cursor-pointer 
                 ${isClicked ? "bg-neutral-700" : "hover:bg-[#111111]"}`}
       onClick={handleClick}
     >

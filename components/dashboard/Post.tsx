@@ -80,7 +80,7 @@ export default function Post({
             {post.positiveTickers.map((ticker) => (
               <span
                 key={ticker}
-                className="bg-green-800/50 text-green-300 hover:bg-green-900 hover:text-white px-2 py-1 rounded-full text-sm"
+                className="bg-gray-600/50 text-gray-300 hover:bg-green-900 hover:text-white px-2 py-1 rounded-full text-sm"
               >
                 {ticker}
               </span>

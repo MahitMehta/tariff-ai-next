@@ -228,12 +228,6 @@ const CurateForm = () => {
                 className="mt-3"
                 onChange={setDesktopNotificationsHandle}
             />
-            <Checkbox
-                id="terms-and-conditions"
-                label="I agree to the Terms and Conditions"
-                className="mt-3"
-                onChange={(value) => console.log(value)}
-            />
         </div>
         <div className="flex flex-col gap-3 w-full">
             <BrandButton 

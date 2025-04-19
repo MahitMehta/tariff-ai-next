@@ -45,7 +45,7 @@ export default function Post({
 
   return (
     <div
-      className={`p-4 ${post.content ? "opacity-100" : "opacity-0"} border-b-[1px] hover:bg-neutral-900/50 border-neutral-800 border-solid transition-all duration-500 cursor-pointer 
+      className={`w-full overflow-hidden p-4 ${post.content ? "opacity-100" : "opacity-0"} border-b-[1px] hover:bg-neutral-900/50 border-neutral-800 border-solid transition-all duration-500 cursor-pointer 
                 ${isClicked ? "bg-neutral-700" : "hover:bg-[#111111]"}`}
       onClick={handleClick}
     >
@@ -80,7 +80,7 @@ export default function Post({
             {post.positiveTickers.map((ticker) => (
               <span
                 key={ticker}
-                className="bg-green-800/50 text-green-300 hover:bg-green-900 hover:text-white px-2 py-1 rounded-full text-sm"
+                className="bg-[#111111] border-[1px] border-[#222222] text-gray-300 hover:text-white px-2 py-1 rounded-full text-sm"
               >
                 {ticker}
               </span>

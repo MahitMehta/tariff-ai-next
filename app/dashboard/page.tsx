@@ -20,10 +20,11 @@ import Post from './components/post';
 import PostModal from './components/postModal';
 import { app, auth, db } from '@/lib/firebase.client';
 import Link from 'next/link';
-import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid';
+import { ArrowLeftOnRectangleIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import { getMessaging, onMessage } from 'firebase/messaging';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Define proper types for your data structures
 interface StockData {
@@ -60,32 +61,33 @@ export default function DashboardPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
 
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  const openChat = () => {
+    setIsChatOpen(true);
+  };
+
   useEffect(() => {
     const messaging = getMessaging(app);
 
     onMessage(messaging, (payload) => {
       console.log('Message received in foreground:', payload);
       
-      // Create and display a custom notification for foreground messages
       const notificationTitle = payload.notification?.title || 'Financial Alert';
       const notificationOptions = {
         body: payload.notification?.body || '',
-        icon: '/vercel.svg', // Add your icon path
+        icon: '/vercel.svg',
         data: payload.data || {}
       };
       
-      // Display notification manually since onMessage only works in foreground
-      // and doesn't display notifications automatically
       if (!("Notification" in window)) {
         console.log("This browser does not support notifications");
       } else if (Notification.permission === "granted") {
         const notification = new Notification(notificationTitle, notificationOptions);
         
-        // Add click handler to notification
         notification.onclick = () => {
           notification.close();
           window.focus();
-          // Handle any additional click actions here
           console.log('Notification clicked:', payload);
         };
       }
@@ -277,12 +279,19 @@ export default function DashboardPage() {
   }, []);
 
   const [mounted, setMounted] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(0);
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setMounted(true);
-    }, 100);
+    setMounted(true);
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
     
-    return () => clearTimeout(timer);
+    handleResize();
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const router = useRouter();
@@ -302,24 +311,37 @@ export default function DashboardPage() {
       className={`bg-black ${mounted ? "opacity-100" : "opacity-0" } duration-1000 text-gray-300 transition-all w-full h-screen flex relative`}
     >
       <div 
-        className="bg-black transition-none duration-0 overflow-auto" 
-        style={{ width: `${leftPanelWidth}%` }}
+        className={`bg-black transition-none duration-0 overflow-auto ${isChatOpen ? 'hidden md:block' : 'block'}`}
+        style={{ 
+          width: isChatOpen ? '0%' : (windowWidth >= 768 ? `${leftPanelWidth}%` : '100%') 
+        }}
       >
         <div className="max-w-4xl mx-auto">
-          <div className="sticky flex justify-between top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4 ml-4">
+          <div className="sticky flex justify-between top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4">
             <h1 className="text-xl font-bold text-white">Activity</h1>
-            <ArrowLeftEndOnRectangleIcon className="cursor-pointer" width={24} height={24}
-              onClick={handleLogOut} 
-            />
+            <div className="flex items-center space-x-4">
+              <ArrowLeftEndOnRectangleIcon 
+                className="cursor-pointer" 
+                width={24} 
+                height={24}
+                onClick={handleLogOut} 
+              />
+              <button 
+                className="md:hidden text-white bg-neutral-800 rounded-full px-4 py-2"
+                onClick={() => setIsChatOpen(true)}
+              >
+                Chat
+              </button>
+            </div>
           </div>
 
-        <div className="divide-y divide-neutral-800">
-          {posts.map((post) => (
-            <div 
-              key={post.id}  
-              className="p-4 hover:bg-neutral-900/50 transition-colors duration-200 cursor-pointer"
-              onClick={() => handlePostClick(post)}
-            >    
+          <div>
+            {posts.map((post) => (
+              <div 
+                key={post.id}  
+                className="p-4 hover:bg-neutral-900/50 transition-colors duration-200 cursor-pointer"
+                onClick={() => handlePostClick(post)}
+              >    
                 <Post {...post} />
               </div>
             ))}
@@ -328,6 +350,7 @@ export default function DashboardPage() {
           <PostModal 
             isOpen={!!selectedPost}
             onClose={handleCloseModal}
+            openChat={openChat}
             post={selectedPost || {
               id: 0,
               username: '',
@@ -345,19 +368,47 @@ export default function DashboardPage() {
       </div>
 
       <div 
-        className="bg-neutral-900/50 cursor-col-resize hover:bg-emerald-900/50 transition-colors"
+        className="hidden md:block bg-neutral-900/50 cursor-col-resize hover:bg-emerald-900/50 transition-colors"
         style={{ width: '5px' }}
         onMouseDown={handleMouseDown}
       />
 
+      {/* Desktop Chat Panel */}
       <div 
-        className="bg-neutral-950 transition-none duration-0 overflow-hidden" 
+        className="hidden md:block bg-neutral-950 transition-none duration-0 overflow-hidden" 
         style={{ width: `${100 - leftPanelWidth}%` }}
       >
-        <div className="text-neutral-400 text-center h-fit">
+        <div className="text-neutral-400 h-full">
           <Chatbot />
         </div>
       </div>
+
+      {/* Mobile Chat Overlay */}
+      <AnimatePresence>
+        {isChatOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 bg-black md:hidden w-screen h-screen"
+          >
+            <div className="sticky top-0 left-0 right-0 flex justify-between items-center bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4">
+              <h1 className="text-xl font-bold text-white">Chat</h1>
+              <button 
+                className="text-white bg-neutral-800 rounded-full w-10 h-10 flex items-center justify-center"
+                onClick={() => setIsChatOpen(false)}
+                aria-label="Close chat"
+              >
+                <XMarkIcon className="h-6 w-6" />
+              </button>
+            </div>
+            <div className="flex-grow w-full h-[calc(100%-64px)] overflow-hidden">
+              <Chatbot />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

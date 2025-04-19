@@ -1,3 +1,4 @@
+"use client"
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
@@ -6,6 +7,7 @@ import { chatContextAtom } from "@/lib/atom";
 interface PostModalProps {
   isOpen: boolean;
   onClose: () => void;
+  openChat?: () => void;
   post: {
     id: number;
     username: string;
@@ -29,7 +31,7 @@ interface PostModalProps {
   };
 }
 
-export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
+export default function PostModal({ isOpen, onClose, openChat, post }: PostModalProps) {
   const [animate, setAnimate] = useState(false);
   const [visible, setVisible] = useState(false);
   const [, setChatContext] = useAtom(chatContextAtom);
@@ -65,6 +67,10 @@ ${stockDetails}
 
     setChatContext(combinedContext);
     onClose();
+    
+    if (window.innerWidth < 768 && openChat) {
+      openChat();
+    }
   };
 
   return (
@@ -111,7 +117,7 @@ ${stockDetails}
         </div>
 
         {post && (
-          <div className="p-6">
+          <div className="p-4 md:p-6">
             <div
               className={`flex items-center space-x-2 mb-4 transition-all duration-300 ease-in-out ${
                 animate
@@ -216,8 +222,8 @@ ${stockDetails}
                     }`}
                     style={{ transitionDelay: `${300 + index * 50}ms` }}
                   >
-                    <div className="flex justify-between items-center mb-4">
-                      <div>
+                    <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
+                      <div className="mb-2 md:mb-0">
                         <span className="text-white text-xl font-bold block">
                           {stock.ticker}
                         </span>
@@ -227,14 +233,15 @@ ${stockDetails}
                           </span>
                         )}
                       </div>
-                      <div className="bg-black rounded-full px-3 py-1 border border-neutral-800">
+                      <div className="bg-black rounded-full px-3 py-1 border border-neutral-800 self-start md:self-auto">
                         <span className="text-neutral-300 text-sm">
                           Market Analysis
                         </span>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-5 gap-3 mb-4">
+                    {/* Rating cards - Mobile-optimized */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-4">
                       {[
                         {
                           label: "Strong Buy",
@@ -276,13 +283,13 @@ ${stockDetails}
                           <div
                             key={item.label}
                             className={`
-                                                        p-3 rounded-lg text-center transition-all duration-300 ease-in-out
-                                                        ${getColorClass()} ${
+                              p-3 rounded-lg text-center transition-all duration-300 ease-in-out
+                              ${getColorClass()} ${
                               animate
                                 ? "opacity-100 translate-y-0"
                                 : "opacity-0 translate-y-1"
                             }
-                                                    `}
+                            `}
                             style={{
                               transitionDelay: `${
                                 350 + index * 50 + idx * 40

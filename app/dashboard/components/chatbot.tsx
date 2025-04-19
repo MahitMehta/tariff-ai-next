@@ -216,7 +216,7 @@ export default function Chatbot() {
 
   return (
     <div className="relative flex flex-col h-screen bg-black overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 bg-neutral-950 p-4 text-center border-b border-neutral-900 z-10">
+      <div className="absolute top-0 left-0 right-0 bg-neutral-950 p-4 text-center border-b border-neutral-900 z-10 hidden sm:block">
         <h2 className="text-lg font-semibold text-white">Ask Chaewon</h2>
       </div>
 
@@ -266,7 +266,7 @@ export default function Chatbot() {
         })}
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 bg-neutral-950 p-4 border-t border-neutral-900 z-10 mb-8">
+      <div className="absolute bottom-0 left-0 right-0 bg-neutral-950 p-4 border-t border-neutral-900 z-10 mb-18 md:mb-8">
         <div className="flex items-end space-x-2">
           <textarea 
             ref={textareaRef}

@@ -45,6 +45,7 @@ type Post = {
   negativeTickers: string[];
   report: string;
   stocks: {
+    ticker: string;
     primaryRating: string;
     strongBuyPercent: number;
     buyPercent: number;
@@ -330,14 +331,14 @@ export default function StocksPage() {
     const stockRecommendation = latestPost?.stocks?.find(stock => stock.ticker === ticker) || emptyRecommendation;
     
     return (
-      <div className="space-y-4">
-        <div className="flex justify-between items-center mb-6">
+      <div className="space-y-6">
+        <div className="flex justify-between items-center mb-4">
           <span className="text-neutral-300 text-sm font-bold">
             Primary Rating: {stockRecommendation.primaryRating}
           </span>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-3">
           {[
             { label: 'Strong Buy', value: stockRecommendation.strongBuyPercent },
             { label: 'Buy', value: stockRecommendation.buyPercent },
@@ -370,20 +371,20 @@ export default function StocksPage() {
               <div 
                 key={item.label} 
                 className={`
-                  w-full p-2 rounded-lg flex justify-between items-center transition-all duration-300 ease-in-out
+                  w-full p-3 rounded-lg flex justify-between items-center transition-all duration-300 ease-in-out
                   ${getColorClass()}
                 `}
               >
-                <span className="text-xs font-semibold">{item.label}</span>
-                <span className="text-sm font-bold">{item.value}%</span>
+                <span className="text-sm font-semibold">{item.label}</span>
+                <span className="text-base font-bold">{item.value}%</span>
               </div>
             );
           })}
         </div>
 
-        <div className="p-2">
-          <h3 className="text-md font-semibold text-neutral-300 mb-1">AI Insight</h3>
-          <p className="text-neutral-300 text-sm mt-4">
+        <div className="p-3 mt-4 bg-neutral-800/30 rounded-lg">
+          <h3 className="text-md font-semibold text-neutral-300 mb-2">AI Insight</h3>
+          <p className="text-neutral-300 text-sm leading-relaxed">
             {stockRecommendation.rationale}
           </p>
         </div>
@@ -396,14 +397,14 @@ export default function StocksPage() {
   };
 
   return (
-    <div className="bg-black h-screen text-white p-6 relative">
+    <div className="bg-black min-h-screen text-white p-4 sm:p-6 relative">
       <button 
         onClick={handleGoBack}
-        className="fixed top-6 left-6 bg-emerald-900/40 hover:bg-emerald-900 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center space-x-2 z-50"
+        className="fixed top-4 sm:top-6 left-4 sm:left-6 bg-emerald-900/40 hover:bg-emerald-900 text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg transition-colors duration-300 flex items-center space-x-3 z-50"
       >
         <svg 
           xmlns="http://www.w3.org/2000/svg" 
-          className="h-5 w-5" 
+          className="h-5 w-5 sm:h-6 sm:w-6" 
           viewBox="0 0 20 20" 
           fill="currentColor"
         >
@@ -413,35 +414,42 @@ export default function StocksPage() {
             clipRule="evenodd" 
           />
         </svg>
-        <span>Back</span>
+        <span className="text-sm sm:text-base">Back</span>
       </button>
 
       <div className="max-w-6xl mx-auto">
         {loading && (
-          <div className="text-neutral-400 text-center">Loading stock data...</div>
+          <div className="text-neutral-400 text-center text-sm sm:text-base">Loading stock data...</div>
         )}
 
         {error && (
-          <div className="bg-red-900/30 text-red-300 p-4 rounded-xl">
+          <div className="bg-red-900/30 text-red-300 p-3 sm:p-4 rounded-xl text-sm sm:text-base">
             {error}
           </div>
         )}
         
         {ticker && stockData.length > 0 && (
-          <div className="flex gap-8">
-            <div className="w-3/4 space-y-6">
-              <div className="bg-neutral-900 rounded-xl p-8 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-2xl font-bold text-white">{companyName || ticker}</h2>
-                    <p className="text-neutral-400">{ticker} • NASDAQ</p>
+          <div className="flex flex-col lg:flex-row mt-12 gap-4 sm:gap-8">
+            <div className="w-full flex flex-col">
+              <div className="bg-neutral-900 rounded-xl p-4 sm:p-8 flex-grow mb-4 sm:mb-0">
+                <div className="flex items-center justify-between w-full h-full">
+                  <div className="flex flex-col items-start">
+                    <div className="flex items-center space-x-3 mb-2">
+                      <h2 className="text-xl sm:text-2xl font-bold text-white">{companyName || ticker}</h2>
+                      <span className="text-xs text-neutral-400 bg-neutral-800 px-2 py-1 rounded-md">
+                        {ticker}
+                      </span>
+                    </div>
+                    <p className="text-sm text-neutral-400 tracking-wider">
+                      Listed on NASDAQ
+                    </p>
                   </div>
-                  <div className="text-right">
-                    <p className="text-3xl font-semibold">
+                  <div className="text-right space-y-1">
+                    <p className="text-2xl sm:text-3xl font-semibold text-white">
                       ${stockData[stockData.length - 1].close.toFixed(2)}
                     </p>
                     <p className={`
-                      font-medium text-lg
+                      font-medium text-base sm:text-lg
                       ${parseFloat(calculatePercentChange(stockData)) >= 0 
                         ? 'text-green-500' 
                         : 'text-red-500'
@@ -454,18 +462,20 @@ export default function StocksPage() {
                 </div>
               </div>
 
-              <div className="bg-neutral-900 rounded-xl p-8 space-y-4">
-                <div className="flex justify-center space-x-2 mb-4">
+              <div className="bg-neutral-900 rounded-xl p-4 sm:p-8 mb-4 sm:mt-8 flex-grow">
+                <div className="flex justify-center space-x-1 mb-4 sm:space-x-2 mb-2 sm:mb-4">
                   {timeRangeButtons.map(({ label, value }) => (
                     <button
                       key={value}
                       onClick={() => selectTimeRangeData(value)}
                       className={`
-                        px-4 py-2 rounded-lg transition-colors
+                        px-3 py-2 sm:px-5 sm:py-3 text-sm sm:text-base rounded-lg transition-colors
                         ${timeRange === value 
                           ? 'bg-green-900 text-green-300' 
                           : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'
                         }
+                        hover:scale-105 active:scale-95 transform transition-transform duration-200
+                        min-w-[60px] sm:min-w-[80px] text-center
                       `}
                     >
                       {label}
@@ -473,8 +483,11 @@ export default function StocksPage() {
                   ))}
                 </div>
 
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={stockData}>
+                <ResponsiveContainer width="100%" height={350} className="sm:h-[500px]">
+                  <LineChart 
+                    data={stockData} 
+                    margin={{ left: -20, right: -20, top: 10, bottom: 0 }}
+                  >
                     <CartesianGrid 
                       strokeDasharray="3 3" 
                       stroke="rgba(255,255,255,0.1)" 
@@ -483,10 +496,12 @@ export default function StocksPage() {
                       dataKey="date" 
                       stroke="rgba(255,255,255,0.3)" 
                       tick={{fontSize: 10}}
+                      padding={{ left: 0, right: 0 }}
                     />
                     <YAxis 
                       stroke="rgba(255,255,255,0.3)" 
                       tick={{fontSize: 10}} 
+                      padding={{ top: 0, bottom: 0 }}
                     />
                     <Tooltip 
                       content={<DayStockInfo />}
@@ -504,68 +519,73 @@ export default function StocksPage() {
               </div>
             </div>
 
-            <div className="w-1/3 bg-neutral-900 rounded-xl p-8 space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-white">Recommendation</h2>
-                <span className="text-neutral-400 text-sm">Latest</span>
+            <div className="w-full lg:w-[40%] bg-neutral-900 rounded-xl p-4 sm:p-8 flex flex-col justify-between h-full">
+              <div className="flex flex-col justify-between h-full">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white">Recommendation</h2>
+                    <span className="text-xs sm:text-sm text-neutral-400">Latest</span>
+                  </div>
+                  {getRecommendationContent()}
+                </div>
               </div>
-              {getRecommendationContent()}
             </div>
           </div>
         )}
 
         <div className="bg-black text-gray-300 w-full">
-            <div className="max-w-4xl mx-auto">
-                <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-4 mt-8">
-                <h1 className="text-xl font-bold text-white">Activity</h1>
-                </div>
-
-                <div className="divide-y divide-neutral-800">
-                {stockPosts && stockPosts.length ? (
-                    stockPosts.map((post) => (
-                    <div 
-                    key={post.id} 
-                    className="p-4 hover:bg-neutral-900/50 transition-colors duration-200 cursor-pointer"
-                    onClick={() => handlePostClick(post)}
-                    >    
-                        <Post {...post} />
-                    </div>
-                ))) : (
-                    <div className="text-center text-neutral-500 p-8">
-                        No posts available for this stock
-                    </div>
-                )}
-                </div>
-
-                <PostModal 
-                    isOpen={!!selectedPost}
-                    onClose={handleCloseModal}
-                    post={selectedPost ? {
-                        ...selectedPost,
-                        stocks: selectedPost.stocks.map(stock => ({
-                            ticker: 'N/A',
-                            primaryRating: stock.primaryRating || '',
-                            strongBuyPercent: stock.strongBuyPercent || 0,
-                            buyPercent: stock.buyPercent || 0,
-                            holdPercent: stock.holdPercent || 0,
-                            sellPercent: stock.sellPercent || 0,
-                            strongSellPercent: stock.strongSellPercent || 0,
-                            rationale: stock.rationale || ''
-                        }))
-                    } : {
-                        id: 0,
-                        username: '',
-                        handle: '',
-                        verified: false,
-                        content: '',
-                        timestamp: '',
-                        positiveTickers: [],
-                        negativeTickers: [],
-                        report: '',
-                        stocks: []
-                    }}
-                />
+          <div className="max-w-4xl mx-auto">
+            <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-neutral-800 p-2 sm:p-4 mt-4 sm:mt-8">
+              <h1 className="text-lg sm:text-xl font-bold text-white">Activity</h1>
             </div>
+
+            <div className="divide-y divide-neutral-800">
+              {stockPosts && stockPosts.length ? (
+                stockPosts.map((post) => (
+                  <div 
+                    key={post.id} 
+                    className="p-2 sm:p-4 hover:bg-neutral-900/50 transition-colors duration-200 cursor-pointer"
+                    onClick={() => handlePostClick(post)}
+                  >    
+                    <Post {...post} />
+                  </div>
+                ))
+              ) : (
+                <div className="text-center text-neutral-500 p-4 sm:p-8 text-sm sm:text-base">
+                  No posts available for this stock
+                </div>
+              )}
+            </div>
+
+            <PostModal 
+              isOpen={!!selectedPost}
+              onClose={handleCloseModal}
+              post={selectedPost ? {
+                ...selectedPost,
+                stocks: selectedPost.stocks.map(stock => ({
+                  ticker: stock.ticker,
+                  primaryRating: stock.primaryRating || '',
+                  strongBuyPercent: stock.strongBuyPercent || 0,
+                  buyPercent: stock.buyPercent || 0,
+                  holdPercent: stock.holdPercent || 0,
+                  sellPercent: stock.sellPercent || 0,
+                  strongSellPercent: stock.strongSellPercent || 0,
+                  rationale: stock.rationale || ''
+                }))
+              } : {
+                id: 0,
+                username: '',
+                handle: '',
+                verified: false,
+                content: '',
+                timestamp: '',
+                positiveTickers: [],
+                negativeTickers: [],
+                report: '',
+                stocks: []
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
